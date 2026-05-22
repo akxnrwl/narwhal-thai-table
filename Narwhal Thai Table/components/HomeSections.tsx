@@ -24,7 +24,7 @@ export function StorySection() {
           <FadeUp className="about-text">
             <span className="label">Our Story</span>
             <h2>A Thai kitchen, raised by the <em>California coast</em>.</h2>
-            <p>We&apos;re a family from Thailand who fell in love with Huntington Beach — the salt air, the sunsets over PCH, the way neighbors wave at each other on the way to the pier. So we did what every Thai family does when they love a place: we cooked for it.</p>
+            <p>We&apos;re a Thai family who fell in love with Huntington Beach — the salt air, the sunsets over PCH, the way neighbors wave at each other on the way to the pier. So we did what every Thai family does when they love a place: we cooked for it.</p>
             <p>Narwhal Thai Table is our home table, opened wide. The curries are pounded by hand the way our grandmothers taught us. The fish comes off California boats. The smiles are real, because the people serving you are the same people who own the place.</p>
             <p style={{ color: 'var(--brass-deep)', fontStyle: 'italic' }}>Come hungry. Stay a while. You&apos;re family here.</p>
             <div className="about-stats">
@@ -50,24 +50,32 @@ export function ChefSection() {
           {/* Future: <MediaFrame ratio="4/5" ornament="inset" src="/images/chef.jpg" alt="Chef Namfon" /> */}
           <FadeUp className="chef-visual">
             <div className="chef-content">
-              <div className="role">— Chef &amp; Owner</div>
+              <div className="role">— Chef &amp; Co-Founder</div>
               <div className="name-en">Chef <em>Namfon</em></div>
               <div className="name-en" style={{ fontSize: 30 }}>Laksanawadee Sripornsawan</div>
               <div className="name-th">น้ำฝน ลักษณาวดี ศรีพรสวรรค์</div>
               <div className="ornament-divider"></div>
-              <div className="badge">MasterChef Thailand · Season 1</div>
+              <div className="badge" style={{ lineHeight: 1.8 }}>
+                Le Cordon Bleu · Paris-Method<br/>
+                Royal Court Women&apos;s College · Thai Royal Cuisine
+              </div>
             </div>
           </FadeUp>
           <FadeUp className="chef-text">
             <span className="label">Meet the Chef</span>
-            <h2>A MasterChef&apos;s craft. <em>A mother&apos;s heart.</em></h2>
-            <p>Chef Namfon first cooked her way into Thailand&apos;s heart on the very first season of <strong>MasterChef Thailand</strong>. But long before the cameras, she was already a Thai mom who fed everyone in the neighborhood and never let anyone leave hungry.</p>
-            <p>She still cooks that way. Every dish at Narwhal — from the first bite of fish cake to the last spoon of mango sticky rice — comes from her hands and her recipe book. When you eat here, you&apos;re eating from her family table.</p>
+            <h2>Trained in two of the world&apos;s strictest kitchens — <em>French and royal Thai</em>.</h2>
+            <p>Chef Namfon — <strong>Laksanawadee Sripornsawan</strong> — is one of a very small group of Thai chefs who carry both pieces of the craft in their hands. She trained at the <strong>Royal Court Women&apos;s College</strong> (วิทยาลัยในวังหญิง), the Thai institution where royal-court cooking and the disciplined art of Thai desserts have been passed down for generations — a school that doesn&apos;t open its doors to just anyone, and famously doesn&apos;t cut corners for the people it does. Then she went to <strong>Le Cordon Bleu</strong> and learned the French side of the same coin: technique, structure, the precision of a Paris-trained kitchen.</p>
+            <p>That combination is what you taste in her food. The depth of <em>chao-wang</em> tradition — where a curry paste is pounded for forty minutes because that&apos;s how long it takes — meets the French training that gives every plate its shape. It&apos;s a kind of understanding of Thai food you simply cannot self-teach. It comes from being in those rooms.</p>
+            <p>Her resume backs it up. <strong>MasterChef Thailand · Season 1</strong>. <strong>Star Chef Thailand · Season 1</strong>. <strong>Chef Fest Thailand</strong>. She has stood in the kitchens that matter and walked out with her work recognized — proof, on stages where there are no second chances, that her cooking holds.</p>
+            <p>And yet she still cooks like a mother feeding her family. That&apos;s the part the training can&apos;t teach and didn&apos;t need to. <strong>Narwhal Thai Table</strong> is her table on Beach Boulevard — royal-court technique, French discipline, California ingredients, and a Thai mother&apos;s instinct for who&apos;s sitting across from her. Every plate, by her own hands.</p>
             <div className="chef-quote">Every dish I make, I make like I&apos;m cooking for someone I love. That&apos;s all. That&apos;s the secret.</div>
             <div className="chef-credentials">
+              <span>Le Cordon Bleu</span>
+              <span>Royal Court Women&apos;s College · วิทยาลัยในวังหญิง</span>
               <span>MasterChef Thailand · S1</span>
-              <span>Chef &amp; Owner</span>
-              <span>Every Plate, Her Hands</span>
+              <span>Star Chef Thailand · S1</span>
+              <span>Chef Fest Thailand</span>
+              <span>Chef &amp; Co-Founder · Narwhal Thai Table</span>
             </div>
           </FadeUp>
         </div>
