@@ -381,6 +381,61 @@ nav.site-nav.scrolled{padding:14px 48px;background:rgba(245,240,230,0.96);}
 .chef-quote{border-left:2px solid var(--brass);padding:18px 0 18px 24px;margin:32px 0;font-family:var(--font-serif);font-style:italic;font-size:22px;line-height:1.5;color:var(--navy);}
 .chef-quote::before{content:"\201C";color:var(--brass);font-size:32px;margin-right:4px;}
 .chef-quote::after{content:"\201D";color:var(--brass);font-size:32px;}
+
+/* ----- The Golden Quote (premium variant of .chef-quote) -----
+   Used in the Chef section as the headline pull-quote. Heavier visual
+   weight: brass corner ornaments, soft golden tint, larger type. */
+.chef-quote.golden{
+  position:relative;
+  border-left:none;
+  margin:56px 0 40px;
+  padding:48px 44px;
+  background:linear-gradient(135deg, rgba(212,179,106,0.10), rgba(176,141,60,0.04));
+  font-size:26px;line-height:1.55;
+  color:var(--navy);
+  text-align:center;
+}
+.chef-quote.golden::before,
+.chef-quote.golden::after{
+  position:absolute;font-family:var(--font-display);font-style:italic;
+  color:var(--brass);font-size:18px;line-height:1;
+  width:22px;height:22px;border:1px solid var(--brass);
+  content:'';
+}
+.chef-quote.golden::before{top:0;left:0;border-right:none;border-bottom:none;}
+.chef-quote.golden::after{bottom:0;right:0;border-left:none;border-top:none;}
+.chef-quote.golden .quote-label{
+  display:block;font-family:var(--font-sans);font-style:normal;
+  font-size:10px;letter-spacing:0.36em;text-transform:uppercase;
+  color:var(--brass-deep);margin-bottom:18px;font-weight:500;
+}
+
+/* ----- Competition / stages bullet list -----
+   Used in the Chef section. Each item: brass diamond bullet, serif title,
+   optional small-caps subtitle (e.g. "Season 1"). */
+.chef-competitions{
+  list-style:none;padding:0;margin:24px 0 28px;
+  display:flex;flex-direction:column;gap:14px;
+  border-left:2px solid var(--brass);padding-left:28px;
+}
+.chef-competitions li{
+  position:relative;display:flex;align-items:baseline;gap:14px;
+  flex-wrap:wrap;
+}
+.chef-competitions li::before{
+  content:"";position:absolute;left:-35px;top:9px;
+  width:7px;height:7px;background:var(--brass);
+  transform:rotate(45deg);
+}
+.chef-competitions li .title{
+  font-family:var(--font-display);font-size:22px;font-weight:500;
+  color:var(--navy);letter-spacing:-0.01em;line-height:1.2;
+}
+.chef-competitions li .sub{
+  font-family:var(--font-sans);font-size:10px;letter-spacing:0.28em;
+  text-transform:uppercase;color:var(--brass-deep);font-weight:500;
+}
+
 .chef-credentials{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
 .chef-credentials span{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--brass-deep);border:1px solid var(--line);padding:6px 14px;}
 
@@ -630,6 +685,11 @@ footer{background:var(--navy-deep);color:var(--muted);padding:48px;border-top:1p
   .about-stats{grid-template-columns:1fr;gap:20px;text-align:center;}
   .about-text > p:first-of-type::first-letter{font-size:52px;}
   .chef-credentials span{font-size:9px;padding:5px 10px;}
+  .chef-quote.golden{padding:36px 24px;font-size:21px;margin:40px 0 32px;}
+  .chef-quote.golden::before, .chef-quote.golden::after{width:16px;height:16px;}
+  .chef-competitions{padding-left:22px;gap:12px;}
+  .chef-competitions li::before{left:-29px;top:7px;width:6px;height:6px;}
+  .chef-competitions li .title{font-size:19px;}
   .menu-tabs-wrap{margin:0 -18px 32px;}
   .tab{padding:13px 12px;font-size:10px;letter-spacing:0.16em;}
   .dish-name{font-size:19px;}
