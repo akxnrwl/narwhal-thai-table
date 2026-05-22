@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0B1F33" />
+<meta name="format-detection" content="telephone=no" />
+<title>Narwhal Thai Table · A Thai Family Table in Huntington Beach</title>
+<meta name="description" content="A Thai family table on Beach Boulevard, Huntington Beach. Every dish hand-prepared by Chef Namfon, of MasterChef Thailand Season 1." />
+
+<!-- Open Graph / social share -->
+<meta property="og:type" content="restaurant" />
+<meta property="og:title" content="Narwhal Thai Table · Huntington Beach" />
+<meta property="og:description" content="A Thai family table on Beach Boulevard. Every dish by Chef Namfon, of MasterChef Thailand Season 1." />
+<meta property="og:site_name" content="Narwhal Thai Table" />
+<meta property="og:locale" content="en_US" />
+<!-- TODO: add og:image and og:url once domain & cover photo are finalized -->
+<!-- <meta property="og:image" content="https://narwhalthaitable.com/og-cover.jpg" /> -->
+<!-- <meta property="og:url" content="https://narwhalthaitable.com/" /> -->
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Favicon (SVG inline so we don't need an extra asset yet) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230B1F33'/%3E%3Ctext x='50%25' y='54%25' font-family='Bodoni Moda,Georgia,serif' font-style='italic' font-size='38' fill='%23B08D3C' text-anchor='middle' dominant-baseline='middle'%3EN%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B1F33;
+    --navy-deep:#06121F;
+    --navy-soft:#152F4A;
+    --off-white:#F5F0E6;
+    --paper:#EFE8D8;
+    --paper-light:#FAF6EC;
+    --brass:#B08D3C;
+    --brass-light:#D4B36A;
+    --brass-deep:#8A6B26;
+    --ink:#1A1A1A;
+    --muted:rgba(245,240,230,0.65);
+    --muted-dark:rgba(11,31,51,0.6);
+    --line:rgba(176,141,60,0.35);
+    --line-dark:rgba(11,31,51,0.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--off-white);
+    color:var(--navy);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--brass);color:var(--off-white);}
+
+  /* Accessible skip link — only visible on focus */
+  .skip-link{
+    position:absolute;left:-9999px;top:0;z-index:200;
+    background:var(--navy);color:var(--off-white);
+    padding:14px 22px;text-decoration:none;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+  }
+  .skip-link:focus{left:12px;top:12px;outline:2px solid var(--brass);}
+
+  /*
+   * ============================================================
+   *  MEDIA FRAME COMPONENT  (image / video container)
+   * ============================================================
+   *  Drop-in container that behaves like a Next.js <Image fill> /
+   *  <video> wrapper. Preserves aspect ratio, shows a stylized
+   *  placeholder until real media is added, lazy loads, and works
+   *  with <picture>, <img srcset>, and <video> sources.
+   *
+   *  HOW TO USE (HTML pattern):
+   *
+   *  <figure class="media-frame" data-state="placeholder"
+   *          style="--ratio: 4/5;">
+   *    <!-- Real photo (when ready): -->
+   *    <!--
+   *    <picture>
+   *      <source srcset="dish-800.avif 800w, dish-1600.avif 1600w" type="image/avif">
+   *      <source srcset="dish-800.webp 800w, dish-1600.webp 1600w" type="image/webp">
+   *      <img class="media-image" src="dish-1200.jpg"
+   *           alt="Description of the photo"
+   *           loading="lazy" decoding="async"
+   *           sizes="(max-width: 768px) 100vw, 50vw">
+   *    </picture>
+   *    -->
+   *    <div class="media-placeholder"> ...stylized stand-in... </div>
+   *  </figure>
+   *
+   *  When the real photo is added, change data-state to "loaded"
+   *  (or remove it) and the placeholder fades out automatically.
+   *  When porting to Next.js this component maps cleanly to a
+   *  <MediaFrame ratio="4/5" src=... alt=...> React component.
+   * ============================================================
+   */
+  .media-frame{
+    position:relative;display:block;width:100%;
+    aspect-ratio:var(--ratio, 4/5);
+    overflow:hidden;background:var(--navy);
+    isolation:isolate;
+  }
+  .media-frame .media-image,
+  .media-frame .media-video,
+  .media-frame picture,
+  .media-frame picture img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center;
+    display:block;
+  }
+  .media-frame .media-placeholder{
+    position:absolute;inset:0;display:flex;
+    align-items:center;justify-content:center;
+    transition:opacity 0.6s ease;
+  }
+  .media-frame[data-state="loaded"] .media-placeholder{opacity:0;pointer-events:none;}
+  .media-frame[data-ornament="corners"]::before,
+  .media-frame[data-ornament="corners"]::after{
+    content:'';position:absolute;
+    width:18px;height:18px;border:1px solid var(--brass);
+    z-index:3;pointer-events:none;
+  }
+  .media-frame[data-ornament="corners"]::before{top:0;left:0;border-right:none;border-bottom:none;}
+  .media-frame[data-ornament="corners"]::after{bottom:0;right:0;border-left:none;border-top:none;}
+  .media-frame[data-ornament="inset"]::before{
+    content:'';position:absolute;inset:24px;
+    border:1px solid var(--line);z-index:3;pointer-events:none;
+  }
+
+  .display{font-family:'Bodoni Moda',serif;font-weight:400;letter-spacing:-0.02em;line-height:0.95;}
+  .serif{font-family:'Cormorant Garamond',serif;}
+  .label{
+    font-family:'Inter',sans-serif;
+    font-size:11px;font-weight:500;
+    letter-spacing:0.28em;text-transform:uppercase;
+  }
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:22px 48px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(245,240,230,0.85);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(11,31,51,0.06);
+    transition:all 0.4s ease;
+  }
+  nav.scrolled{padding:14px 48px;background:rgba(245,240,230,0.96);}
+  .logo{
+    font-family:'Bodoni Moda',serif;
+    font-size:20px;font-weight:600;letter-spacing:0.03em;
+    color:var(--navy);text-decoration:none;
+    display:flex;align-items:center;gap:12px;
+  }
+  .logo-mark{
+    width:34px;height:34px;
+    border:1.5px solid var(--brass);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-style:italic;color:var(--brass);font-weight:500;font-size:15px;
+    font-family:'Bodoni Moda',serif;
+  }
+  .nav-links{display:flex;gap:38px;align-items:center;}
+  .nav-links a{
+    text-decoration:none;color:var(--navy);
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    font-weight:500;position:relative;padding:6px 0;
+    transition:color 0.3s;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:0;
+    width:0;height:1px;background:var(--brass);
+    transition:width 0.4s ease;
+  }
+  .nav-links a:hover{color:var(--brass);}
+  .nav-links a:hover::after{width:100%;}
+  .btn-reserve{
+    background:var(--navy);color:var(--off-white);
+    padding:12px 22px;border:1px solid var(--navy);
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    font-weight:500;text-decoration:none;cursor:pointer;
+    transition:all 0.4s ease;
+  }
+  .btn-reserve:hover{background:var(--brass);border-color:var(--brass);color:var(--off-white);}
+
+  /* Hamburger button — hidden on desktop, shown on mobile */
+  .nav-toggle{
+    display:none;
+    background:none;border:none;cursor:pointer;
+    width:40px;height:40px;padding:0;
+    align-items:center;justify-content:center;
+    color:var(--navy);position:relative;z-index:120;
+  }
+  .nav-toggle-bar{
+    display:block;width:22px;height:1.5px;
+    background:currentColor;position:relative;
+    transition:transform 0.35s ease, opacity 0.2s ease;
+  }
+  .nav-toggle-bar::before,
+  .nav-toggle-bar::after{
+    content:'';position:absolute;left:0;
+    width:22px;height:1.5px;background:currentColor;
+    transition:transform 0.35s ease, top 0.25s ease;
+  }
+  .nav-toggle-bar::before{top:-7px;}
+  .nav-toggle-bar::after{top:7px;}
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar{background:transparent;}
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar::before{top:0;transform:rotate(45deg);}
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar::after{top:0;transform:rotate(-45deg);}
+
+  /* Mobile drawer (shown only at <=980px via @media) */
+  .nav-drawer{
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:var(--off-white);
+    padding:96px 32px 48px;
+    transform:translateY(-100%);
+    transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+    z-index:90;
+    display:flex;flex-direction:column;gap:8px;
+    overflow-y:auto;
+    visibility:hidden;
+  }
+  .nav-drawer[data-open="true"]{
+    transform:translateY(0);
+    visibility:visible;
+  }
+  .nav-drawer a{
+    display:block;
+    text-decoration:none;color:var(--navy);
+    font-family:'Bodoni Moda',serif;
+    font-size:32px;font-weight:400;letter-spacing:-0.01em;
+    padding:18px 4px;
+    border-bottom:1px solid var(--line-dark);
+    transition:color 0.3s, padding-left 0.3s;
+  }
+  .nav-drawer a:hover,
+  .nav-drawer a:focus-visible{color:var(--brass);padding-left:12px;outline:none;}
+  .nav-drawer .drawer-cta{
+    margin-top:auto;background:var(--navy);color:var(--off-white);
+    border:1px solid var(--navy);text-align:center;
+    font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
+    letter-spacing:0.22em;text-transform:uppercase;
+    padding:18px;
+  }
+  body[data-nav-open="true"]{overflow:hidden;}
+
+  /* HERO with video bg */
+  .hero{
+    min-height:100vh;
+    background:var(--navy);
+    color:var(--off-white);
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    padding:140px 48px 100px;
+    overflow:hidden;
+  }
+  .hero-video{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;z-index:0;
+    opacity:.55;
+  }
+  /* Animated fallback that shimmers like fire/heat when video is missing */
+  .hero-fallback{
+    position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 70%, rgba(212,179,106,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 75% 35%, rgba(176,141,60,0.30) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,140,40,0.18) 0%, transparent 60%),
+      linear-gradient(135deg, var(--navy-deep), var(--navy) 50%, var(--navy-soft));
+    animation:flicker 8s ease-in-out infinite;
+  }
+  @keyframes flicker{
+    0%,100%{filter:brightness(1) hue-rotate(0deg);}
+    33%{filter:brightness(1.15) hue-rotate(-6deg);}
+    66%{filter:brightness(0.92) hue-rotate(4deg);}
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;z-index:1;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(11,31,51,0.4) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(11,31,51,0.3) 0%, transparent 50%),
+      linear-gradient(180deg, rgba(11,31,51,0.5), rgba(11,31,51,0.7));
+    pointer-events:none;
+  }
+  .hero::after{
+    content:'';position:absolute;inset:0;z-index:1;
+    background-image:
+      linear-gradient(rgba(245,240,230,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,240,230,0.025) 1px, transparent 1px);
+    background-size:80px 80px;
+    pointer-events:none;
+  }
+  .hero-inner{
+    position:relative;z-index:2;
+    max-width:1400px;width:100%;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:center;
+  }
+  .hero-text .label{color:var(--brass-light);margin-bottom:32px;display:inline-flex;align-items:center;gap:14px;}
+  .hero-text .label::before{content:'';width:36px;height:1px;background:var(--brass);}
+  .hero-text h1{
+    font-family:'Bodoni Moda',serif;
+    font-size:clamp(48px,7vw,98px);
+    font-weight:400;margin-bottom:32px;line-height:0.98;
+    letter-spacing:-0.02em;color:var(--off-white);
+  }
+  .hero-text h1 em{
+    font-style:italic;color:var(--brass-light);
+    font-family:'Cormorant Garamond',serif;font-weight:300;
+  }
+  .hero-text p{
+    font-family:'Cormorant Garamond',serif;
+    font-size:22px;font-style:italic;font-weight:300;
+    color:rgba(245,240,230,0.85);max-width:480px;
+    margin-bottom:44px;line-height:1.5;
+  }
+  .hero-cta{display:flex;gap:18px;flex-wrap:wrap;}
+  .btn-primary,.btn-secondary{
+    padding:16px 30px;font-size:11px;
+    letter-spacing:0.2em;text-transform:uppercase;
+    font-weight:500;cursor:pointer;text-decoration:none;
+    transition:all 0.4s ease;
+    display:inline-flex;align-items:center;gap:12px;
+  }
+  .btn-primary{background:var(--brass);color:var(--navy);border:1px solid var(--brass);}
+  .btn-primary:hover{background:var(--brass-light);border-color:var(--brass-light);}
+  .btn-secondary{background:transparent;color:var(--off-white);border:1px solid rgba(245,240,230,0.4);}
+  .btn-secondary:hover{border-color:var(--brass);color:var(--brass-light);}
+  .btn-primary svg,.btn-secondary svg{transition:transform 0.3s;}
+  .btn-primary:hover svg,.btn-secondary:hover svg{transform:translateX(4px);}
+
+  .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;}
+  .visual-frame{
+    width:100%;aspect-ratio:4/5;
+    border:1px solid var(--line);
+    background:rgba(11,31,51,0.45);
+    backdrop-filter:blur(8px);
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    padding:40px;
+  }
+  .visual-frame::before,.visual-frame::after{
+    content:'';position:absolute;
+    width:18px;height:18px;
+    border:1px solid var(--brass);
+  }
+  .visual-frame::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+  .visual-frame::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+  .ornament{text-align:center;color:var(--off-white);}
+  .ornament-narwhal{width:170px;height:170px;margin:0 auto 24px;}
+  .ornament-narwhal svg{width:100%;height:100%;}
+  .ornament-text{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:28px;letter-spacing:0.02em;
+    color:var(--off-white);margin-bottom:10px;
+  }
+  .ornament-divider{
+    width:50px;height:1px;background:var(--brass);
+    margin:18px auto;
+  }
+  .ornament-tagline{
+    font-size:10px;letter-spacing:0.34em;
+    text-transform:uppercase;color:var(--brass-light);
+    font-family:'Inter',sans-serif;font-weight:500;
+  }
+  .hero-scroll{
+    position:absolute;bottom:32px;left:50%;
+    transform:translateX(-50%);z-index:2;
+    color:var(--muted);
+    font-size:10px;letter-spacing:0.32em;text-transform:uppercase;
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+  }
+  .hero-scroll::after{
+    content:'';width:1px;height:40px;background:var(--brass);
+    animation:scrollPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes scrollPulse{
+    0%,100%{transform:scaleY(1);opacity:1;}
+    50%{transform:scaleY(0.4);opacity:0.5;}
+  }
+
+  /* Section base */
+  section{padding:140px 48px;position:relative;}
+  .container{max-width:1280px;margin:0 auto;}
+  .section-head{margin-bottom:80px;text-align:center;}
+  .section-head .label{color:var(--brass-deep);margin-bottom:20px;display:block;}
+  .section-head h2{
+    font-family:'Bodoni Moda',serif;
+    font-size:clamp(42px,5.2vw,68px);
+    font-weight:400;color:var(--navy);
+    letter-spacing:-0.02em;line-height:1;
+  }
+  .section-head h2 em{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;color:var(--brass-deep);font-weight:300;
+  }
+  .section-head p{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:20px;
+    color:var(--muted-dark);max-width:600px;
+    margin:24px auto 0;line-height:1.5;
+  }
+
+  /* STORY (about) */
+  .about{background:var(--paper);}
+  .about-grid{
+    display:grid;grid-template-columns:1fr 1.1fr;
+    gap:100px;align-items:center;
+  }
+  .about-visual{
+    position:relative;aspect-ratio:4/5;
+    background:var(--navy);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .about-visual::before{
+    content:'';position:absolute;inset:24px;
+    border:1px solid var(--line);
+  }
+  .about-visual-content{
+    position:relative;z-index:2;text-align:center;color:var(--off-white);
+    padding:40px;
+  }
+  .about-visual-content .roman{
+    font-family:'Bodoni Moda',serif;
+    font-style:italic;font-size:120px;
+    color:var(--brass);line-height:1;
+    margin-bottom:24px;
+  }
+  .about-visual-content .est{
+    font-size:10px;letter-spacing:0.4em;text-transform:uppercase;
+    color:var(--brass-light);margin-bottom:8px;
+  }
+  .about-visual-content .year{
+    font-family:'Bodoni Moda',serif;
+    font-size:48px;letter-spacing:0.04em;
+  }
+  .about-text .label{color:var(--brass-deep);margin-bottom:24px;display:block;}
+  .about-text h2{
+    font-family:'Bodoni Moda',serif;
+    font-size:clamp(38px,4.5vw,58px);
+    font-weight:400;color:var(--navy);
+    letter-spacing:-0.02em;line-height:1.05;margin-bottom:32px;
+  }
+  .about-text h2 em{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;color:var(--brass-deep);font-weight:300;
+  }
+  .about-text > p{
+    font-family:'Cormorant Garamond',serif;
+    font-size:19px;line-height:1.7;color:var(--navy);
+    margin-bottom:20px;
+  }
+  .about-text > p:first-of-type::first-letter{
+    font-family:'Bodoni Moda',serif;
+    font-size:64px;float:left;line-height:0.9;
+    padding:6px 12px 0 0;color:var(--brass);
+  }
+  .about-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:32px;margin-top:48px;
+    padding-top:40px;border-top:1px solid var(--line-dark);
+  }
+  .stat .num{
+    font-family:'Bodoni Moda',serif;
+    font-size:42px;color:var(--brass);
+    line-height:1;margin-bottom:6px;
+  }
+  .stat .lbl{
+    font-size:10px;letter-spacing:0.24em;
+    text-transform:uppercase;color:var(--muted-dark);
+  }
+
+  /* CHEF */
+  .chef{background:var(--paper-light);}
+  .chef-grid{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:90px;align-items:center;
+  }
+  .chef-visual{
+    aspect-ratio:4/5;position:relative;
+    background:linear-gradient(135deg, var(--navy-soft), var(--navy-deep));
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;color:var(--off-white);
+  }
+  .chef-visual::before{content:'';position:absolute;inset:24px;border:1px solid var(--line);}
+  .chef-content{position:relative;z-index:2;text-align:center;padding:50px;}
+  .chef-content .role{
+    font-size:10px;letter-spacing:0.4em;text-transform:uppercase;
+    color:var(--brass-light);margin-bottom:20px;
+  }
+  .chef-content .name-en{
+    font-family:'Bodoni Moda',serif;font-size:48px;
+    color:var(--off-white);line-height:1.05;letter-spacing:-0.02em;
+    margin-bottom:6px;
+  }
+  .chef-content .name-en em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-light);font-weight:300;}
+  .chef-content .name-th{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--brass-light);font-size:22px;margin-top:8px;
+  }
+  .chef-content .ornament-divider{margin:24px auto;}
+  .chef-content .badge{
+    font-size:10px;letter-spacing:0.32em;text-transform:uppercase;
+    color:var(--off-white);
+  }
+  .chef-text .label{color:var(--brass-deep);margin-bottom:24px;display:block;}
+  .chef-text h2{
+    font-family:'Bodoni Moda',serif;
+    font-size:clamp(34px,4vw,52px);
+    font-weight:400;color:var(--navy);line-height:1.05;
+    margin-bottom:28px;letter-spacing:-0.02em;
+  }
+  .chef-text h2 em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-deep);font-weight:300;}
+  .chef-text p{
+    font-family:'Cormorant Garamond',serif;
+    font-size:19px;line-height:1.7;color:var(--navy);
+    margin-bottom:18px;
+  }
+  .chef-quote{
+    border-left:2px solid var(--brass);
+    padding:18px 0 18px 24px;
+    margin:32px 0;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:22px;line-height:1.5;
+    color:var(--navy);
+  }
+  .chef-quote::before{content:"\201C";color:var(--brass);font-size:32px;margin-right:4px;}
+  .chef-quote::after{content:"\201D";color:var(--brass);font-size:32px;}
+  .chef-credentials{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .chef-credentials span{
+    font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
+    color:var(--brass-deep);border:1px solid var(--line);padding:6px 14px;
+  }
+
+  /* MENU */
+  .menu-section{background:var(--off-white);}
+  /* wrapper holds the sticky positioning + edge fade hints */
+  .menu-tabs-wrap{
+    position:sticky;top:72px;z-index:9;
+    margin:0 -48px 64px;padding:6px 0 0;
+    background:rgba(245,240,230,0.95);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-dark);
+  }
+  /* gradient fade on left/right hints that tabs scroll horizontally */
+  .menu-tabs-wrap::before,
+  .menu-tabs-wrap::after{
+    content:'';position:absolute;top:0;bottom:0;width:36px;
+    pointer-events:none;z-index:2;opacity:0;
+    transition:opacity 0.3s;
+  }
+  .menu-tabs-wrap::before{left:0;background:linear-gradient(90deg, var(--off-white), transparent);}
+  .menu-tabs-wrap::after{right:0;background:linear-gradient(-90deg, var(--off-white), transparent);}
+  .menu-tabs{
+    display:flex;justify-content:center;gap:0;
+    flex-wrap:wrap;
+    padding:0 48px;
+  }
+  .tab{
+    background:none;border:none;cursor:pointer;
+    padding:18px 22px;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+    font-weight:500;color:var(--muted-dark);
+    font-family:'Inter',sans-serif;
+    position:relative;transition:color 0.3s;
+    white-space:nowrap;
+    scroll-snap-align:center;
+  }
+  .tab:focus-visible{outline:2px solid var(--brass);outline-offset:-4px;color:var(--navy);}
+  .tab::after{
+    content:'';position:absolute;bottom:-1px;left:0;right:0;
+    height:1px;background:var(--brass);
+    transform:scaleX(0);transition:transform 0.4s ease;
+  }
+  .tab.active{color:var(--navy);}
+  .tab.active::after{transform:scaleX(1);}
+  .tab:hover{color:var(--navy);}
+
+  .menu-category{display:none;}
+  .menu-category.active{display:block;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .cat-grid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:48px 80px;max-width:1180px;margin:0 auto;
+  }
+  .dish{
+    padding-bottom:28px;
+    border-bottom:1px dashed var(--line);
+    position:relative;
+  }
+  .dish.sig::before{
+    content:"\2605";position:absolute;left:-22px;top:2px;
+    color:var(--brass);font-size:14px;
+  }
+  .dish-head{
+    display:flex;justify-content:space-between;
+    align-items:baseline;gap:20px;margin-bottom:10px;
+  }
+  .dish-name{
+    font-family:'Bodoni Moda',serif;
+    font-size:22px;font-weight:500;color:var(--navy);
+    letter-spacing:-0.01em;line-height:1.2;
+  }
+  .dish-name .thai{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:15px;color:var(--brass-deep);
+    font-weight:400;display:block;margin-top:2px;
+  }
+  .dish-desc{
+    font-family:'Cormorant Garamond',serif;
+    font-size:17px;font-style:italic;
+    color:var(--muted-dark);line-height:1.5;
+  }
+  .dish-tags{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .tag{
+    font-size:9px;letter-spacing:0.2em;
+    text-transform:uppercase;color:var(--brass-deep);
+    padding:3px 8px;border:1px solid var(--line);
+    font-weight:500;
+  }
+  .tag.spicy{color:#A6362F;border-color:rgba(166,54,47,0.35);}
+  .dish-variants{
+    margin-top:8px;color:var(--brass-deep);
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;
+  }
+
+  .menu-aside-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:50px;
+    max-width:1180px;margin:60px auto 0;
+    padding:50px 0;border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);
+  }
+  .menu-aside-grid h4{
+    color:var(--brass-deep);font-size:11px;letter-spacing:0.28em;
+    text-transform:uppercase;margin-bottom:18px;font-weight:500;
+  }
+  .menu-aside-grid ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 18px;}
+  .menu-aside-grid li{
+    color:var(--navy);font-family:'Cormorant Garamond',serif;font-size:17px;
+  }
+  .menu-aside-grid li::after{content:"\B7";color:var(--brass);margin-left:18px;}
+  .menu-aside-grid li:last-child::after{content:"";}
+  .menu-note{
+    text-align:center;margin-top:48px;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:17px;color:var(--muted-dark);
+  }
+
+  /* EXPERIENCE / 3 PILLARS */
+  .experience{background:var(--navy);color:var(--off-white);padding:160px 48px;}
+  .experience .section-head h2{color:var(--off-white);}
+  .experience .section-head .label{color:var(--brass-light);}
+  .experience .section-head h2 em{color:var(--brass-light);}
+  .experience .section-head p{color:var(--muted);}
+  .pillars{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;background:var(--line);
+    border:1px solid var(--line);
+  }
+  .pillar{background:var(--navy);padding:64px 40px;transition:background 0.4s ease;}
+  .pillar:hover{background:var(--navy-soft);}
+  .pillar-num{
+    font-family:'Bodoni Moda',serif;
+    font-style:italic;font-size:14px;
+    color:var(--brass);letter-spacing:0.2em;
+    margin-bottom:32px;display:block;
+  }
+  .pillar-icon{
+    width:48px;height:48px;margin-bottom:32px;
+    color:var(--brass-light);
+  }
+  .pillar h3{
+    font-family:'Bodoni Moda',serif;
+    font-size:28px;font-weight:400;
+    margin-bottom:16px;color:var(--off-white);
+    letter-spacing:-0.01em;
+  }
+  .pillar p{
+    font-family:'Cormorant Garamond',serif;
+    font-size:17px;font-style:italic;
+    color:var(--muted);line-height:1.6;
+  }
+
+  /* RESERVE */
+  .reserve{background:var(--paper);padding:160px 48px;}
+  .reserve-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+  .reserve-info .label{color:var(--brass-deep);display:block;margin-bottom:20px;}
+  .reserve-info h2{
+    font-family:'Bodoni Moda',serif;
+    font-size:clamp(38px,4.5vw,58px);font-weight:400;color:var(--navy);
+    letter-spacing:-0.02em;line-height:1.05;margin-bottom:24px;
+  }
+  .reserve-info h2 em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-deep);font-weight:300;}
+  .reserve-info > p{
+    font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;
+    color:var(--muted-dark);line-height:1.6;margin-bottom:40px;
+  }
+  .hours-block{border-top:1px solid var(--line-dark);padding-top:32px;}
+  .hours-block h4{
+    font-size:11px;letter-spacing:0.28em;text-transform:uppercase;
+    color:var(--brass-deep);margin-bottom:18px;font-weight:500;
+  }
+  .hours-row{
+    display:flex;justify-content:space-between;
+    padding:10px 0;border-bottom:1px dashed var(--line);font-size:15px;
+  }
+  .hours-row .day{color:var(--navy);font-weight:500;}
+  .hours-row .time{color:var(--muted-dark);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;}
+
+  .reserve-form{
+    background:var(--off-white);padding:48px;
+    border:1px solid var(--line-dark);position:relative;
+  }
+  .reserve-form::before,.reserve-form::after{
+    content:'';position:absolute;width:14px;height:14px;
+    border:1px solid var(--brass);
+  }
+  .reserve-form::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+  .reserve-form::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+  .form-title{
+    font-family:'Bodoni Moda',serif;
+    font-size:26px;color:var(--navy);
+    margin-bottom:14px;letter-spacing:-0.01em;
+  }
+  .form-title em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-deep);}
+  .form-sub{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--muted-dark);font-size:17px;margin-bottom:28px;
+  }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+  .form-group{margin-bottom:20px;}
+  .form-group label{
+    display:block;font-size:10px;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--brass-deep);
+    margin-bottom:8px;font-weight:500;
+  }
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;padding:14px 16px;background:transparent;
+    border:1px solid var(--line-dark);
+    font-family:'Inter',sans-serif;font-size:14px;
+    color:var(--navy);transition:border-color 0.3s;
+  }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+    outline:none;border-color:var(--brass);
+  }
+  .form-group textarea{resize:vertical;min-height:80px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;}
+  .btn-submit{
+    width:100%;padding:18px;
+    background:var(--navy);color:var(--off-white);
+    border:1px solid var(--navy);cursor:pointer;
+    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
+    font-weight:500;transition:all 0.4s;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-submit:hover{background:var(--brass);border-color:var(--brass);}
+
+  /* CONTACT */
+  .contact{background:var(--navy);color:var(--off-white);padding:140px 48px;}
+  .contact-grid{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:60px;
+    margin-bottom:80px;
+  }
+  .contact-block .label{color:var(--brass-light);display:block;margin-bottom:18px;}
+  .contact-block h3{
+    font-family:'Bodoni Moda',serif;
+    font-size:30px;font-weight:400;color:var(--off-white);
+    margin-bottom:14px;letter-spacing:-0.01em;
+  }
+  .contact-block p,.contact-block a{
+    font-family:'Cormorant Garamond',serif;
+    font-size:18px;font-style:italic;color:var(--muted);
+    text-decoration:none;line-height:1.6;transition:color 0.3s;
+  }
+  .contact-block a:hover{color:var(--brass-light);}
+  .map-placeholder{
+    width:100%;aspect-ratio:21/9;
+    background:var(--navy-deep);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .map-placeholder::before{
+    content:'';position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(176,141,60,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(176,141,60,0.08) 1px, transparent 1px);
+    background-size:40px 40px;
+  }
+  .map-content{position:relative;z-index:2;text-align:center;}
+  .map-pin{width:56px;height:56px;margin:0 auto 16px;color:var(--brass);}
+  .map-content .addr{
+    font-family:'Bodoni Moda',serif;font-size:22px;
+    color:var(--off-white);margin-bottom:6px;letter-spacing:-0.01em;
+  }
+  .map-content .city{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:16px;color:var(--brass-light);
+  }
+
+  /* FOOTER */
+  footer{
+    background:var(--navy-deep);color:var(--muted);
+    padding:48px;border-top:1px solid var(--line);
+  }
+  .footer-inner{
+    max-width:1280px;margin:0 auto;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:24px;
+  }
+  .footer-brand{
+    font-family:'Bodoni Moda',serif;font-size:16px;
+    color:var(--off-white);letter-spacing:0.04em;font-style:italic;
+  }
+  .footer-brand em{color:var(--brass-light);}
+  .footer-copy{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;}
+  .footer-social{display:flex;gap:24px;}
+  .footer-social a{
+    color:var(--muted);text-decoration:none;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+    transition:color 0.3s;
+  }
+  .footer-social a:hover{color:var(--brass-light);}
+
+  /* Fade in */
+  .fade-up{opacity:0;transform:translateY(40px);transition:all 1s ease;}
+  .fade-up.visible{opacity:1;transform:translateY(0);}
+
+  /* ====== TABLET / SMALL LAPTOP ====== */
+  @media(max-width:980px){
+    nav{padding:16px 24px;}
+    nav.scrolled{padding:12px 24px;}
+    /* swap inline nav for hamburger drawer */
+    .nav-links{display:none;}
+    .nav-toggle{display:inline-flex;}
+    .btn-reserve{padding:10px 16px;font-size:10px;}
+    section{padding:80px 24px;}
+    .hero{padding:120px 24px 80px;}
+    .hero-inner{grid-template-columns:1fr;gap:48px;}
+    .hero-visual{max-width:360px;margin:0 auto;}
+    .about-grid,.chef-grid{grid-template-columns:1fr;gap:60px;}
+    .cat-grid{grid-template-columns:1fr;gap:32px;}
+    .menu-aside-grid{grid-template-columns:1fr;gap:30px;}
+    .pillars{grid-template-columns:1fr;}
+    .reserve-grid{grid-template-columns:1fr;gap:48px;}
+    .reserve-form{padding:32px 24px;}
+    .contact-grid{grid-template-columns:1fr;gap:40px;}
+    .footer-inner{flex-direction:column;text-align:center;}
+    .form-row{grid-template-columns:1fr;}
+
+    /* menu tabs: switch from wrapped flex to a single horizontal scroller */
+    .menu-tabs-wrap{
+      top:60px;
+      margin:0 -24px 40px;padding:0;
+    }
+    .menu-tabs-wrap::before,
+    .menu-tabs-wrap::after{opacity:1;}
+    .menu-tabs{
+      flex-wrap:nowrap;justify-content:flex-start;
+      overflow-x:auto;overflow-y:hidden;
+      scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling:touch;
+      padding:0 16px;
+      /* hide scrollbar but keep functional */
+      scrollbar-width:none;
+    }
+    .menu-tabs::-webkit-scrollbar{display:none;}
+    .tab{
+      padding:14px 14px;
+      font-size:10.5px;letter-spacing:0.18em;
+      flex-shrink:0;
+    }
+  }
+
+  /* ====== PHONE ====== */
+  @media(max-width:768px){
+    nav{padding:14px 18px;}
+    section{padding:64px 20px;}
+    .hero{padding:110px 20px 70px;min-height:90vh;}
+    .hero-text h1{margin-bottom:24px;}
+    .hero-text p{font-size:19px;margin-bottom:32px;}
+    .hero-cta{gap:12px;}
+    .btn-primary,.btn-secondary{padding:14px 22px;font-size:10.5px;}
+    .hero-visual{max-width:300px;}
+    .visual-frame{padding:28px;}
+    .ornament-narwhal{width:130px;height:130px;}
+    .ornament-text{font-size:24px;}
+    .about-grid,.chef-grid{gap:48px;}
+    .about-stats{grid-template-columns:repeat(3,1fr);gap:16px;}
+    .stat .num{font-size:32px;}
+    .about-visual-content .roman{font-size:84px;}
+    .about-visual-content .year{font-size:36px;}
+    .chef-content{padding:32px 24px;}
+    .chef-content .name-en{font-size:36px;}
+    .section-head{margin-bottom:56px;}
+    .menu-tabs-wrap{top:56px;}
+    .reserve-form{padding:28px 20px;}
+    .contact-block h3{font-size:26px;}
+    .map-placeholder{aspect-ratio:4/3;}
+  }
+
+  /* ====== SMALL PHONE ====== */
+  @media(max-width:480px){
+    nav{padding:12px 16px;}
+    .logo{font-size:17px;gap:10px;}
+    .logo-mark{width:30px;height:30px;font-size:14px;}
+    .btn-reserve{padding:9px 12px;font-size:9.5px;letter-spacing:0.14em;}
+    section{padding:56px 18px;}
+    .hero{padding:100px 18px 60px;}
+    .hero-text .label{margin-bottom:24px;font-size:10px;letter-spacing:0.24em;}
+    .hero-text p{font-size:17px;}
+    .hero-cta{flex-direction:column;align-items:stretch;}
+    .btn-primary,.btn-secondary{justify-content:center;}
+    .hero-visual{max-width:260px;}
+    .about-stats{grid-template-columns:1fr;gap:20px;text-align:center;}
+    .about-text > p:first-of-type::first-letter{font-size:52px;}
+    .chef-credentials span{font-size:9px;padding:5px 10px;}
+    .menu-tabs-wrap{margin:0 -18px 32px;}
+    .tab{padding:13px 12px;font-size:10px;letter-spacing:0.16em;}
+    .dish-name{font-size:19px;}
+    .dish-desc{font-size:16px;}
+    .pillar{padding:48px 28px;}
+    .footer-social{flex-wrap:wrap;justify-content:center;gap:14px 20px;}
+    .nav-drawer a{font-size:26px;padding:14px 4px;}
+  }
+
+  /* ====== Respect prefers-reduced-motion ====== */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{
+      animation-duration:0.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important;
+      scroll-behavior:auto !important;
+    }
+    .fade-up{opacity:1;transform:none;}
+    .hero-fallback{animation:none;}
+    .hero-scroll::after{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- NAV -->
+<nav id="nav" aria-label="Primary">
+  <a href="#top" class="logo" aria-label="Narwhal Thai Table — home">
+    <span class="logo-mark" aria-hidden="true">N</span>
+    Narwhal Thai Table
+  </a>
+  <div class="nav-links">
+    <a href="#story">Our Story</a>
+    <a href="#chef">The Chef</a>
+    <a href="#menu">Menu</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Visit</a>
+  </div>
+  <a href="#reserve" class="btn-reserve">Save a Seat</a>
+  <button class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="nav-drawer"
+          aria-label="Open menu">
+    <span class="nav-toggle-bar" aria-hidden="true"></span>
+  </button>
+</nav>
+
+<!-- Mobile slide-down drawer (built from the same links as nav-links) -->
+<div class="nav-drawer" id="nav-drawer" aria-hidden="true">
+  <a href="#story">Our Story</a>
+  <a href="#chef">The Chef</a>
+  <a href="#menu">Menu</a>
+  <a href="#experience">Experience</a>
+  <a href="#contact">Visit</a>
+  <a href="#reserve" class="drawer-cta">Save a Seat</a>
+</div>
+
+<main id="main"><a id="top"></a>
+
+<!-- HERO with video background -->
+<section class="hero" aria-labelledby="hero-title">
+  <!--
+    ============================================================
+    HERO BACKGROUND VIDEO
+    ============================================================
+    Drop a kitchen video into this folder (or a /media subfolder)
+    and uncomment the <source> tag below. The animated fallback
+    keeps the hero alive until a real video plays.
+
+      <source src="media/wok.mp4"    type="video/mp4">
+      <source src="media/wok.webm"   type="video/webm">
+
+    Recommended: 1080p, 8–15 seconds, looped seamlessly, muted,
+    under 4 MB. Free sources:
+      - pexels.com/search/videos/thai cooking
+      - pexels.com/search/videos/wok flame
+    For high-quality posters, also set `poster="media/wok.jpg"`
+    on the <video> element to avoid a black flash on slow networks.
+    ============================================================
+  -->
+  <div class="hero-fallback" aria-hidden="true"></div>
+  <video class="hero-video"
+         autoplay muted loop playsinline preload="metadata"
+         aria-hidden="true"
+         poster="">
+    <!-- <source src="media/wok.mp4" type="video/mp4"> -->
+    <!-- <source src="media/hotpot.mp4" type="video/mp4"> -->
+  </video>
+
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="label">A Thai Family Table · Huntington Beach</span>
+      <h1 id="hero-title">Come sit<br/>with us, <em>neighbor</em>.</h1>
+      <p>A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Namfon's own hands.</p>
+      <div class="hero-cta">
+        <a href="#reserve" class="btn-primary">
+          Save Me a Seat
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#menu" class="btn-secondary">
+          Peek at the Menu
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <!--
+        FUTURE: replace the .visual-frame stand-in below with a real
+        photograph using the .media-frame pattern documented at the top
+        of the CSS, e.g.:
+          <figure class="media-frame" data-ornament="corners" style="--ratio:4/5;">
+            <picture>
+              <source srcset="media/hero-800.webp 800w, media/hero-1600.webp 1600w" type="image/webp">
+              <img class="media-image" src="media/hero-1200.jpg" alt="..." sizes="(max-width:768px) 90vw, 40vw" loading="eager" fetchpriority="high">
+            </picture>
+          </figure>
+      -->
+      <div class="visual-frame" role="img" aria-label="Narwhal Thai Table mark">
+        <div class="ornament">
+          <div class="ornament-narwhal">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#D4B36A"/>
+                  <stop offset="100%" stop-color="#8A6B26"/>
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="92" fill="none" stroke="#B08D3C" stroke-width="0.5" opacity="0.4"/>
+              <circle cx="100" cy="100" r="78" fill="none" stroke="#B08D3C" stroke-width="0.5" opacity="0.3"/>
+              <path d="M 40 110 Q 50 95, 75 95 Q 110 95, 135 105 Q 155 110, 165 115 Q 158 118, 150 120 Q 130 124, 110 122 Q 80 122, 60 120 Q 45 117, 40 110 Z" fill="url(#brassGrad)" opacity="0.95"/>
+              <path d="M 158 110 Q 175 95, 178 88 Q 172 100, 168 112 Q 172 122, 178 132 Q 175 125, 158 120 Z" fill="url(#brassGrad)" opacity="0.9"/>
+              <line x1="42" y1="103" x2="8" y2="78" stroke="#D4B36A" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="42" y1="103" x2="8" y2="78" stroke="#8A6B26" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
+              <path d="M 15 82 Q 20 80, 22 84 M 22 84 Q 27 82, 29 86 M 29 86 Q 34 84, 36 88" stroke="#8A6B26" stroke-width="0.6" fill="none" opacity="0.7"/>
+              <circle cx="55" cy="104" r="1.8" fill="#0B1F33"/>
+              <path d="M 95 122 Q 100 132, 108 134 Q 105 128, 102 122 Z" fill="#8A6B26" opacity="0.85"/>
+              <path d="M 30 145 Q 60 140, 90 145 T 170 145" stroke="#B08D3C" stroke-width="0.5" fill="none" opacity="0.4"/>
+              <path d="M 40 155 Q 70 150, 100 155 T 165 155" stroke="#B08D3C" stroke-width="0.4" fill="none" opacity="0.3"/>
+              <g transform="translate(100, 40)" opacity="0.8"><path d="M 0 -8 L 2 -2 L 8 0 L 2 2 L 0 8 L -2 2 L -8 0 L -2 -2 Z" fill="#D4B36A"/></g>
+            </svg>
+          </div>
+          <div class="ornament-text">Narwhal</div>
+          <div class="ornament-divider"></div>
+          <div class="ornament-tagline">Thai Table · Est. 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">Scroll</div>
+</section>
+
+<!-- OUR STORY -->
+<section class="about" id="story">
+  <div class="container">
+    <div class="about-grid">
+      <!--
+        FUTURE: swap this stand-in for a real photo (family in the kitchen,
+        dining room, etc.) using the media-frame pattern. e.g.:
+          <figure class="media-frame fade-up" data-ornament="inset" style="--ratio:4/5;">
+            <picture>
+              <source srcset="media/story-800.webp 800w, media/story-1600.webp 1600w" type="image/webp">
+              <img class="media-image" src="media/story-1200.jpg"
+                   alt="The Sripornsawan family at the Narwhal Thai Table dining room"
+                   loading="lazy" decoding="async"
+                   sizes="(max-width:768px) 100vw, 45vw">
+            </picture>
+          </figure>
+      -->
+      <div class="about-visual fade-up" role="img" aria-label="Established 2026 — Huntington Beach, California">
+        <div class="about-visual-content">
+          <div class="est">Established</div>
+          <div class="year">MMXXVI</div>
+          <div class="roman">N</div>
+          <div class="ornament-divider" style="background:var(--brass);"></div>
+          <div class="est" style="color:var(--brass-light);">Huntington Beach · CA</div>
+        </div>
+      </div>
+      <div class="about-text fade-up">
+        <span class="label">Our Story</span>
+        <h2>A Thai kitchen, raised by the <em>California coast</em>.</h2>
+        <p>We're a family from Thailand who fell in love with Huntington Beach — the salt air, the sunsets over PCH, the way neighbors wave at each other on the way to the pier. So we did what every Thai family does when they love a place: we cooked for it.</p>
+        <p>Narwhal Thai Table is our home table, opened wide. The curries are pounded by hand the way our grandmothers taught us. The fish comes off California boats. The smiles are real, because the people serving you are the same people who own the place.</p>
+        <p style="color:var(--brass-deep);font-style:italic;">Come hungry. Stay a while. You're family here.</p>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="num">S1</div>
+            <div class="lbl">MasterChef Thailand</div>
+          </div>
+          <div class="stat">
+            <div class="num">100%</div>
+            <div class="lbl">By Chef's Hand</div>
+          </div>
+          <div class="stat">
+            <div class="num">HB</div>
+            <div class="lbl">Our Hometown</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEF -->
+<section class="chef" id="chef">
+  <div class="container">
+    <div class="chef-grid">
+      <!--
+        FUTURE: replace this stand-in with a portrait of Chef Namfon
+        using the media-frame pattern (see CSS at the top of <style>). e.g.:
+          <figure class="media-frame fade-up" data-ornament="inset" style="--ratio:4/5;">
+            <picture>
+              <source srcset="media/chef-800.webp 800w, media/chef-1600.webp 1600w" type="image/webp">
+              <img class="media-image" src="media/chef-1200.jpg"
+                   alt="Portrait of Chef Namfon Laksanawadee Sripornsawan"
+                   loading="lazy" decoding="async"
+                   sizes="(max-width:768px) 100vw, 45vw">
+            </picture>
+          </figure>
+      -->
+      <div class="chef-visual fade-up" role="img" aria-label="Chef Namfon Laksanawadee Sripornsawan, MasterChef Thailand Season 1">
+        <div class="chef-content">
+          <div class="role">— Chef &amp; Owner</div>
+          <div class="name-en">Chef <em>Namfon</em></div>
+          <div class="name-en" style="font-size:30px;">Laksanawadee Sripornsawan</div>
+          <div class="name-th">น้ำฝน ลักษณาวดี ศรีพรสวรรค์</div>
+          <div class="ornament-divider"></div>
+          <div class="badge">MasterChef Thailand · Season 1</div>
+        </div>
+      </div>
+      <div class="chef-text fade-up">
+        <span class="label">Meet the Chef</span>
+        <h2>A MasterChef's craft. <em>A mother's heart.</em></h2>
+        <p>Chef Namfon first cooked her way into Thailand's heart on the very first season of <strong>MasterChef Thailand</strong>. But long before the cameras, she was already a Thai mom who fed everyone in the neighborhood and never let anyone leave hungry.</p>
+        <p>She still cooks that way. Every dish at Narwhal — from the first bite of fish cake to the last spoon of mango sticky rice — comes from her hands and her recipe book. When you eat here, you're eating from her family table.</p>
+        <div class="chef-quote">Every dish I make, I make like I'm cooking for someone I love. That's all. That's the secret.</div>
+        <div class="chef-credentials">
+          <span>MasterChef Thailand · S1</span>
+          <span>Chef &amp; Owner</span>
+          <span>Every Plate, Her Hands</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="container">
+    <div class="section-head fade-up">
+      <span class="label">What's Cooking</span>
+      <h2>Pull up a chair — <em>Chef Namfon's got something for you</em>.</h2>
+      <p>Pick a category below. Every dish hand-prepared the way she's been making it her whole life. ★ marks her signature creations.</p>
+    </div>
+
+    <div class="menu-tabs-wrap">
+      <div class="menu-tabs" role="tablist" aria-label="Menu categories">
+        <button class="tab active" role="tab" aria-selected="true"  aria-controls="cat-specials"   id="tab-specials"   data-tab="specials">Specials</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-appetizers" id="tab-appetizers" data-tab="appetizers" tabindex="-1">Appetizers</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-salad"      id="tab-salad"      data-tab="salad"      tabindex="-1">Salad</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-grill"      id="tab-grill"      data-tab="grill"      tabindex="-1">Grill</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-soup"       id="tab-soup"       data-tab="soup"       tabindex="-1">Soup</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-curry"      id="tab-curry"      data-tab="curry"      tabindex="-1">Curry</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-rice"       id="tab-rice"       data-tab="rice"       tabindex="-1">Rice</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-noodles"    id="tab-noodles"    data-tab="noodles"    tabindex="-1">Noodles</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-alacarte"   id="tab-alacarte"   data-tab="alacarte"   tabindex="-1">À La Carte</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-seafood"    id="tab-seafood"    data-tab="seafood"    tabindex="-1">Seafood</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-dessert"    id="tab-dessert"    data-tab="dessert"    tabindex="-1">Dessert</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-drinks"     id="tab-drinks"     data-tab="drinks"     tabindex="-1">Drinks</button>
+        <button class="tab"        role="tab" aria-selected="false" aria-controls="cat-sides"      id="tab-sides"      data-tab="sides"      tabindex="-1">Sides &amp; Protein</button>
+      </div>
+    </div>
+
+    <!-- SPECIALS -->
+    <div class="menu-category active" data-category="specials" role="tabpanel" id="cat-specials" aria-labelledby="tab-specials">
+      <div class="cat-grid">
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Ceviche<span class="thai">เซวิเช</span></div></div><p class="dish-desc">Chef Namfon's signature seafood ceviche.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Lobster<span class="thai">ล็อบสเตอร์</span></div></div><p class="dish-desc">Pacific lobster prepared in the chef's house style.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Dungeness Crab<span class="thai">ปูดันเจนเนส</span></div></div><p class="dish-desc">Whole dungeness crab, seasonally selected.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Sea Bass Steamed in Seafood Sauce<span class="thai">ปลากะพงนึ่งซีฟู้ด</span></div></div><p class="dish-desc">Whole steamed sea bass with a vibrant Thai seafood dressing.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Fried Chicken with Lime Sauce<span class="thai">ไก่ทอดน้ำปลามะนาว</span></div></div><p class="dish-desc">Crispy chicken finished with a bright Thai lime sauce.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Narwhal Salad<span class="thai">ยำซีฟู้ดนาร์วาล</span></div></div><p class="dish-desc">House salad of seafood ceviche, lemongrass and Thai herbs.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">American Fried Rice<span class="thai">ข้าวผัดอเมริกัน</span></div></div><p class="dish-desc">House favorite — red rice, fried egg, chicken, sausage.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">OG Pad Thai<span class="thai">ผัดไทยต้นตำรับ</span></div></div><p class="dish-desc">Hand-cut rice noodles, the original way.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig fade-up"><div class="dish-head"><div class="dish-name">Cabbage with Premium Fish Sauce<span class="thai">กะหล่ำผัดน้ำปลา</span></div></div><p class="dish-desc">Stir-fried fresh cabbage with the chef's premium fish sauce.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+      </div>
+    </div>
+
+    <!-- APPETIZERS -->
+    <div class="menu-category" data-category="appetizers" role="tabpanel" id="cat-appetizers" aria-labelledby="tab-appetizers" hidden>
+      <div class="cat-grid">
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Narwhal Chicken Wings<span class="thai">ปีกไก่ทอดนาร์วาล</span></div></div><p class="dish-desc">Crispy fried chicken wings with Thai seasoning.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Clams Pop<span class="thai">หอยลายทอดกรอบ</span></div></div><p class="dish-desc">Crispy fried clams served with the house Thai dip.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Thai Fish Cake<span class="thai">ทอดมันปลา</span></div></div><p class="dish-desc">Fried fish cakes served with cucumber chili sauce and crushed peanuts.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Crispy Spring Rolls<span class="thai">ปอเปี๊ยะทอด</span></div></div><p class="dish-desc">Hand-rolled, stuffed with ground pork and vegetables.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Vegetable Spring Rolls<span class="thai">ปอเปี๊ยะผัก</span></div></div><p class="dish-desc">A vegetarian rendition of the classic.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Fresh Spring Rolls<span class="thai">ปอเปี๊ยะสด</span></div></div><p class="dish-desc">Soft rice paper wraps with herbs and fresh garnish.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Calamari<span class="thai">ปลาหมึกทอด</span></div></div><p class="dish-desc">Lightly battered, golden, served with Thai condiments.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Fried Thai Meatballs<span class="thai">ลูกชิ้นทอด</span></div></div><p class="dish-desc">House-rolled meatballs, deep-fried and crisped.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Nam Sod with Crispy Rice<span class="thai">แหนมซดข้าวตัง</span></div></div><p class="dish-desc">Nam sod blended with crumbly, fried crispy rice. Served with lettuce.</p></div>
+      </div>
+    </div>
+
+    <!-- SALAD -->
+    <div class="menu-category" data-category="salad" role="tabpanel" id="cat-salad" aria-labelledby="tab-salad" hidden>
+      <div class="cat-grid">
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Narwhal Salad — Ceviche<span class="thai">ยำซีฟู้ดนาร์วาล</span></div></div><p class="dish-desc">Seafood with mixed greens, lemongrass, mint, cucumber and house seafood dressing.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Rib-Eye Salad<span class="thai">ยำเนื้อย่าง</span></div></div><p class="dish-desc">BBQ rib-eye over mixed greens, cucumber, radish, green onion and fresh mint with Thai herb dressing.</p></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Fresh Fruit Salad<span class="thai">สลัดผลไม้</span></div></div><p class="dish-desc">Pineapple, apple, tomato and seasonal fruits.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Papaya Salad — Som Tum<span class="thai">ส้มตำ</span></div></div><p class="dish-desc">Hand-pounded to order. Choose your tradition.</p><p class="dish-variants">Som Tum Thai (dried shrimp) · Som Tum Thai (salty black crab) · Som Tum Lao (fermented fish sauce)</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Larb<span class="thai">ลาบ</span></div></div><p class="dish-desc">Minced meat salad with red onion, toasted rice flour, chili flakes and fish sauce in a tangy dressing.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Nam-Tok Salad<span class="thai">น้ำตกเนื้อ</span></div></div><p class="dish-desc">Grilled rib-eye, fresh Thai herbs, lime, chili, fish sauce and toasted rice powder, with cabbage wedges.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+      </div>
+    </div>
+
+    <!-- GRILL -->
+    <div class="menu-category" data-category="grill" role="tabpanel" id="cat-grill" aria-labelledby="tab-grill" hidden>
+      <div class="cat-grid">
+        <div class="dish"><div class="dish-head"><div class="dish-name">Thai Sausage (3)<span class="thai">ไส้กรอกไทย</span></div></div><p class="dish-desc">House Thai sausage grilled, garnished with fresh ginger, chili, cabbage, lime and peanut.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Sa-Tay Skewers (5)<span class="thai">สะเต๊ะ</span></div></div><p class="dish-desc">Choice of chicken or beef — marinated, skewered, grilled. Served with peanut sauce and cucumber relish.</p></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Crying Tiger<span class="thai">เสือร้องไห้</span></div></div><p class="dish-desc">Grilled rib-eye with toasted rice–mint–lime sauce and house chimichurri.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Grilled Beef Meatballs<span class="thai">ลูกชิ้นเนื้อย่าง</span></div></div><p class="dish-desc">Skewered and charred over open flame.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">BBQ Chicken<span class="thai">ไก่ย่าง</span></div></div><p class="dish-desc">Marinated Thai-style grilled chicken.</p></div>
+      </div>
+    </div>
+
+    <!-- SOUP -->
+    <div class="menu-category" data-category="soup" role="tabpanel" id="cat-soup" aria-labelledby="tab-soup" hidden>
+      <div class="cat-grid">
+        <div class="dish"><div class="dish-head"><div class="dish-name">Tom Yum<span class="thai">ต้มยำ</span></div></div><p class="dish-desc">Hot &amp; sour broth with red chili paste, straw mushrooms, lemongrass, kaffir lime leaves, galangal and Thai herbs.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Tom Kha<span class="thai">ต้มข่า</span></div></div><p class="dish-desc">Creamy hot &amp; sour soup of coconut milk and red chili paste.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Po-Tak Seafood<span class="thai">โป๊ะแตก</span></div></div><p class="dish-desc">Clear hot &amp; sour broth with mixed seafood.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Wonton Soup<span class="thai">เกี๊ยวน้ำ</span></div></div><p class="dish-desc">Pork wontons, bean sprouts and green onion in chicken broth.</p></div>
+      </div>
+    </div>
+
+    <!-- CURRY -->
+    <div class="menu-category" data-category="curry" role="tabpanel" id="cat-curry" aria-labelledby="tab-curry" hidden>
+      <div class="cat-grid">
+        <div class="dish"><div class="dish-head"><div class="dish-name">Green Curry<span class="thai">แกงเขียวหวาน</span></div></div><p class="dish-desc">Green chili paste, herbs and spices with eggplant, bamboo shoots, bell pepper and holy basil in coconut milk.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Panang Curry<span class="thai">พะแนง</span></div></div><p class="dish-desc">Sweet, thick curry with short rib or sliced beef, red panang paste, coconut cream, red bell peppers and holy basil.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Yellow Curry<span class="thai">แกงกะหรี่</span></div></div><p class="dish-desc">Creamy yellow curry with slow-cooked chicken and potato.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Massaman Curry<span class="thai">มัสมั่น</span></div></div><p class="dish-desc">Chili paste, beef, peanuts, spices and Thai herbs.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Pineapple Curry<span class="thai">แกงคั่วสับปะรด</span></div></div><p class="dish-desc">Creamy red curry with pineapple, coconut cream and your protein of choice.</p></div>
+      </div>
+    </div>
+
+    <!-- RICE -->
+    <div class="menu-category" data-category="rice" role="tabpanel" id="cat-rice" aria-labelledby="tab-rice" hidden>
+      <div class="cat-grid">
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Narwhal Garlic Beef<span class="thai">ข้าวผัดกระเทียมเนื้อ</span></div></div><p class="dish-desc">Garlic stir-fried rice with beef, served with fresh cucumber.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">American Fried Rice<span class="thai">ข้าวผัดอเมริกัน</span></div></div><p class="dish-desc">Red rice, fried egg, chicken, sausage, cucumber, tomato.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Crab Fried Rice<span class="thai">ข้าวผัดปู</span></div></div><p class="dish-desc">Crab meat, egg and green onion.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">House Fried Rice<span class="thai">ข้าวผัด</span></div></div><p class="dish-desc">Red rice, protein of choice, egg, greens, served with cucumber.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Pineapple Fried Rice<span class="thai">ข้าวผัดสับปะรด</span></div></div><p class="dish-desc">Pineapple, egg, raisins, green onion, tomato, cashew nut and your protein of choice.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Garlic &amp; Pepper Over Rice<span class="thai">ราดข้าวกระเทียมพริกไทย</span></div></div><p class="dish-desc">Stir-fried garlic and pepper over rice.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Teriyaki Chicken Over Rice<span class="thai">ราดข้าวไก่เทอริยากิ</span></div></div><p class="dish-desc">Tender chicken stir-fried in a savory-sweet sauce.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Krapow Over Rice<span class="thai">ราดข้าวกะเพรา</span></div></div><p class="dish-desc">Spicy basil stir-fry of chili and holy basil.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+      </div>
+    </div>
+
+    <!-- NOODLES -->
+    <div class="menu-category" data-category="noodles" role="tabpanel" id="cat-noodles" aria-labelledby="tab-noodles" hidden>
+      <div class="cat-grid">
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">OG Pad Thai<span class="thai">ผัดไทย</span></div></div><p class="dish-desc">Rice noodles, protein of choice, bean sprouts, chives, lime, crushed peanuts.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Pad See Ew<span class="thai">ผัดซีอิ๊ว</span></div></div><p class="dish-desc">Flat rice noodles, protein of choice, Chinese broccoli, egg.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Pad Kee Mao — Drunken Noodles<span class="thai">ผัดขี้เมา</span></div></div><p class="dish-desc">Hot &amp; spicy stir-fried flat rice noodles with bell pepper, holy basil and Thai chili.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Thai Boat Noodles<span class="thai">ก๋วยเตี๋ยวเรือ</span></div></div><p class="dish-desc">Rice noodles with slow-cooked beef, meatballs, rich beef broth, ong choy and bean sprouts.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Rad Na<span class="thai">ราดหน้า</span></div></div><p class="dish-desc">Flat rice noodles with Chinese broccoli, finished with gravy.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Sukhothai Tom Yum Noodles<span class="thai">สุโขทัยต้มยำ</span></div></div><p class="dish-desc">Rice noodles with ground pork, dried shrimp, crushed peanuts, chili powder, green beans, bean sprouts and green onion in chicken broth.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Stir-Fried Glass Noodles<span class="thai">ผัดวุ้นเส้น</span></div></div><p class="dish-desc">Glass noodles stir-fried with egg, cabbage, green onion, celery and protein of choice.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Chow Mein<span class="thai">บะหมี่ผัด</span></div></div><p class="dish-desc">Egg noodles with protein of choice, egg, cabbage, celery, carrot and green onion.</p></div>
+      </div>
+    </div>
+
+    <!-- A LA CARTE -->
+    <div class="menu-category" data-category="alacarte" role="tabpanel" id="cat-alacarte" aria-labelledby="tab-alacarte" hidden>
+      <div class="cat-grid">
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Cabbage with Premium Fish Sauce<span class="thai">กะหล่ำน้ำปลา</span></div></div><p class="dish-desc">Stir-fried fresh cabbage with the chef's premium fish sauce.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Crispy Chicken with Cashew Nut<span class="thai">ไก่ผัดเม็ดมะม่วง</span></div></div><p class="dish-desc">Stir-fried cashews with chili, white onion, green onion and chili paste.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Crispy Pork — Garlic &amp; Chili<span class="thai">หมูกรอบพริกกระเทียม</span></div></div><p class="dish-desc">Crispy pork stir-fried with chili and garlic.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Garlic &amp; Pepper<span class="thai">ผัดกระเทียมพริกไทย</span></div></div><p class="dish-desc">Stir-fried garlic and pepper, protein of choice.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Stir-Fried Crab with Curry Powder<span class="thai">ปูผัดผงกะหรี่</span></div></div><p class="dish-desc">Chunky crab meat, fragrant curry powder, egg and fresh vegetables.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Spicy Green Bean<span class="thai">ผัดถั่วฝักยาว</span></div></div><p class="dish-desc">Green beans stir-fried in a spicy chili paste sauce.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Spicy Basil — Krapow<span class="thai">ผัดกะเพรา</span></div></div><p class="dish-desc">Stir-fried chili and holy basil.</p><div class="dish-tags"><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Sweet &amp; Sour<span class="thai">ผัดเปรี้ยวหวาน</span></div></div><p class="dish-desc">Pineapple, onion and bell peppers with your protein in a sweet and sour sauce.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Ong Choy<span class="thai">ผัดผักบุ้ง</span></div></div><p class="dish-desc">Stir-fried Chinese watercress with bean sauce, garlic and chili.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Chinese Broccoli<span class="thai">ผัดคะน้า</span></div></div><p class="dish-desc">Stir-fried Chinese broccoli with garlic and oyster sauce.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">American Broccoli<span class="thai">ผัดบรอกโคลี</span></div></div><p class="dish-desc">Stir-fried American broccoli with gravy sauce, protein of choice.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Mixed Vegetables<span class="thai">ผัดผักรวม</span></div></div><p class="dish-desc">Seasonal stir-fried mixed vegetables, protein of choice.</p></div>
+      </div>
+    </div>
+
+    <!-- SEAFOOD -->
+    <div class="menu-category" data-category="seafood" role="tabpanel" id="cat-seafood" aria-labelledby="tab-seafood" hidden>
+      <div class="cat-grid">
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Whole Pompano with Sweet Chili<span class="thai">ปลาจะละเม็ดทอด</span></div></div><p class="dish-desc">Whole pompano fried until crisp, glazed with sweet chili.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">White Fish Fillet with Mango Salad<span class="thai">ปลาทอดยำมะม่วง</span></div></div><p class="dish-desc">Lightly battered fish fillet, served with a fresh mango salad.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Spicy Clams with Basil<span class="thai">หอยลายผัดกะเพรา</span></div></div><p class="dish-desc">Clams in sweet chili paste and holy basil.</p><div class="dish-tags"><span class="tag">Signature</span><span class="tag spicy">Spicy</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Steamed Clams &amp; Green Mussels<span class="thai">หอยนึ่งตะไคร้</span></div></div><p class="dish-desc">Steamed with lemongrass and holy basil, served with spicy seafood sauce.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Kung Ob Wun Sen<span class="thai">กุ้งอบวุ้นเส้น</span></div></div><p class="dish-desc">Whole shrimp baked over glass noodles.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+      </div>
+    </div>
+
+    <!-- DESSERT -->
+    <div class="menu-category" data-category="dessert" role="tabpanel" id="cat-dessert" aria-labelledby="tab-dessert" hidden>
+      <div class="cat-grid">
+        <div class="dish"><div class="dish-head"><div class="dish-name">Narwhal Sundae<span class="thai">นาร์วาลซันเดย์</span></div></div><p class="dish-desc">Ice cream — vanilla, chocolate or strawberry — cone, whipped cream.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Mango with Sweet Sticky Rice<span class="thai">ข้าวเหนียวมะม่วง</span></div></div><p class="dish-desc">Finished with sweet coconut cream.</p></div>
+        <div class="dish sig"><div class="dish-head"><div class="dish-name">Coconut Ice Cream with Bread<span class="thai">ไอติมกะทิขนมปัง</span></div></div><p class="dish-desc">House-churned coconut ice cream, warm bread, classic Thai toppings.</p><div class="dish-tags"><span class="tag">Signature</span></div></div>
+      </div>
+    </div>
+
+    <!-- DRINKS -->
+    <div class="menu-category" data-category="drinks" role="tabpanel" id="cat-drinks" aria-labelledby="tab-drinks" hidden>
+      <div class="cat-grid">
+        <div class="dish"><div class="dish-head"><div class="dish-name">Thai Tea<span class="thai">ชาไทย</span></div></div><p class="dish-desc">Sweet, rich and creamy.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Thai Green Tea<span class="thai">ชาเขียวไทย</span></div></div><p class="dish-desc">Green jasmine tea, sweet and creamy.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Thai Coffee<span class="thai">กาแฟไทย</span></div></div><p class="dish-desc">Robust Thai-style iced coffee.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">House Iced Tea<span class="thai">ชาดำเย็น</span></div></div><p class="dish-desc">Refreshing brewed daily.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Pink Milk<span class="thai">นมเย็น</span></div></div><p class="dish-desc">A Thai childhood classic.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Passion Fruit<span class="thai">เสาวรส</span></div></div><p class="dish-desc">Fresh, tropical, bright.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Fresh Cucumber<span class="thai">น้ำแตงกวา</span></div></div><p class="dish-desc">Cooling cucumber refresher.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Pineapple Soda<span class="thai">โซดาสับปะรด</span></div></div><p class="dish-desc">House pineapple, sparkling.</p></div>
+        <div class="dish"><div class="dish-head"><div class="dish-name">Soda</div></div><p class="dish-desc">Coke · Diet Coke · Dr. Pepper · Sprite.</p></div>
+      </div>
+    </div>
+
+    <!-- SIDES & PROTEIN -->
+    <div class="menu-category" data-category="sides" role="tabpanel" id="cat-sides" aria-labelledby="tab-sides" hidden>
+      <div class="menu-aside-grid" style="border:none;padding:0;margin:0 auto;">
+        <div>
+          <h4>— Choose Your Protein</h4>
+          <ul>
+            <li>Chicken</li><li>Pork</li><li>Beef</li><li>Shrimp</li>
+            <li>Ground Pork</li><li>Ground Chicken</li><li>Crispy Pork</li>
+            <li>Fried Tofu</li><li>Soft Tofu</li>
+            <li>Seasonal Seafood — Lobster, Pacific Rockfish, Black Cod, Dungeness (MKT)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>— On the Side</h4>
+          <ul>
+            <li>Jasmine White Rice</li>
+            <li>Brown Rice</li>
+            <li>Sticky Rice</li>
+            <li>House Peanut Sauce</li>
+            <li>Fried Egg</li>
+            <li>Omelet</li>
+            <li>Creamy Scrambled Eggs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="menu-note">★ are Chef Namfon's signature creations. Tell us about your allergies or spice level when you order — we'll cook it just for you.</p>
+  </div>
+</section>
+
+<!-- EXPERIENCE / 3 PILLARS -->
+<section class="experience" id="experience">
+  <div class="container">
+    <div class="section-head fade-up">
+      <span class="label">The Experience</span>
+      <h2>More than a meal — <em>a table to come home to</em>.</h2>
+      <p>Three things hold every plate together. They're the same three things our grandmothers taught us in the family kitchen.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar fade-up">
+        <span class="pillar-num">I.</span>
+        <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+          <path d="M24 4c-2 4-6 8-6 14a6 6 0 0012 0c0-6-4-10-6-14z"/>
+          <circle cx="24" cy="34" r="10"/>
+          <path d="M16 38c2-2 14-2 16 0"/>
+        </svg>
+        <h3>Cooked by Hand</h3>
+        <p>Curries pounded fresh in the stone mortar. Broths simmered slow. No shortcuts — the way home cooking is supposed to be.</p>
+      </div>
+      <div class="pillar fade-up">
+        <span class="pillar-num">II.</span>
+        <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+          <path d="M6 26c0 8 8 16 18 16s18-8 18-16"/>
+          <path d="M14 18a10 10 0 0120 0"/>
+          <path d="M24 8v6"/>
+          <circle cx="24" cy="26" r="3" fill="currentColor"/>
+        </svg>
+        <h3>California Sourced</h3>
+        <p>Seafood off our coast. Produce from California farms. Thai aromatics flown in weekly so nothing tastes tired or far from home.</p>
+      </div>
+      <div class="pillar fade-up">
+        <span class="pillar-num">III.</span>
+        <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+          <path d="M12 36c0-8 6-14 12-14s12 6 12 14"/>
+          <path d="M16 36h16"/>
+          <circle cx="18" cy="14" r="2" fill="currentColor"/>
+          <circle cx="30" cy="14" r="2" fill="currentColor"/>
+          <path d="M20 18c1 2 3 3 4 3s3-1 4-3"/>
+        </svg>
+        <h3>From Our Family</h3>
+        <p>Owner-operated by the Angsawothai family. The faces you see at the door are the faces who cook your food. That's the whole thing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVE -->
+<section class="reserve" id="reserve">
+  <div class="container">
+    <div class="reserve-grid">
+      <div class="reserve-info fade-up">
+        <span class="label">Save a Seat</span>
+        <h2>We saved a seat <em>for you</em>.</h2>
+        <p>It's a cozy room. Give us a call, send a note, or fill out the form — we'll have your table ready when you get here. Birthdays, anniversaries, big family nights — just tell us, we love a good occasion.</p>
+        <div class="hours-block">
+          <h4>Hours of Service</h4>
+          <div class="hours-row"><span class="day">Tuesday – Thursday</span><span class="time">5:00 — 10:00 PM</span></div>
+          <div class="hours-row"><span class="day">Friday – Saturday</span><span class="time">5:00 — 11:00 PM</span></div>
+          <div class="hours-row"><span class="day">Sunday</span><span class="time">5:00 — 9:30 PM</span></div>
+          <div class="hours-row"><span class="day">Monday</span><span class="time">Closed</span></div>
+        </div>
+      </div>
+      <!--
+        Reservation form. Currently shows a confirmation message on submit
+        and does NOT send anywhere. When ready to wire up a backend:
+          - swap action="" with a Formspree / Resend / custom endpoint
+          - keep method="post" and the name attributes already set on inputs
+          - remove the JS handler in the <script> block that shows the inline
+            confirmation; the real backend will respond instead.
+      -->
+      <form class="reserve-form fade-up"
+            id="reserve-form"
+            method="post"
+            action=""
+            novalidate
+            aria-describedby="reserve-form-status">
+        <div class="form-title">Book a <em>seat</em> at the table</div>
+        <div class="form-sub">We'll text or email you to confirm — usually within a few hours.</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rsv-first">First Name</label>
+            <input id="rsv-first" name="first_name" type="text" autocomplete="given-name" required>
+          </div>
+          <div class="form-group">
+            <label for="rsv-last">Last Name</label>
+            <input id="rsv-last" name="last_name" type="text" autocomplete="family-name" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rsv-email">Email</label>
+            <input id="rsv-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="form-group">
+            <label for="rsv-phone">Phone</label>
+            <input id="rsv-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rsv-date">Date</label>
+            <input id="rsv-date" name="date" type="date" required>
+          </div>
+          <div class="form-group">
+            <label for="rsv-time">Time</label>
+            <select id="rsv-time" name="time" required>
+              <option value="">Select</option>
+              <option>5:00 PM</option><option>5:30 PM</option>
+              <option>6:00 PM</option><option>6:30 PM</option>
+              <option>7:00 PM</option><option>7:30 PM</option>
+              <option>8:00 PM</option><option>8:30 PM</option>
+              <option>9:00 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="rsv-party">Party Size</label>
+          <select id="rsv-party" name="party_size" required>
+            <option value="">Select</option>
+            <option>2 Guests</option><option>3 Guests</option>
+            <option>4 Guests</option><option>5 Guests</option>
+            <option>6 Guests</option><option>7+ (please specify)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="rsv-notes">Anything we should know?</label>
+          <textarea id="rsv-notes" name="notes" placeholder="Allergies, spice level, occasion, seating preference..."></textarea>
+        </div>
+        <!-- Simple honeypot (real users won't fill this; bots usually do) -->
+        <div style="position:absolute;left:-9999px;" aria-hidden="true">
+          <label for="rsv-hp">Leave blank</label>
+          <input id="rsv-hp" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <button type="submit" class="btn-submit">Request Reservation</button>
+        <p id="reserve-form-status" role="status" aria-live="polite" style="min-height:1em;margin-top:14px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-deep);font-size:16px;"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-head fade-up" style="margin-bottom:64px;">
+      <span class="label" style="color:var(--brass-light);">Come See Us</span>
+      <h2 style="color:var(--off-white);">Right on Beach Blvd — <em style="color:var(--brass-light);">stop by anytime</em>.</h2>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-block fade-up">
+        <span class="label">Address</span>
+        <h3>Find us</h3>
+        <p>19072 Beach Boulevard<br/>Huntington Beach, CA 92648<br/>Between PCH and the 405</p>
+      </div>
+      <div class="contact-block fade-up">
+        <span class="label">Contact</span>
+        <h3>Get in touch</h3>
+        <p>
+          <a href="tel:+17140000000">(714) 000-0000</a><br/>
+          <a href="mailto:hello@narwhalthaitable.com">hello@narwhalthaitable.com</a>
+        </p>
+      </div>
+      <div class="contact-block fade-up">
+        <span class="label">Private Events</span>
+        <h3>Take the room</h3>
+        <p>
+          Buyouts, family-style tastings, private dinners — we love hosting.<br/>
+          <a href="mailto:events@narwhalthaitable.com">events@narwhalthaitable.com</a>
+        </p>
+      </div>
+    </div>
+
+    <a class="map-placeholder fade-up" href="https://www.google.com/maps/search/?api=1&query=19072+Beach+Blvd+Huntington+Beach+CA+92648" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div class="map-content">
+        <svg class="map-pin" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+          <path d="M28 6c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z"/>
+          <circle cx="28" cy="22" r="6"/>
+        </svg>
+        <div class="addr">19072 Beach Boulevard</div>
+        <div class="city">Huntington Beach, California · open in Google Maps</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Narwhal <em>Thai Table</em></div>
+    <!--
+      Social links: replace href="#" with the real URLs once accounts are live.
+      rel="noopener" is set to avoid window.opener leaks; aria-label gives screen
+      readers a clear destination since the text is just the platform name.
+    -->
+    <nav class="footer-social" aria-label="Social">
+      <a href="#" aria-label="Narwhal Thai Table on Instagram" rel="noopener">Instagram</a>
+      <a href="#" aria-label="Narwhal Thai Table on Facebook" rel="noopener">Facebook</a>
+      <a href="#" aria-label="Narwhal Thai Table on Yelp" rel="noopener">Yelp</a>
+      <a href="#" aria-label="Narwhal Thai Table on Google" rel="noopener">Google</a>
+    </nav>
+    <div class="footer-copy">© 2026 Narwhal Hospitality LLC · Huntington Beach, CA</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    'use strict';
+
+    /* ---------- Nav scroll effect (passive for smooth scrolling) ---------- */
+    const nav = document.getElementById('nav');
+    if (nav) {
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          nav.classList.toggle('scrolled', window.scrollY > 40);
+          ticking = false;
+        });
+      }, { passive: true });
+    }
+
+    /* ---------- Mobile hamburger drawer ---------- */
+    const navToggle = document.querySelector('.nav-toggle');
+    const navDrawer = document.getElementById('nav-drawer');
+    function setDrawer(open) {
+      if (!navToggle || !navDrawer) return;
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      navDrawer.setAttribute('aria-hidden', String(!open));
+      navDrawer.dataset.open = String(open);
+      document.body.dataset.navOpen = String(open);
+    }
+    if (navToggle && navDrawer) {
+      navToggle.addEventListener('click', () => {
+        const open = navToggle.getAttribute('aria-expanded') !== 'true';
+        setDrawer(open);
+      });
+      // Tapping any drawer link closes the drawer
+      navDrawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => setDrawer(false));
+      });
+      // Esc key closes the drawer
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+          setDrawer(false);
+          navToggle.focus();
+        }
+      });
+      // Reset drawer if user resizes back to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 980 && navToggle.getAttribute('aria-expanded') === 'true') {
+          setDrawer(false);
+        }
+      });
+    }
+
+    /* ---------- Menu tabs (ARIA tabs pattern with keyboard nav) ---------- */
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const categories = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+    function activateTab(tab, { focus = false } = {}) {
+      if (!tab) return;
+      const panelId = tab.getAttribute('aria-controls');
+      const panel = panelId ? document.getElementById(panelId) : null;
+      if (!panel) return; // guard against orphaned tabs
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
+      });
+      categories.forEach(c => {
+        c.classList.remove('active');
+        c.setAttribute('hidden', '');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      tab.setAttribute('tabindex', '0');
+      panel.classList.add('active');
+      panel.removeAttribute('hidden');
+      if (focus) tab.focus();
+      // Scroll the active tab into view on mobile horizontal scroller
+      tab.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => activateTab(tab));
+      tab.addEventListener('keydown', (e) => {
+        const idx = tabs.indexOf(tab);
+        let next = null;
+        if (e.key === 'ArrowRight') next = tabs[(idx + 1) % tabs.length];
+        else if (e.key === 'ArrowLeft') next = tabs[(idx - 1 + tabs.length) % tabs.length];
+        else if (e.key === 'Home') next = tabs[0];
+        else if (e.key === 'End') next = tabs[tabs.length - 1];
+        if (next) {
+          e.preventDefault();
+          activateTab(next, { focus: true });
+        }
+      });
+    });
+
+    /* ---------- Fade-up on scroll (IntersectionObserver) ---------- */
+    const fadeEls = document.querySelectorAll('.fade-up');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      fadeEls.forEach(el => observer.observe(el));
+    } else {
+      // Graceful fallback for ancient browsers
+      fadeEls.forEach(el => el.classList.add('visible'));
+    }
+
+    /* ---------- Hero video: hide fallback once it actually plays ---------- */
+    const heroVideo = document.querySelector('.hero-video');
+    const heroFallback = document.querySelector('.hero-fallback');
+    if (heroVideo && heroFallback) {
+      const reveal = () => { heroFallback.style.opacity = '0'; };
+      heroVideo.addEventListener('playing', reveal, { once: true });
+      heroVideo.addEventListener('canplay', () => {
+        // Some browsers (iOS Safari) don't always fire 'playing' on autoplay.
+        if (!heroVideo.paused) reveal();
+      });
+    }
+
+    /* ---------- Reservation form: client-side handler ----------
+       Replace this entire block once a real endpoint is wired up. */
+    const form = document.getElementById('reserve-form');
+    if (form) {
+      const status = document.getElementById('reserve-form-status');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Honeypot check
+        const hp = form.querySelector('#rsv-hp');
+        if (hp && hp.value) return; // silent drop on bot
+        // Native validity check (since we set novalidate)
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+        const btn = form.querySelector('.btn-submit');
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Sending…';
+        }
+        // Simulate latency so the UX feels real until backend is connected
+        setTimeout(() => {
+          if (status) {
+            status.textContent = 'Thank you — we will confirm your reservation within a few hours.';
+          }
+          if (btn) {
+            btn.textContent = 'Request Sent';
+            btn.style.background = 'var(--brass)';
+            btn.style.borderColor = 'var(--brass)';
+          }
+        }, 400);
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Narwhal Thai Table — Modern Thai Fine Dining in Huntington Beach</title>
+<meta name="description" content="Narwhal Thai Table — an upscale Thai dining experience in Huntington Beach, California. Every dish crafted by Chef Namfon Laksanawadee Sripornsawan, MasterChef Thailand Season 1." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Prata&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#0A1A2F;
+    --navy-800:#0F2238;
+    --navy-700:#152C46;
+    --navy-600:#1C3855;
+    --offwhite:#F4EEDC;
+    --offwhite-soft:#EDE5CE;
+    --offwhite-dim:rgba(244,238,220,0.72);
+    --brass:#C49A4B;
+    --brass-bright:#D9B36A;
+    --brass-deep:#8E6B2B;
+    --line:rgba(196,154,75,0.28);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ 
+    background:var(--navy-900);
+    color:var(--offwhite);
+    font-family:'Inter',sans-serif;
+    font-weight:300;
+    line-height:1.65;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.02em;}
+  a{color:inherit;text-decoration:none;}
+
+  /* ------- NAV ------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 6vw;
+    background:rgba(10,26,47,.7);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:'Prata',serif;
+    font-size:1.3rem;letter-spacing:.18em;color:var(--offwhite);
+    text-transform:uppercase;
+  }
+  .brand span{color:var(--brass-bright);}
+  .nav-links{display:flex;gap:38px;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--offwhite-dim);}
+  .nav-links a{transition:color .3s;}
+  .nav-links a:hover{color:var(--brass-bright);}
+  .nav-cta{
+    border:1px solid var(--brass);color:var(--brass-bright);
+    padding:10px 22px;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;
+    transition:all .35s;
+  }
+  .nav-cta:hover{background:var(--brass);color:var(--navy-900);}
+  @media(max-width:880px){.nav-links{display:none;}nav{padding:18px 5vw;}}
+
+  /* ------- HERO ------- */
+  .hero{
+    min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:140px 6vw 80px;
+    background:
+      radial-gradient(ellipse at top,rgba(196,154,75,.10),transparent 55%),
+      radial-gradient(ellipse at bottom,rgba(28,56,85,.5),transparent 60%),
+      linear-gradient(180deg,var(--navy-900) 0%,var(--navy-800) 100%);
+    overflow:hidden;
+  }
+  .hero::before,.hero::after{
+    content:"";position:absolute;border:1px solid var(--line);pointer-events:none;
+  }
+  .hero::before{top:90px;left:5vw;right:5vw;bottom:40px;}
+  .hero::after{top:100px;left:calc(5vw + 10px);right:calc(5vw + 10px);bottom:50px;border-color:rgba(196,154,75,.15);}
+
+  .hero-inner{position:relative;z-index:2;max-width:880px;}
+  .eyebrow{
+    color:var(--brass-bright);letter-spacing:.45em;font-size:.72rem;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:18px;margin-bottom:28px;
+  }
+  .eyebrow::before,.eyebrow::after{content:"";width:36px;height:1px;background:var(--brass);}
+  .hero h1{
+    font-family:'Prata',serif;
+    font-size:clamp(3rem,8vw,6.5rem);
+    line-height:1.02;color:var(--offwhite);font-weight:400;
+    margin-bottom:30px;
+  }
+  .hero h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-bright);font-weight:400;}
+  .hero-sub{
+    font-size:1.05rem;color:var(--offwhite-dim);max-width:560px;margin:0 auto 44px;
+    font-weight:300;letter-spacing:.02em;
+  }
+  .hero-cta{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+  .btn{
+    padding:16px 38px;font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;
+    transition:all .35s;cursor:pointer;font-family:'Inter',sans-serif;
+  }
+  .btn-primary{background:var(--brass);color:var(--navy-900);border:1px solid var(--brass);}
+  .btn-primary:hover{background:var(--brass-bright);border-color:var(--brass-bright);transform:translateY(-2px);}
+  .btn-ghost{background:transparent;color:var(--offwhite);border:1px solid var(--offwhite-dim);}
+  .btn-ghost:hover{border-color:var(--brass-bright);color:var(--brass-bright);}
+
+  .ornament{
+    display:flex;align-items:center;justify-content:center;gap:14px;margin:34px 0 0;
+    color:var(--brass);
+  }
+  .ornament .line{width:80px;height:1px;background:var(--brass);opacity:.55;}
+  .ornament .diamond{width:8px;height:8px;background:var(--brass);transform:rotate(45deg);}
+
+  /* ------- SECTION BASE ------- */
+  section{padding:110px 6vw;position:relative;}
+  .section-eyebrow{
+    color:var(--brass-bright);letter-spacing:.4em;font-size:.7rem;text-transform:uppercase;
+    margin-bottom:18px;display:block;
+  }
+  .section-title{
+    font-family:'Prata',serif;font-size:clamp(2.2rem,5vw,3.6rem);
+    color:var(--offwhite);line-height:1.1;margin-bottom:22px;font-weight:400;
+  }
+  .section-title em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-bright);}
+
+  /* ------- PHILOSOPHY ------- */
+  .philosophy{background:var(--navy-800);}
+  .philosophy-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+    max-width:1280px;margin:0 auto;
+  }
+  .philosophy p{font-size:1.05rem;color:var(--offwhite-dim);margin-bottom:18px;font-weight:300;}
+  .pillars{display:grid;grid-template-columns:1fr 1fr;gap:36px;}
+  .pillar{padding:32px 26px;border:1px solid var(--line);background:rgba(15,34,56,.4);transition:all .4s;}
+  .pillar:hover{border-color:var(--brass);background:rgba(196,154,75,.06);}
+  .pillar h4{color:var(--brass-bright);font-size:1.35rem;margin-bottom:10px;font-style:italic;}
+  .pillar p{color:var(--offwhite-dim);font-size:.92rem;margin:0;line-height:1.6;}
+  @media(max-width:880px){.philosophy-grid{grid-template-columns:1fr;gap:50px;}.pillars{grid-template-columns:1fr;}}
+
+  /* ------- CHEF ------- */
+  .chef{background:linear-gradient(180deg,var(--navy-900),var(--navy-800));overflow:hidden;}
+  .chef-grid{
+    display:grid;grid-template-columns:0.95fr 1.05fr;gap:90px;align-items:center;
+    max-width:1280px;margin:0 auto;
+  }
+  .chef-portrait{
+    aspect-ratio:3/4;position:relative;border:1px solid var(--brass);
+    background:
+      radial-gradient(circle at 30% 30%,rgba(196,154,75,.22),transparent 60%),
+      linear-gradient(135deg,var(--navy-700),var(--navy-900));
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .chef-portrait::after{
+    content:"";position:absolute;inset:14px;border:1px solid rgba(196,154,75,.25);
+  }
+  .chef-monogram{
+    font-family:'Prata',serif;font-size:8rem;color:var(--brass-bright);opacity:.18;
+    position:absolute;line-height:1;
+  }
+  .chef-card{
+    position:relative;z-index:2;text-align:center;padding:30px;
+  }
+  .chef-card .role{
+    font-size:.7rem;letter-spacing:.4em;color:var(--brass-bright);text-transform:uppercase;margin-bottom:14px;
+  }
+  .chef-card .name{
+    font-family:'Prata',serif;font-size:2rem;color:var(--offwhite);line-height:1.15;margin-bottom:8px;
+  }
+  .chef-card .thai{
+    font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass-bright);font-size:1.4rem;
+  }
+  .chef-bio p{color:var(--offwhite-dim);font-size:1.02rem;margin-bottom:18px;}
+  .chef-bio .quote{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:1.4rem;color:var(--offwhite);
+    padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    margin:32px 0;line-height:1.5;
+  }
+  .chef-bio .quote::before{content:"“";color:var(--brass-bright);font-size:2rem;margin-right:6px;}
+  .chef-bio .quote::after{content:"”";color:var(--brass-bright);font-size:2rem;margin-left:4px;}
+  .credentials{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px;}
+  .credentials span{
+    border:1px solid var(--line);color:var(--brass-bright);
+    padding:8px 16px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  }
+  @media(max-width:880px){.chef-grid{grid-template-columns:1fr;gap:50px;}.chef-monogram{font-size:6rem;}}
+
+  /* ------- MENU ------- */
+  .menu{background:var(--navy-900);}
+  .menu-header{text-align:center;max-width:720px;margin:0 auto 80px;}
+  .menu-header p{color:var(--offwhite-dim);margin-top:14px;}
+
+  /* Tab nav */
+  .menu-tabs{
+    max-width:1180px;margin:0 auto 60px;
+    display:flex;flex-wrap:wrap;justify-content:center;gap:6px;
+    padding-bottom:24px;border-bottom:1px solid var(--line);
+    position:sticky;top:72px;background:rgba(10,26,47,.92);backdrop-filter:blur(10px);
+    z-index:10;padding-top:14px;
+  }
+  .menu-tab{
+    background:transparent;border:1px solid transparent;color:var(--offwhite-dim);
+    font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+    padding:10px 18px;cursor:pointer;transition:all .3s;font-weight:400;
+  }
+  .menu-tab:hover{color:var(--brass-bright);}
+  .menu-tab.active{color:var(--brass-bright);border-color:var(--brass);}
+  .menu-tab .thai{
+    display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    text-transform:none;font-size:.85rem;letter-spacing:.04em;color:var(--offwhite-dim);
+    margin-top:3px;
+  }
+  .menu-tab.active .thai{color:var(--brass);}
+
+  .menu-category{max-width:1180px;margin:0 auto 90px;display:none;}
+  .menu-category.active{display:block;animation:fadeIn .5s ease;}
+  .menu-category:last-of-type{margin-bottom:0;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .cat-head{
+    display:flex;align-items:center;gap:24px;margin-bottom:44px;
+  }
+  .cat-head h3{
+    font-family:'Prata',serif;
+    font-size:clamp(1.6rem,3vw,2.2rem);color:var(--offwhite);
+    letter-spacing:.04em;white-space:nowrap;font-weight:400;
+  }
+  .cat-head .thai-sub{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--brass-bright);font-size:1.15rem;
+  }
+  .cat-head .cat-line{flex:1;height:1px;background:var(--line);}
+
+  .cat-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:42px 70px;
+  }
+  .dish{position:relative;padding-bottom:22px;border-bottom:1px solid var(--line);}
+  .dish.sig::before{
+    content:"★";color:var(--brass-bright);position:absolute;left:-22px;top:2px;font-size:.85rem;
+  }
+  .dish-name{
+    font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--offwhite);
+    font-weight:500;margin-bottom:6px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  }
+  .dish-name .sig-tag{
+    font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--brass-bright);border:1px solid var(--brass);padding:2px 8px;
+  }
+  .dish-desc{color:var(--offwhite-dim);font-size:.92rem;line-height:1.6;}
+  .dish-variants{margin-top:8px;color:var(--brass-bright);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1rem;}
+
+  .menu-aside{
+    display:grid;grid-template-columns:1fr 1fr;gap:50px;
+    max-width:1180px;margin:0 auto;
+    padding:50px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .menu-aside h4{
+    color:var(--brass-bright);font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;
+    margin-bottom:18px;font-family:'Inter',sans-serif;font-weight:500;
+  }
+  .menu-aside ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 18px;}
+  .menu-aside li{
+    color:var(--offwhite);font-family:'Cormorant Garamond',serif;font-size:1.15rem;
+  }
+  .menu-aside li::after{content:"·";color:var(--brass);margin-left:18px;}
+  .menu-aside li:last-child::after{content:"";}
+
+  .menu-note{
+    text-align:center;margin-top:60px;color:var(--offwhite-dim);
+    font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.15rem;
+  }
+  @media(max-width:880px){
+    .cat-grid{grid-template-columns:1fr;gap:32px;}
+    .menu-aside{grid-template-columns:1fr;gap:30px;}
+    .cat-head{flex-wrap:wrap;gap:12px;}
+  }
+
+  /* ------- EXPERIENCE ------- */
+  .experience{
+    background:
+      linear-gradient(180deg,rgba(10,26,47,.85),rgba(10,26,47,.95)),
+      radial-gradient(circle at 50% 50%,var(--navy-700),var(--navy-900));
+    text-align:center;
+  }
+  .experience-inner{max-width:840px;margin:0 auto;}
+  .experience .quote-mark{font-family:'Prata',serif;font-size:5rem;color:var(--brass);line-height:1;opacity:.7;}
+  .experience h2{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--offwhite);
+    line-height:1.5;margin:20px 0 30px;font-weight:400;
+  }
+  .experience .sig{color:var(--brass-bright);letter-spacing:.3em;font-size:.78rem;text-transform:uppercase;}
+
+  /* ------- VISIT ------- */
+  .visit{background:var(--navy-800);}
+  .visit-grid{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:80px;
+    max-width:1200px;margin:0 auto;
+  }
+  .visit-info h3{color:var(--brass-bright);font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;margin-bottom:16px;font-family:'Inter',sans-serif;font-weight:500;}
+  .visit-block{margin-bottom:40px;}
+  .visit-block .detail{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--offwhite);line-height:1.4;}
+  .visit-block .detail span{display:block;color:var(--offwhite-dim);font-size:1rem;margin-top:4px;}
+  .hours-row{
+    display:flex;justify-content:space-between;padding:10px 0;
+    border-bottom:1px solid var(--line);font-size:.95rem;color:var(--offwhite-dim);
+  }
+  .hours-row:last-child{border-bottom:none;}
+  .hours-row span:first-child{color:var(--offwhite);letter-spacing:.08em;}
+  .hours-row span:last-child{color:var(--brass-bright);font-family:'Cormorant Garamond',serif;font-size:1.05rem;}
+
+  .reserve-card{
+    background:rgba(15,34,56,.5);border:1px solid var(--brass);
+    padding:50px 40px;text-align:center;position:relative;
+  }
+  .reserve-card::before,.reserve-card::after{
+    content:"";position:absolute;width:14px;height:14px;border:1px solid var(--brass);
+  }
+  .reserve-card::before{top:10px;left:10px;border-right:none;border-bottom:none;}
+  .reserve-card::after{bottom:10px;right:10px;border-left:none;border-top:none;}
+  .reserve-card h3{
+    font-family:'Prata',serif;font-size:1.8rem;color:var(--offwhite);margin-bottom:14px;
+  }
+  .reserve-card p{color:var(--offwhite-dim);margin-bottom:30px;font-size:.95rem;}
+  .reserve-card .btn{display:inline-block;margin:6px;}
+  @media(max-width:880px){.visit-grid{grid-template-columns:1fr;gap:50px;}}
+
+  /* ------- FOOTER ------- */
+  footer{
+    background:var(--navy-900);padding:60px 6vw 30px;border-top:1px solid var(--line);
+    text-align:center;
+  }
+  .footer-brand{
+    font-family:'Prata',serif;font-size:1.4rem;letter-spacing:.2em;color:var(--offwhite);
+    text-transform:uppercase;margin-bottom:8px;
+  }
+  .footer-brand span{color:var(--brass-bright);}
+  .footer-tag{color:var(--offwhite-dim);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:30px;}
+  .footer-bottom{
+    color:var(--offwhite-dim);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+    border-top:1px solid var(--line);padding-top:24px;margin-top:30px;
+  }
+  .footer-bottom span{color:var(--brass-bright);}
+
+  /* Subtle fade-in */
+  .fade{opacity:0;transform:translateY(20px);transition:all 1s ease;}
+  .fade.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#top" class="brand">Narwhal <span>·</span> Thai Table</a>
+  <div class="nav-links">
+    <a href="#story">Story</a>
+    <a href="#chef">The Chef</a>
+    <a href="#menu">Menu</a>
+    <a href="#visit">Visit</a>
+  </div>
+  <a href="#visit" class="nav-cta">Reserve</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-inner fade">
+    <div class="eyebrow"> The Art of Thai dinning • Huntington Beach</div>
+    <h1>The taste of Siam reimagined,<br><em>by the sea.</em></h1>
+    <p class="hero-sub">
+      A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the warm California
+      coast we now call home. Every plate is cooked by Chef Namfon herself, one of MasterChef Thailand's
+      original talents, with the patience and love she learned in her mother's kitchen.
+    </p>
+    <div class="hero-cta">
+      <a href="#visit" class="btn btn-primary">Save Me a Seat</a>
+      <a href="#menu" class="btn btn-ghost">Peek at the Menu</a>
+    </div>
+    <div class="ornament">
+      <span class="line"></span><span class="diamond"></span><span class="line"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="story">
+  <div class="philosophy-grid">
+    <div class="fade">
+      <span class="section-eyebrow">— Our Story</span>
+      <h2 class="section-title">A Thai kitchen, raised by the <em>California coast.</em></h2>
+      <p>
+        We're a family from Thailand who fell in love with Huntington Beach — the salt air, the sunsets over PCH,
+        the way neighbors wave at each other on the way to the pier. So we did what every Thai family does when
+        they love a place: we cooked for it.
+      </p>
+      <p>
+        Narwhal Thai Table is our home table, opened wide. The curries are pounded by hand the way our grandmothers
+        taught us. The fish comes off California boats. The smiles are real, because the people serving you
+        are the same people who own the place.
+      </p>
+      <p style="color:var(--brass-bright);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;margin-top:18px;">
+        Come hungry. Stay a while. You're family here.
+      </p>
+    </div>
+    <div class="pillars fade">
+      <div class="pillar">
+        <h4>From Our Family</h4>
+        <p>Owner-operated by the Angsawothai family. The faces you see at the door are the faces who cook your food.</p>
+      </div>
+      <div class="pillar">
+        <h4>Cooked by Hand</h4>
+        <p>Curries pounded fresh. Sauces stirred slowly. No shortcuts, the way home cooking is supposed to be.</p>
+      </div>
+      <div class="pillar">
+        <h4>California Sourced</h4>
+        <p>Seafood from our coast, produce from California farms, Thai aromatics flown weekly so nothing tastes tired.</p>
+      </div>
+      <div class="pillar">
+        <h4>For the Neighborhood</h4>
+        <p>A table for date nights, birthdays, Tuesdays after work — for everyone who calls HB and the OC home.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEF -->
+<section class="chef" id="chef">
+  <div class="chef-grid">
+    <div class="chef-portrait fade">
+      <div class="chef-monogram">N</div>
+      <div class="chef-card">
+        <div class="role">— Chef &amp; Creative Director</div>
+        <div class="name">Namfon</div>
+        <div class="name" style="font-size:1.4rem;">Laksanawadee Sripornsawan</div>
+        <div class="thai">น้ำฝน ลักษณาวดี ศรีพรสวรรค์</div>
+      </div>
+    </div>
+    <div class="chef-bio fade">
+      <span class="section-eyebrow">— Meet Chef Namfon</span>
+      <h2 class="section-title">A MasterChef's craft. <em>A mother's heart.</em></h2>
+      <p>
+        Chef Namfon first cooked her way into Thailand's heart on the very first season of
+        <strong style="color:var(--offwhite);font-weight:500;">MasterChef Thailand</strong>. But long before the cameras,
+        she was already a Thai mom who fed everyone in the neighborhood and never let anyone leave hungry.
+      </p>
+      <p>
+        She still cooks that way. Every dish at Narwhal — from the first bite of fish cake to the last
+        spoon of mango sticky rice — comes from her hands and her recipe book. When you eat here, you're
+        eating from her family table.
+      </p>
+      <div class="quote">
+        Every dish I make, I make like I'm cooking for someone I love. That's all. That's the secret.
+      </div>
+      <div class="credentials">
+        <span>MasterChef Thailand · S1</span>
+        <span>Chef &amp; Owner</span>
+        <span>Every Plate, Her Hands</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="menu-header fade">
+    <span class="section-eyebrow">— What's Cooking</span>
+    <h2 class="section-title">Pull up a chair. <em>Chef Namfon's got something for you.</em></h2>
+    <p>Pick a category below — every dish is hand-prepared by the chef, with the recipes she's been making her whole life.</p>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="menu-tabs fade">
+    <button class="menu-tab active" data-cat="specials">Chef's Specials<span class="thai">แนะนำ</span></button>
+    <button class="menu-tab" data-cat="appetizers">Appetizers<span class="thai">ของว่าง</span></button>
+    <button class="menu-tab" data-cat="salad">Salad<span class="thai">ยำ</span></button>
+    <button class="menu-tab" data-cat="grill">Grill<span class="thai">ปิ้งย่าง</span></button>
+    <button class="menu-tab" data-cat="soup">Soup<span class="thai">ต้ม</span></button>
+    <button class="menu-tab" data-cat="curry">Curry<span class="thai">แกง</span></button>
+    <button class="menu-tab" data-cat="rice">Rice<span class="thai">ข้าว</span></button>
+    <button class="menu-tab" data-cat="noodles">Noodles<span class="thai">เส้น</span></button>
+    <button class="menu-tab" data-cat="alacarte">À La Carte<span class="thai">ผัด</span></button>
+    <button class="menu-tab" data-cat="seafood">Seafood<span class="thai">ทะเล</span></button>
+    <button class="menu-tab" data-cat="dessert">Dessert<span class="thai">หวาน</span></button>
+    <button class="menu-tab" data-cat="drinks">Drinks<span class="thai">เครื่องดื่ม</span></button>
+    <button class="menu-tab" data-cat="sides">Sides &amp; Protein<span class="thai">เครื่องเคียง</span></button>
+  </div>
+
+  <!-- CHEF SPECIALS -->
+  <div class="menu-category active fade" data-cat="specials">
+    <div class="cat-head">
+      <h3>Chef's Specials</h3>
+      <span class="thai-sub">เมนูแนะนำพิเศษ</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">Ceviche <span class="sig-tag">Signature</span></div><p class="dish-desc">Chef Namfon's signature seafood ceviche.</p></div>
+      <div class="dish sig"><div class="dish-name">Lobster <span class="sig-tag">Signature</span></div><p class="dish-desc">Pacific lobster prepared in the chef's house style.</p></div>
+      <div class="dish sig"><div class="dish-name">Dungeness Crab <span class="sig-tag">Signature</span></div><p class="dish-desc">Whole dungeness crab, seasonally selected.</p></div>
+      <div class="dish sig"><div class="dish-name">Sea Bass Steamed in Seafood Sauce <span class="sig-tag">Signature</span></div><p class="dish-desc">Whole steamed sea bass with a vibrant Thai seafood dressing.</p></div>
+      <div class="dish sig"><div class="dish-name">Fried Chicken with Lime Sauce <span class="sig-tag">Signature</span></div><p class="dish-desc">Crispy chicken finished with a bright Thai lime sauce.</p></div>
+      <div class="dish sig"><div class="dish-name">Narwhal Salad <span class="sig-tag">Signature</span></div><p class="dish-desc">House salad of seafood ceviche, lemongrass and Thai herbs.</p></div>
+      <div class="dish sig"><div class="dish-name">American Fried Rice <span class="sig-tag">Signature</span></div><p class="dish-desc">House favorite — red rice, fried egg, chicken, sausage.</p></div>
+      <div class="dish sig"><div class="dish-name">OG Pad Thai <span class="sig-tag">Signature</span></div><p class="dish-desc">Hand-cut rice noodles, the original way.</p></div>
+      <div class="dish sig"><div class="dish-name">Cabbage with Premium Fish Sauce <span class="sig-tag">Signature</span></div><p class="dish-desc">Stir-fried fresh cabbage with the chef's premium fish sauce.</p></div>
+    </div>
+  </div>
+
+  <!-- APPETIZERS -->
+  <div class="menu-category fade" data-cat="appetizers">
+    <div class="cat-head">
+      <h3>Appetizers</h3>
+      <span class="thai-sub">ของว่าง</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">Narwhal Chicken Wings <span class="sig-tag">Signature</span></div><p class="dish-desc">Crispy fried chicken wings with Thai seasoning.</p></div>
+      <div class="dish sig"><div class="dish-name">Clams Pop <span class="sig-tag">Signature</span></div><p class="dish-desc">Crispy fried clams served with the house Thai dip.</p></div>
+      <div class="dish"><div class="dish-name">Thai Fish Cake</div><p class="dish-desc">Fried fish cakes served with cucumber chili sauce and crushed peanuts.</p></div>
+      <div class="dish"><div class="dish-name">Crispy Spring Rolls</div><p class="dish-desc">Hand-rolled, stuffed with ground pork and vegetables.</p></div>
+      <div class="dish"><div class="dish-name">Vegetable Spring Rolls</div><p class="dish-desc">A vegetarian rendition of the classic.</p></div>
+      <div class="dish"><div class="dish-name">Fresh Spring Rolls</div><p class="dish-desc">Soft rice paper wraps with herbs and fresh garnish.</p></div>
+      <div class="dish"><div class="dish-name">Calamari</div><p class="dish-desc">Lightly battered, golden, served with Thai condiments.</p></div>
+      <div class="dish"><div class="dish-name">Fried Thai Meatballs</div><p class="dish-desc">House-rolled meatballs, deep-fried and crisped.</p></div>
+      <div class="dish"><div class="dish-name">Nam Sod with Crispy Rice</div><p class="dish-desc">Nam sod blended with crumbly, fried crispy rice. Served with lettuce.</p></div>
+    </div>
+  </div>
+
+  <!-- SALAD -->
+  <div class="menu-category fade" data-cat="salad">
+    <div class="cat-head">
+      <h3>Salad</h3>
+      <span class="thai-sub">ยำ &amp; สลัด</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">Narwhal Salad — Ceviche <span class="sig-tag">Signature</span></div><p class="dish-desc">Seafood with mixed greens, lemongrass, mint, cucumber and the house seafood dressing.</p></div>
+      <div class="dish"><div class="dish-name">Rib-Eye Salad</div><p class="dish-desc">BBQ rib-eye over mixed greens, cucumber, radish, green onion and fresh mint with a Thai herb dressing.</p></div>
+      <div class="dish sig"><div class="dish-name">Fresh Fruit Salad <span class="sig-tag">Signature</span></div><p class="dish-desc">Pineapple, apple, tomato and seasonal fruits.</p></div>
+      <div class="dish"><div class="dish-name">Papaya Salad — Som Tum</div>
+        <p class="dish-desc">Choose your tradition. Hand-pounded to order.</p>
+        <p class="dish-variants">Som Tum Thai (dried shrimp) · Som Tum Thai (salty black crab) · Som Tum Lao (fermented fish sauce)</p>
+      </div>
+      <div class="dish"><div class="dish-name">Larb</div><p class="dish-desc">Minced meat salad with red onion, toasted rice flour, chili flakes and fish sauce in a tangy dressing.</p></div>
+      <div class="dish"><div class="dish-name">Nam-Tok Salad</div><p class="dish-desc">Grilled rib-eye, fresh Thai herbs, lime, chili, fish sauce and toasted rice powder, served with cabbage wedges.</p></div>
+    </div>
+  </div>
+
+  <!-- BBQ -->
+  <div class="menu-category fade" data-cat="grill">
+    <div class="cat-head">
+      <h3>From the Grill</h3>
+      <span class="thai-sub">ปิ้งย่าง</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish"><div class="dish-name">Thai Sausage (3)</div><p class="dish-desc">House Thai sausage grilled, garnished with fresh ginger, chili, cabbage, lime and peanut.</p></div>
+      <div class="dish"><div class="dish-name">Sa-Tay Skewers (5)</div><p class="dish-desc">Choice of chicken or beef — marinated, skewered, grilled. Served with peanut sauce and cucumber relish.</p></div>
+      <div class="dish sig"><div class="dish-name">Crying Tiger <span class="sig-tag">Signature</span></div><p class="dish-desc">Grilled rib-eye with toasted rice–mint–lime sauce and house chimichurri.</p></div>
+      <div class="dish"><div class="dish-name">Grilled Beef Meatballs</div><p class="dish-desc">Skewered and charred over open flame.</p></div>
+      <div class="dish"><div class="dish-name">BBQ Chicken</div><p class="dish-desc">Marinated Thai-style grilled chicken.</p></div>
+    </div>
+  </div>
+
+  <!-- SOUP -->
+  <div class="menu-category fade" data-cat="soup">
+    <div class="cat-head">
+      <h3>Soup</h3>
+      <span class="thai-sub">ต้ม &amp; ซุป</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish"><div class="dish-name">Tom Yum</div><p class="dish-desc">Hot &amp; sour broth with red chili paste, straw mushrooms, lemongrass, kaffir lime leaves, galangal and Thai herbs.</p></div>
+      <div class="dish sig"><div class="dish-name">Tom Kha <span class="sig-tag">Signature</span></div><p class="dish-desc">Creamy hot &amp; sour soup of coconut milk and red chili paste.</p></div>
+      <div class="dish"><div class="dish-name">Po-Tak Seafood</div><p class="dish-desc">Clear hot &amp; sour broth with mixed seafood.</p></div>
+      <div class="dish"><div class="dish-name">Wonton Soup</div><p class="dish-desc">Pork wontons, bean sprouts and green onion in chicken broth.</p></div>
+    </div>
+  </div>
+
+  <!-- CURRY -->
+  <div class="menu-category fade" data-cat="curry">
+    <div class="cat-head">
+      <h3>Curries</h3>
+      <span class="thai-sub">แกง</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish"><div class="dish-name">Green Curry</div><p class="dish-desc">Blend of green chili paste, herbs and spices with eggplant, bamboo shoots, bell pepper and holy basil in coconut milk.</p></div>
+      <div class="dish sig"><div class="dish-name">Panang Curry <span class="sig-tag">Signature</span></div><p class="dish-desc">Sweet, thick curry with short rib or sliced beef, red panang paste, coconut cream, red bell peppers and holy basil.</p></div>
+      <div class="dish"><div class="dish-name">Yellow Curry</div><p class="dish-desc">Creamy yellow curry with slow-cooked chicken and potato.</p></div>
+      <div class="dish"><div class="dish-name">Massaman Curry</div><p class="dish-desc">Chili paste, beef, peanuts, spices and Thai herbs.</p></div>
+      <div class="dish"><div class="dish-name">Pineapple Curry</div><p class="dish-desc">Creamy red curry with pineapple, coconut cream and your protein of choice.</p></div>
+    </div>
+  </div>
+
+  <!-- RICE -->
+  <div class="menu-category fade" data-cat="rice">
+    <div class="cat-head">
+      <h3>Rice</h3>
+      <span class="thai-sub">ข้าว</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">Narwhal Garlic Beef <span class="sig-tag">Signature</span></div><p class="dish-desc">Garlic stir-fried rice with beef, served with fresh cucumber.</p></div>
+      <div class="dish sig"><div class="dish-name">American Fried Rice <span class="sig-tag">Signature</span></div><p class="dish-desc">Red rice, fried egg, chicken, sausage, cucumber, tomato.</p></div>
+      <div class="dish"><div class="dish-name">Crab Fried Rice</div><p class="dish-desc">Crab meat, egg and green onion.</p></div>
+      <div class="dish"><div class="dish-name">House Fried Rice</div><p class="dish-desc">Red rice, protein of choice, egg, greens, served with cucumber.</p></div>
+      <div class="dish"><div class="dish-name">Pineapple Fried Rice</div><p class="dish-desc">Pineapple, egg, raisins, green onion, tomato, cashew nut and your protein of choice.</p></div>
+      <div class="dish"><div class="dish-name">Garlic &amp; Pepper Over Rice</div><p class="dish-desc">Stir-fried garlic and pepper over rice.</p></div>
+      <div class="dish"><div class="dish-name">Teriyaki Chicken Over Rice</div><p class="dish-desc">Tender chicken stir-fried in a savory-sweet sauce.</p></div>
+      <div class="dish"><div class="dish-name">Krapow Over Rice</div><p class="dish-desc">Spicy basil stir-fry of chili and holy basil.</p></div>
+    </div>
+  </div>
+
+  <!-- NOODLES -->
+  <div class="menu-category fade" data-cat="noodles">
+    <div class="cat-head">
+      <h3>Noodles</h3>
+      <span class="thai-sub">เส้น</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">OG Pad Thai <span class="sig-tag">Signature</span></div><p class="dish-desc">Rice noodles, protein of choice, bean sprouts, chives, lime, crushed peanuts.</p></div>
+      <div class="dish"><div class="dish-name">Pad See Ew</div><p class="dish-desc">Flat rice noodles, protein of choice, Chinese broccoli, egg.</p></div>
+      <div class="dish"><div class="dish-name">Pad Kee Mao — Drunken Noodles</div><p class="dish-desc">Hot &amp; spicy stir-fried flat rice noodles with bell pepper, holy basil and Thai chili, served on a bed of lettuce.</p></div>
+      <div class="dish"><div class="dish-name">Thai Boat Noodles</div><p class="dish-desc">Rice noodles with slow-cooked beef, meatballs, rich beef broth, ong choy and bean sprouts.</p></div>
+      <div class="dish"><div class="dish-name">Rad Na</div><p class="dish-desc">Flat rice noodles with Chinese broccoli, finished with gravy.</p></div>
+      <div class="dish"><div class="dish-name">Sukhothai Tom Yum Noodles</div><p class="dish-desc">Rice noodles with ground pork, dried shrimp, crushed peanuts, chili powder, green beans, bean sprouts and green onion in chicken broth.</p></div>
+      <div class="dish"><div class="dish-name">Stir-Fried Glass Noodles</div><p class="dish-desc">Glass noodles stir-fried with egg, cabbage, green onion, celery and protein of choice.</p></div>
+      <div class="dish"><div class="dish-name">Chow Mein</div><p class="dish-desc">Egg noodles with protein of choice, egg, cabbage, celery, carrot and green onion.</p></div>
+    </div>
+  </div>
+
+  <!-- A LA CARTE -->
+  <div class="menu-category fade" data-cat="alacarte">
+    <div class="cat-head">
+      <h3>À La Carte</h3>
+      <span class="thai-sub">ผัดและเครื่องเคียง</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">Cabbage with Premium Fish Sauce <span class="sig-tag">Signature</span></div><p class="dish-desc">Stir-fried fresh cabbage with the chef's premium fish sauce.</p></div>
+      <div class="dish"><div class="dish-name">Crispy Chicken with Cashew Nut</div><p class="dish-desc">Stir-fried cashews with chili, white onion, green onion and chili paste.</p></div>
+      <div class="dish"><div class="dish-name">Crispy Pork — Garlic &amp; Chili</div><p class="dish-desc">Crispy pork stir-fried with chili and garlic.</p></div>
+      <div class="dish"><div class="dish-name">Garlic &amp; Pepper</div><p class="dish-desc">Stir-fried garlic and pepper, protein of choice.</p></div>
+      <div class="dish"><div class="dish-name">Stir-Fried Crab with Curry Powder</div><p class="dish-desc">Chunky crab meat, fragrant curry powder, egg and fresh vegetables.</p></div>
+      <div class="dish"><div class="dish-name">Spicy Green Bean</div><p class="dish-desc">Green beans stir-fried in a spicy chili paste sauce.</p></div>
+      <div class="dish"><div class="dish-name">Spicy Basil — Krapow</div><p class="dish-desc">Stir-fried chili and holy basil.</p></div>
+      <div class="dish"><div class="dish-name">Sweet &amp; Sour</div><p class="dish-desc">Pineapple, onion and bell peppers with your protein in a sweet and sour sauce.</p></div>
+      <div class="dish"><div class="dish-name">Ong Choy</div><p class="dish-desc">Stir-fried Chinese watercress with bean sauce, garlic and chili.</p></div>
+      <div class="dish"><div class="dish-name">Chinese Broccoli</div><p class="dish-desc">Stir-fried Chinese broccoli with garlic and oyster sauce.</p></div>
+      <div class="dish"><div class="dish-name">American Broccoli</div><p class="dish-desc">Stir-fried American broccoli with gravy sauce, protein of choice.</p></div>
+      <div class="dish"><div class="dish-name">Mixed Vegetables</div><p class="dish-desc">Seasonal stir-fried mixed vegetables, protein of choice.</p></div>
+    </div>
+  </div>
+
+  <!-- POSEIDON -->
+  <div class="menu-category fade" data-cat="seafood">
+    <div class="cat-head">
+      <h3>Poseidon — From the Sea</h3>
+      <span class="thai-sub">อาหารทะเล</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish sig"><div class="dish-name">Whole Pompano with Sweet Chili <span class="sig-tag">Signature</span></div><p class="dish-desc">Whole pompano fried until crisp, glazed with sweet chili.</p></div>
+      <div class="dish sig"><div class="dish-name">White Fish Fillet with Mango Salad <span class="sig-tag">Signature</span></div><p class="dish-desc">Lightly battered fish fillet, served with a fresh mango salad.</p></div>
+      <div class="dish sig"><div class="dish-name">Spicy Clams with Basil <span class="sig-tag">Signature</span></div><p class="dish-desc">Clams in sweet chili paste and holy basil.</p></div>
+      <div class="dish sig"><div class="dish-name">Steamed Manila Clams &amp; Green Mussels <span class="sig-tag">Signature</span></div><p class="dish-desc">Steamed with lemongrass and holy basil, served with spicy seafood sauce.</p></div>
+      <div class="dish sig"><div class="dish-name">Kung Ob Wun Sen <span class="sig-tag">Signature</span></div><p class="dish-desc">Whole shrimp baked over glass noodles.</p></div>
+    </div>
+  </div>
+
+  <!-- DESSERT -->
+  <div class="menu-category fade" data-cat="dessert">
+    <div class="cat-head">
+      <h3>Dessert</h3>
+      <span class="thai-sub">ของหวาน</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish"><div class="dish-name">Narwhal Sundae</div><p class="dish-desc">Ice cream — vanilla, chocolate or strawberry — cone, whipped cream.</p></div>
+      <div class="dish"><div class="dish-name">Mango with Sweet Sticky Rice</div><p class="dish-desc">Finished tableside with sweet coconut cream.</p></div>
+      <div class="dish sig"><div class="dish-name">Coconut Ice Cream with Bread <span class="sig-tag">Signature</span></div><p class="dish-desc">House-churned coconut ice cream, warm bread, classic Thai toppings.</p></div>
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="menu-category fade" data-cat="drinks">
+    <div class="cat-head">
+      <h3>Drinks</h3>
+      <span class="thai-sub">เครื่องดื่ม</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="cat-grid">
+      <div class="dish"><div class="dish-name">Thai Tea</div><p class="dish-desc">Sweet, rich and creamy.</p></div>
+      <div class="dish"><div class="dish-name">Thai Green Tea</div><p class="dish-desc">Green jasmine tea, sweet and creamy.</p></div>
+      <div class="dish"><div class="dish-name">Thai Coffee</div><p class="dish-desc">Robust Thai-style iced coffee.</p></div>
+      <div class="dish"><div class="dish-name">House Iced Tea</div><p class="dish-desc">Refreshing brewed daily.</p></div>
+      <div class="dish"><div class="dish-name">Pink Milk</div><p class="dish-desc">A Thai childhood classic.</p></div>
+      <div class="dish"><div class="dish-name">Passion Fruit</div><p class="dish-desc">Fresh, tropical, bright.</p></div>
+      <div class="dish"><div class="dish-name">Fresh Cucumber</div><p class="dish-desc">Cooling cucumber refresher.</p></div>
+      <div class="dish"><div class="dish-name">Pineapple Soda</div><p class="dish-desc">House pineapple, sparkling.</p></div>
+      <div class="dish"><div class="dish-name">Soda</div><p class="dish-desc">Coke · Diet Coke · Dr. Pepper · Sprite.</p></div>
+    </div>
+  </div>
+
+  <!-- SIDES & PROTEIN -->
+  <div class="menu-category fade" data-cat="sides">
+    <div class="cat-head">
+      <h3>Sides &amp; Protein</h3>
+      <span class="thai-sub">เครื่องเคียง &amp; เนื้อสัตว์</span>
+      <span class="cat-line"></span>
+    </div>
+    <div class="menu-aside" style="border:none;padding:0;">
+      <div>
+        <h4>— Choose Your Protein</h4>
+        <ul>
+          <li>Chicken</li><li>Pork</li><li>Beef</li><li>Shrimp</li>
+          <li>Ground Pork</li><li>Ground Chicken</li><li>Crispy Pork</li>
+          <li>Fried Tofu</li><li>Soft Tofu</li>
+          <li>Seasonal Seafood — Lobster, Pacific Rockfish, Black Cod, Dungeness (MKT)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>— On the Side</h4>
+        <ul>
+          <li>Jasmine White Rice</li>
+          <li>Brown Rice</li>
+          <li>Sticky Rice</li>
+          <li>House Peanut Sauce</li>
+          <li>Fried Egg</li>
+          <li>Omelet</li>
+          <li>Creamy Scrambled Eggs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="menu-note fade" style="display:block;">★ are our signature dishes — Chef Namfon's favorites. Tell us about your allergies or spice level when you order; we'll cook it just for you.</p>
+</section>
+
+<!-- EXPERIENCE / QUOTE -->
+<section class="experience">
+  <div class="experience-inner fade">
+    <div class="quote-mark">“</div>
+    <h2>
+      When you walk in, you're not a customer.<br>
+      You're a friend who finally came over for dinner.
+    </h2>
+    <div class="sig">— The Narwhal Family</div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section class="visit" id="visit">
+  <div class="visit-grid">
+    <div class="visit-info fade">
+      <span class="section-eyebrow">— Come See Us</span>
+      <h2 class="section-title">We saved a seat for <em>you.</em></h2>
+      <p style="color:var(--offwhite-dim);margin-top:8px;margin-bottom:6px;">
+        Right on Beach Boulevard, between PCH and the 405 — easy stop for HB locals, the OC,
+        Long Beach, and anyone driving the coast.
+      </p>
+
+      <div class="visit-block" style="margin-top:36px;">
+        <h3>The Address</h3>
+        <p class="detail">19072 Beach Boulevard
+          <span>Huntington Beach, California 92648</span>
+        </p>
+      </div>
+
+      <div class="visit-block">
+        <h3>Hours of Service</h3>
+        <div class="hours-row"><span>Tuesday — Thursday</span><span>5:00 – 10:00 pm</span></div>
+        <div class="hours-row"><span>Friday — Saturday</span><span>5:00 – 11:00 pm</span></div>
+        <div class="hours-row"><span>Sunday</span><span>5:00 – 9:30 pm</span></div>
+        <div class="hours-row"><span>Monday</span><span>Closed</span></div>
+      </div>
+
+      <div class="visit-block">
+        <h3>Connect</h3>
+        <p class="detail">hello@narwhalthaitable.com
+          <span>(714) 000-0000</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="reserve-card fade">
+      <h3>Save Me a Seat</h3>
+      <p>It's a cozy room — give us a call or a quick email,<br>and we'll have your table ready when you get here.</p>
+      <a href="mailto:hello@narwhalthaitable.com?subject=Reservation%20Request" class="btn btn-primary">Email Us</a>
+      <br>
+      <a href="tel:7140000000" class="btn btn-ghost">Give Us a Call</a>
+      <div class="ornament" style="margin-top:36px;">
+        <span class="line"></span><span class="diamond"></span><span class="line"></span>
+      </div>
+      <p style="margin-top:24px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--offwhite-dim);">
+        Birthdays, anniversaries, big family nights — just tell us, we love a good occasion.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Narwhal <span>·</span> Thai Table</div>
+  <div class="footer-tag">A Thai family table — for our Huntington Beach neighbors and all who find us.</div>
+  <div class="ornament">
+    <span class="line"></span><span class="diamond"></span><span class="line"></span>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Narwhal Hospitality LLC <span>·</span> Huntington Beach, CA <span>·</span> All Rights Reserved
+  </div>
+</footer>
+
+<script>
+  // Subtle scroll fade-in
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:0.12});
+  document.querySelectorAll('.fade').forEach(el=>io.observe(el));
+
+  // Menu tabs
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-category');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      const cat = tab.dataset.cat;
+      tabs.forEach(t=>t.classList.toggle('active', t===tab));
+      panels.forEach(p=>p.classList.toggle('active', p.dataset.cat===cat));
+    });
+  });
+</script>
+
+</body>
+</html>
