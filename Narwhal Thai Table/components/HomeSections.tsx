@@ -59,12 +59,16 @@ export function ChefSection() {
                 Le Cordon Bleu · Paris-Method<br/>
                 Royal Court Women&apos;s College · Thai Royal Cuisine
               </div>
+              <div style={{ marginTop: 10, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--brass-light)', fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>
+                Lineage of the Inner-Court Kitchen<br/>King Rama V · Late 1800s
+              </div>
             </div>
           </FadeUp>
           <FadeUp className="chef-text">
             <span className="label">Meet the Chef</span>
             <h2>Trained in two of the world&apos;s strictest kitchens — <em>French and royal Thai</em>.</h2>
-            <p>Chef Namfon — <strong>Laksanawadee Sripornsawan</strong> — is one of a very small group of Thai chefs who carry both pieces of the craft in their hands. She trained at the <strong>Royal Court Women&apos;s College</strong> (วิทยาลัยในวังหญิง), the Thai institution where royal-court cooking and the disciplined art of Thai desserts have been passed down for generations — a school that doesn&apos;t open its doors to just anyone, and famously doesn&apos;t cut corners for the people it does. Then she went to <strong>Le Cordon Bleu</strong> and learned the French side of the same coin: technique, structure, the precision of a Paris-trained kitchen.</p>
+            <p>Chef Namfon — <strong>Laksanawadee Sripornsawan</strong> — is one of a very small group of Thai chefs who carry both pieces of the craft in their hands. She trained at the <strong>Royal Court Women&apos;s College</strong> (วิทยาลัยในวังหญิง), an institution descended directly from <em>hong-khreuang fai-nai</em> — the royal kitchen of the Inner Court of <strong>King Chulalongkorn the Great</strong> (Rama V, late 1800s) — and still teaches the recipes and discipline that once fed the kings of Siam. If you remember <em>Dae Jang Geum</em>, the Korean drama about a young woman learning the trade in the royal kitchens of Joseon — this is the same archetype, the same impossible standard, only on the Thai side of the map. Not a school that opens its doors to just anyone. And famously, doesn&apos;t cut corners for the ones it does.</p>
+            <p>Then she went to <strong>Le Cordon Bleu</strong> and learned the French side of the same coin: technique, structure, the precision of a Paris-trained kitchen.</p>
             <p>That combination is what you taste in her food. The depth of <em>chao-wang</em> tradition — where a curry paste is pounded for forty minutes because that&apos;s how long it takes — meets the French training that gives every plate its shape. It&apos;s a kind of understanding of Thai food you simply cannot self-teach. It comes from being in those rooms.</p>
             <p>Her resume backs it up. <strong>MasterChef Thailand · Season 1</strong>. <strong>Star Chef Thailand · Season 1</strong>. <strong>Chef Fest Thailand</strong>. She has stood in the kitchens that matter and walked out with her work recognized — proof, on stages where there are no second chances, that her cooking holds.</p>
             <p>And yet she still cooks like a mother feeding her family. That&apos;s the part the training can&apos;t teach and didn&apos;t need to. <strong>Narwhal Thai Table</strong> is her table on Beach Boulevard — royal-court technique, French discipline, California ingredients, and a Thai mother&apos;s instinct for who&apos;s sitting across from her. Every plate, by her own hands.</p>
