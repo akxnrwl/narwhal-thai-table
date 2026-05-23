@@ -56,33 +56,34 @@ export function ChefSection() {
               <div className="name-th">น้ำฝน ลักษณาวดี ศรีพรสวรรค์</div>
               <div className="ornament-divider"></div>
               <div className="badge" style={{ lineHeight: 1.8 }}>
-                Le Cordon Bleu · Paris-Method<br/>
-                Royal Thai Crafts School for Women
+                Le Cordon Bleu<br/>
+                Royal Traditional Thai Crafts School for Women
               </div>
-              <div style={{ marginTop: 10, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--brass-light)', fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>
-                Lineage of the Inner-Court Kitchen<br/>King Rama V · Late 1800s
+              <div style={{ marginTop: 10, fontSize: 10, letterSpacing: '0.22em', color: 'var(--brass-light)', fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>
+                Lineage of the Inner-Court Kitchen · King Rama V · Late 1800s
               </div>
             </div>
           </FadeUp>
           <FadeUp className="chef-text">
             <span className="label">Meet the Chef</span>
-            <h2>An Elegant Alliance of <em>Royal Thai Heritage</em> and <em>French Precision</em>.</h2>
+            <h2>The Living Legacy of <em>Royal Thai Culinary Heritage</em>.</h2>
 
-            {/* Paragraph 1 — Royal heritage + Dae Jang Geum (tighter) */}
-            <p>Chef Namfon (<strong>Laksanawadee Sripornsawan</strong>) is one of a very small group of Thai chefs who carry both pieces of the craft in their hands. She trained at <strong>The Royal Traditional Thai Crafts School for Women</strong> (วิทยาลัยในวังหญิง), an institution descended directly from <em>hong-khreuang fai-nai</em> — the royal kitchen of the Inner Court of <strong>King Chulalongkorn the Great</strong> (Rama V, late 1800s) — and still teaches the recipes and discipline that once fed the kings of Siam. Think of it as the Thai counterpart to the legendary world of <em>Dae Jang Geum</em>: the same archetype, the same impossible standard, only on the Thai side of the map.</p>
+            {/* Paragraph 1 — Origin + Inner Court + Dae Jang Geum */}
+            <p>Chef Namfon (<strong>Laksanawadee Sripornsawan</strong>) is one of a very small, elite group of Thai chefs who carry the true weight of authentic royal craft. She trained within the sacred walls of <strong>The Royal Traditional Thai Crafts School for Women</strong> (วิทยาลัยในวังหญิง), an institution descended directly from <em>hong-khreuang fai-nai</em> — the inner-court royal kitchen of <strong>King Chulalongkorn the Great</strong> (Rama V, late 1800s). Here, she mastered the time-honored recipes, intricate flavor balancing, and strict palace discipline that once fed the kings of Siam. Think of it as the Thai counterpart to the legendary world of <em>Dae Jang Geum</em>: the same archetype, the same impossible standard of perfection.</p>
 
-            {/* Paragraph 2 — French architecture */}
-            <p>To this royal foundation, she integrated the rigorous classical training of <strong>Le Cordon Bleu</strong>, fusing ancient Siamese heritage with the structural precision and advanced techniques of a Paris-trained kitchen.</p>
+            {/* Paragraph 2 — Le Cordon Bleu as complementary layer */}
+            <p>To complement this deep royal foundation, she also completed her classical training at <strong>Le Cordon Bleu</strong>, bringing an extra layer of professional discipline and refined technique to her traditional roots.</p>
 
-            {/* Paragraph 3 — National stages, with bullet list */}
+            {/* Paragraph 3 — National stages with bullet list (now with placements) */}
             <p>Her exceptional mastery has been proven under the highest pressure on Thailand&apos;s premier culinary television stages:</p>
             <ul className="chef-competitions">
               <li>
                 <span className="title">MasterChef Thailand</span>
-                <span className="sub">Season 1</span>
+                <span className="sub">Season 1 · Top 10</span>
               </li>
               <li>
                 <span className="title">Star Chef Thailand</span>
+                <span className="sub">Season 1 · Top 3</span>
               </li>
               <li>
                 <span className="title">Chef Fest Thailand</span>
@@ -90,20 +91,20 @@ export function ChefSection() {
             </ul>
             <p>In these intense, high-stakes arenas where there is no room for error, her skills stood out and commanded absolute respect.</p>
 
-            {/* Paragraph 4 — Narwhal definition */}
-            <p><strong>Narwhal Thai Table</strong> is her table on HB — royal-court technique, French discipline, California ingredients, and a Thai mother&apos;s instinct from her. Every plate, by her own hands.</p>
+            {/* Paragraph 4 — Narwhal definition (final voice) */}
+            <p><strong>Narwhal Thai Table</strong> is her table on HB — where sacred royal-court technique meets fresh California ingredients, driven by her unique artistic vision and an uncompromising dedication to the craft. Every single plate is crafted entirely by her own hands and her own instinct.</p>
 
-            {/* The Golden Quote */}
+            {/* The Golden Quote — The Chef's Promise */}
             <blockquote className="chef-quote golden">
               <span className="quote-label">The Chef&apos;s Promise</span>
-              Every dish I make, I make like I&apos;m cooking for someone I love. That&apos;s all. That&apos;s the secret.
+              Authenticity means no shortcuts. At Narwhal, we pair timeless royal-court discipline with the finest local ingredients, delivering the true, uncompromised soul of Royal Thai cuisine. Welcome to my table.
             </blockquote>
 
             <div className="chef-credentials">
               <span>Le Cordon Bleu</span>
-              <span>Royal Thai Crafts School for Women · วิทยาลัยในวังหญิง</span>
-              <span>MasterChef Thailand · S1</span>
-              <span>Star Chef Thailand</span>
+              <span>The Royal Traditional Thai Crafts School for Women · วิทยาลัยในวังหญิง</span>
+              <span>MasterChef Thailand · S1 · Top 10</span>
+              <span>Star Chef Thailand · S1 · Top 3</span>
               <span>Chef Fest Thailand</span>
               <span>Chef &amp; Co-Founder · Narwhal Thai Table</span>
             </div>
