@@ -14,9 +14,9 @@ export type DishStory = {
   lede: string;
   /** Where the dish comes from — region, tradition, family memory */
   history?: string;
-  /** How Chef Namfon wants the diner to experience it */
+  /** How Chef Rainny wants the diner to experience it */
   howToEat?: string;
-  /** Chef Namfon's voice — first-person quote */
+  /** Chef Rainny's voice — first-person quote */
   chefNote?: string;
 };
 
@@ -52,7 +52,7 @@ export type Dish = {
 export const DISHES: Dish[] = [
   /* ---------- SPECIALS ---------- */
   { slug: 'ceviche', name: 'Ceviche', thai: 'เซวิเช', category: 'specials', signature: true,
-    description: "Chef Namfon's signature seafood ceviche.", price: 'MKT' },
+    description: "Chef Rainny's signature seafood ceviche.", price: 'MKT' },
   { slug: 'lobster', name: 'Lobster', thai: 'ล็อบสเตอร์', category: 'specials', signature: true,
     description: "Pacific lobster prepared in the chef's house style.", price: 'MKT' },
   { slug: 'dungeness-crab', name: 'Dungeness Crab', thai: 'ปูดันเจนเนส', category: 'specials', signature: true,
@@ -82,7 +82,7 @@ export const DISHES: Dish[] = [
     },
     story: {
       lede: 'The pad thai that started in the kitchens of 1940s Bangkok, not the Americanized one with ketchup. Sweet from palm sugar, sour from tamarind, salty from fish sauce, smoky from a properly hot wok — and that\'s it.',
-      history: 'Pad thai is younger than people think. It was popularized in the 1940s by Field Marshal Plaek Phibunsongkhram as part of a national identity campaign — rice was scarce in wartime, noodles ate less of the harvest, and the recipe spread from government cookbooks into every neighborhood. Chef Namfon learned it from her grandmother in Bangkok, who learned it from a noodle vendor in Chantaburi province (the home of chantaboon noodles) in the 1960s. The "OG" in the name is the chef\'s wink at how far the dish has drifted from this original — no ketchup, no peanut butter, no sweet pink sauce. Just the four-flavor balance Thai cooks chase: เปรี้ยว หวาน เค็ม เผ็ด — sour, sweet, salty, hot.',
+      history: 'Pad thai is younger than people think. It was popularized in the 1940s by Field Marshal Plaek Phibunsongkhram as part of a national identity campaign — rice was scarce in wartime, noodles ate less of the harvest, and the recipe spread from government cookbooks into every neighborhood. Chef Rainny learned it from her grandmother in Bangkok, who learned it from a noodle vendor in Chantaburi province (the home of chantaboon noodles) in the 1960s. The "OG" in the name is the chef\'s wink at how far the dish has drifted from this original — no ketchup, no peanut butter, no sweet pink sauce. Just the four-flavor balance Thai cooks chase: เปรี้ยว หวาน เค็ม เผ็ด — sour, sweet, salty, hot.',
       howToEat: 'A proper pad thai arrives with a lime wedge, raw bean sprouts, a small pile of dried chili flakes, and sometimes raw banana blossom on the side. Squeeze the lime over everything first. Then taste — if it needs more punch, sprinkle chili; if it needs more crunch, pile on the bean sprouts. The herbs and garnishes aren\'t decoration; they\'re your seat at the cook\'s table. The whole point is that you finish the seasoning to your own tongue.',
       chefNote: 'My grandmother told me: if your pad thai tastes like ketchup, you bought a tourist plate. Real pad thai is sour first, then sweet, then salty, then the chili sneaks in last. The smoke from the wok is the fifth flavor — and you can only get that with real heat. We cook every plate on a 200,000-BTU burner because anything less is a stir-fry, not pad thai.',
     },
@@ -146,7 +146,7 @@ export const DISHES: Dish[] = [
     },
     story: {
       lede: 'A grilled steak with a name that gets a lot of theories. The real story is older and quieter than the legend — Northeastern (Isaan) farmers grilled tougher cuts of beef hard, sliced them paper-thin, and chased the smoke with a sour-fire dip called jaew.',
-      history: 'Suea Rong Hai (เสือร้องไห้) literally means "crying tiger." Most people repeat the romantic version: the steak is so good it would make a tiger cry. The older Isaan story is the opposite — the cut used was traditionally a tough piece of brisket, called the "tiger cry" cut because even a tiger would weep trying to chew it. Pounding it tender, grilling it hard, then slicing thin across the grain was the village fix. Northeastern Thai cooks paired it with jaew — a dipping sauce of toasted rice powder, lime, fish sauce, and a serious amount of chili — and ate it with sticky rice and a bottle of lao khao. Chef Namfon learned it from her uncle, who ran a roadside grill outside Khon Kaen and refused to use anything but rib-eye after he moved to California. "If you can afford the rib-eye," he told her, "the tiger doesn\'t cry anymore." We use his rule.',
+      history: 'Suea Rong Hai (เสือร้องไห้) literally means "crying tiger." Most people repeat the romantic version: the steak is so good it would make a tiger cry. The older Isaan story is the opposite — the cut used was traditionally a tough piece of brisket, called the "tiger cry" cut because even a tiger would weep trying to chew it. Pounding it tender, grilling it hard, then slicing thin across the grain was the village fix. Northeastern Thai cooks paired it with jaew — a dipping sauce of toasted rice powder, lime, fish sauce, and a serious amount of chili — and ate it with sticky rice and a bottle of lao khao. Chef Rainny learned it from her uncle, who ran a roadside grill outside Khon Kaen and refused to use anything but rib-eye after he moved to California. "If you can afford the rib-eye," he told her, "the tiger doesn\'t cry anymore." We use his rule.',
       howToEat: "Eat it the Isaan way: roll a small ball of sticky rice between your fingertips, dip it lightly in the jaew, then pick up a slice of beef with the sticky-rice ball and eat the whole thing in one bite. Don't soak the rice in the sauce — the rice should be a spoon, not a sponge. A bite of cabbage between mouthfuls resets your palate. The chimichurri is for our California neighbors who grew up dipping steak in something green; you can use either, or both at the same time. The Thai uncles will not judge you.",
       chefNote: 'My uncle said the test of a real crying tiger is the moment after the first bite — the sticky rice, the smoke, the lime, the chili — they should hit one after the other, like a small parade. If they all hit at once, the cook rushed it. If only one hits, the cook was scared of the grill. We are not scared of the grill.',
     },
@@ -176,7 +176,7 @@ export const DISHES: Dish[] = [
     },
     story: {
       lede: 'The gentler cousin of tom yum. Coconut milk softens the chili; galangal — not ginger, never ginger — gives it the perfume that makes Thai kitchens smell like home.',
-      history: 'Tom kha gai (ต้มข่าไก่) is a Central-Thai everyday soup that became globally famous through Thai restaurants abroad. Its name is literal: tom = boil, kha = galangal, gai = chicken. The defining ingredient is the galangal — a rhizome that looks like ginger\'s cousin but tastes like nothing else: piney, citrusy, slightly soapy in the best way. Chef Namfon\'s family makes it every time someone in the house catches a cold. "Coconut milk for comfort," her mother used to say, "galangal for the medicine, lime for the soul." Most Western menus over-sweeten it and under-spice it. Ours stays closer to the home version: bright, hot enough to wake you up, fragrant enough to be a hug.',
+      history: 'Tom kha gai (ต้มข่าไก่) is a Central-Thai everyday soup that became globally famous through Thai restaurants abroad. Its name is literal: tom = boil, kha = galangal, gai = chicken. The defining ingredient is the galangal — a rhizome that looks like ginger\'s cousin but tastes like nothing else: piney, citrusy, slightly soapy in the best way. Chef Rainny\'s family makes it every time someone in the house catches a cold. "Coconut milk for comfort," her mother used to say, "galangal for the medicine, lime for the soul." Most Western menus over-sweeten it and under-spice it. Ours stays closer to the home version: bright, hot enough to wake you up, fragrant enough to be a hug.',
       howToEat: "Tom kha is meant to be eaten with rice — not as a starter on its own. Spoon some of the broth and a few pieces of chicken or shrimp over a small mound of jasmine, mix gently, eat in a single bite. The slices of galangal in the bowl are not for chewing — they're flavor delivery, like a bay leaf. Push them to the side. If it's too spicy, add a small splash of coconut milk from a side dish (just ask); if it's too mild, ask for our nam prik pao chili oil. The lime wedge on top is yours to deploy when it lands.",
       chefNote: "When my mother was sick, she asked for tom kha before she asked for medicine. I think it's because every spoon tastes like the kitchen we grew up in — the same coconut, the same galangal, the same lime hitting the bowl right at the end. I cook it the same way now, in California. The galangal is harder to get here, but I won't substitute. It has to be kha.",
     },
