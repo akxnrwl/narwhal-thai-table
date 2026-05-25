@@ -81,7 +81,7 @@ Three dishes ship with full stories (OG Pad Thai, Tom Kha, Crying Tiger). To add
     lede: '...',         // shown right under the title
     history: '...',      // multi-paragraph supported (separate with blank lines)
     howToEat: '...',
-    chefNote: '...',     // first-person Chef Namfon quote
+    chefNote: '...',     // first-person Chef Rainny quote
   },
 },
 ```
