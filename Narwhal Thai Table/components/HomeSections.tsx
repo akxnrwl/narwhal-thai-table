@@ -70,7 +70,13 @@ export function ChefSection() {
             {/* Paragraph 1 — Origin + Inner Court + Dae Jang Geum (always visible) */}
             <p>Chef Rainny is one of a very small, elite group of Thai chefs who carry the true weight of authentic royal craft. She trained within the sacred walls of <strong>The Royal Traditional Thai Crafts School for Women</strong> (วิทยาลัยในวังหญิง), an institution descended directly from <em>hong-khreuang fai-nai</em> — the inner-court royal kitchen of <strong>King Chulalongkorn the Great</strong> (Rama V, late 1800s). Here, she mastered the time-honored recipes, intricate flavor balancing, and strict palace discipline that once fed the kings of Siam. Think of it as the Thai counterpart to the legendary world of <em>Dae Jang Geum</em>: the same archetype, the same impossible standard of perfection.</p>
 
-            {/* Everything below collapses behind a Read More toggle */}
+            {/* The Golden Quote — The Chef's Promise (always visible, before the Read More toggle) */}
+            <blockquote className="chef-quote golden">
+              <span className="quote-label">The Chef&apos;s Promise</span>
+              Authenticity means no shortcuts. At Narwhal, we pair timeless royal-court discipline with the finest local ingredients, delivering the true, uncompromised soul of Royal Thai cuisine. Welcome to my table.
+            </blockquote>
+
+            {/* Deeper credentials, competition record and credential chips collapse behind a Read More toggle */}
             <ChefBioReadMore>
               {/* Paragraph 2 — Le Cordon Bleu as complementary layer */}
               <p>To complement this deep royal foundation, she also completed her classical training at <strong>Le Cordon Bleu</strong>, bringing an extra layer of professional discipline and refined technique to her traditional roots.</p>
@@ -94,12 +100,6 @@ export function ChefSection() {
 
               {/* Paragraph 4 — Narwhal definition (final voice) */}
               <p><strong>Narwhal Thai Table</strong> is her table on HB — where sacred royal-court technique meets fresh California ingredients, driven by her unique artistic vision and an uncompromising dedication to the craft. Every single plate is crafted entirely by her own hands and her own instinct.</p>
-
-              {/* The Golden Quote — The Chef's Promise */}
-              <blockquote className="chef-quote golden">
-                <span className="quote-label">The Chef&apos;s Promise</span>
-                Authenticity means no shortcuts. At Narwhal, we pair timeless royal-court discipline with the finest local ingredients, delivering the true, uncompromised soul of Royal Thai cuisine. Welcome to my table.
-              </blockquote>
 
               <div className="chef-credentials">
                 <span>Le Cordon Bleu</span>
