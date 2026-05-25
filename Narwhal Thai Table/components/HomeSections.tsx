@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import FadeUp from './FadeUp';
 import ReserveForm from './ReserveForm';
+import ChefBioReadMore from './ChefBioReadMore';
 import { DISHES } from '@/lib/dishes';
 
 /* ============================================================
@@ -47,13 +48,11 @@ export function ChefSection() {
     <section className="chef" id="chef">
       <div className="container">
         <div className="chef-grid">
-          {/* Future: <MediaFrame ratio="4/5" ornament="inset" src="/images/chef.jpg" alt="Chef Namfon" /> */}
+          {/* Future: <MediaFrame ratio="4/5" ornament="inset" src="/images/chef.jpg" alt="Chef Rainny" /> */}
           <FadeUp className="chef-visual">
             <div className="chef-content">
               <div className="role">— Chef &amp; Co-Founder</div>
-              <div className="name-en">Chef <em>Namfon</em></div>
-              <div className="name-en" style={{ fontSize: 30 }}>Laksanawadee Sripornsawan</div>
-              <div className="name-th">น้ำฝน ลักษณาวดี ศรีพรสวรรค์</div>
+              <div className="name-en">Chef <em>Rainny</em></div>
               <div className="ornament-divider"></div>
               <div className="badge" style={{ lineHeight: 1.8 }}>
                 Le Cordon Bleu<br/>
@@ -68,46 +67,49 @@ export function ChefSection() {
             <span className="label">Meet the Chef</span>
             <h2>The Living Legacy of <em>Royal Thai Culinary Heritage</em>.</h2>
 
-            {/* Paragraph 1 — Origin + Inner Court + Dae Jang Geum */}
-            <p>Chef Namfon (<strong>Laksanawadee Sripornsawan</strong>) is one of a very small, elite group of Thai chefs who carry the true weight of authentic royal craft. She trained within the sacred walls of <strong>The Royal Traditional Thai Crafts School for Women</strong> (วิทยาลัยในวังหญิง), an institution descended directly from <em>hong-khreuang fai-nai</em> — the inner-court royal kitchen of <strong>King Chulalongkorn the Great</strong> (Rama V, late 1800s). Here, she mastered the time-honored recipes, intricate flavor balancing, and strict palace discipline that once fed the kings of Siam. Think of it as the Thai counterpart to the legendary world of <em>Dae Jang Geum</em>: the same archetype, the same impossible standard of perfection.</p>
+            {/* Paragraph 1 — Origin + Inner Court + Dae Jang Geum (always visible) */}
+            <p>Chef Rainny is one of a very small, elite group of Thai chefs who carry the true weight of authentic royal craft. She trained within the sacred walls of <strong>The Royal Traditional Thai Crafts School for Women</strong> (วิทยาลัยในวังหญิง), an institution descended directly from <em>hong-khreuang fai-nai</em> — the inner-court royal kitchen of <strong>King Chulalongkorn the Great</strong> (Rama V, late 1800s). Here, she mastered the time-honored recipes, intricate flavor balancing, and strict palace discipline that once fed the kings of Siam. Think of it as the Thai counterpart to the legendary world of <em>Dae Jang Geum</em>: the same archetype, the same impossible standard of perfection.</p>
 
-            {/* Paragraph 2 — Le Cordon Bleu as complementary layer */}
-            <p>To complement this deep royal foundation, she also completed her classical training at <strong>Le Cordon Bleu</strong>, bringing an extra layer of professional discipline and refined technique to her traditional roots.</p>
+            {/* Everything below collapses behind a Read More toggle */}
+            <ChefBioReadMore>
+              {/* Paragraph 2 — Le Cordon Bleu as complementary layer */}
+              <p>To complement this deep royal foundation, she also completed her classical training at <strong>Le Cordon Bleu</strong>, bringing an extra layer of professional discipline and refined technique to her traditional roots.</p>
 
-            {/* Paragraph 3 — National stages with bullet list (now with placements) */}
-            <p>Her exceptional mastery has been proven under the highest pressure on Thailand&apos;s premier culinary television stages:</p>
-            <ul className="chef-competitions">
-              <li>
-                <span className="title">MasterChef Thailand</span>
-                <span className="sub">Season 1 · Top 10</span>
-              </li>
-              <li>
-                <span className="title">Star Chef Thailand</span>
-                <span className="sub">Season 1 · Top 3</span>
-              </li>
-              <li>
-                <span className="title">Chef Fest Thailand</span>
-              </li>
-            </ul>
-            <p>In these intense, high-stakes arenas where there is no room for error, her skills stood out and commanded absolute respect.</p>
+              {/* Paragraph 3 — National stages with bullet list (now with placements) */}
+              <p>Her exceptional mastery has been proven under the highest pressure on Thailand&apos;s premier culinary television stages:</p>
+              <ul className="chef-competitions">
+                <li>
+                  <span className="title">MasterChef Thailand</span>
+                  <span className="sub">Season 1 · Top 10</span>
+                </li>
+                <li>
+                  <span className="title">Star Chef Thailand</span>
+                  <span className="sub">Season 1 · Top 3</span>
+                </li>
+                <li>
+                  <span className="title">Chef Fest Thailand</span>
+                </li>
+              </ul>
+              <p>In these intense, high-stakes arenas where there is no room for error, her skills stood out and commanded absolute respect.</p>
 
-            {/* Paragraph 4 — Narwhal definition (final voice) */}
-            <p><strong>Narwhal Thai Table</strong> is her table on HB — where sacred royal-court technique meets fresh California ingredients, driven by her unique artistic vision and an uncompromising dedication to the craft. Every single plate is crafted entirely by her own hands and her own instinct.</p>
+              {/* Paragraph 4 — Narwhal definition (final voice) */}
+              <p><strong>Narwhal Thai Table</strong> is her table on HB — where sacred royal-court technique meets fresh California ingredients, driven by her unique artistic vision and an uncompromising dedication to the craft. Every single plate is crafted entirely by her own hands and her own instinct.</p>
 
-            {/* The Golden Quote — The Chef's Promise */}
-            <blockquote className="chef-quote golden">
-              <span className="quote-label">The Chef&apos;s Promise</span>
-              Authenticity means no shortcuts. At Narwhal, we pair timeless royal-court discipline with the finest local ingredients, delivering the true, uncompromised soul of Royal Thai cuisine. Welcome to my table.
-            </blockquote>
+              {/* The Golden Quote — The Chef's Promise */}
+              <blockquote className="chef-quote golden">
+                <span className="quote-label">The Chef&apos;s Promise</span>
+                Authenticity means no shortcuts. At Narwhal, we pair timeless royal-court discipline with the finest local ingredients, delivering the true, uncompromised soul of Royal Thai cuisine. Welcome to my table.
+              </blockquote>
 
-            <div className="chef-credentials">
-              <span>Le Cordon Bleu</span>
-              <span>The Royal Traditional Thai Crafts School for Women · วิทยาลัยในวังหญิง</span>
-              <span>MasterChef Thailand · S1 · Top 10</span>
-              <span>Star Chef Thailand · S1 · Top 3</span>
-              <span>Chef Fest Thailand</span>
-              <span>Chef &amp; Co-Founder · Narwhal Thai Table</span>
-            </div>
+              <div className="chef-credentials">
+                <span>Le Cordon Bleu</span>
+                <span>The Royal Traditional Thai Crafts School for Women · วิทยาลัยในวังหญิง</span>
+                <span>MasterChef Thailand · S1 · Top 10</span>
+                <span>Star Chef Thailand · S1 · Top 3</span>
+                <span>Chef Fest Thailand</span>
+                <span>Chef &amp; Co-Founder · Narwhal Thai Table</span>
+              </div>
+            </ChefBioReadMore>
           </FadeUp>
         </div>
       </div>
@@ -126,7 +128,7 @@ export function MenuPreviewSection() {
       <div className="container">
         <FadeUp className="section-head">
           <span className="label">What&apos;s Cooking</span>
-          <h2>Pull up a chair — <em>Chef Namfon&apos;s got something for you</em>.</h2>
+          <h2>Pull up a chair — <em>Chef Rainny&apos;s got something for you</em>.</h2>
           <p>Here&apos;s a taste of her signature plates. The full menu — thirteen categories from appetizers to dessert — lives on its own page.</p>
         </FadeUp>
 

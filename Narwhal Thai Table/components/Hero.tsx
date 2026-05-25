@@ -49,7 +49,7 @@ export default function Hero() {
             Come sit<br/>with us, <em>neighbor</em>.
           </h1>
           <p>
-            A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Namfon&apos;s own hands.
+            A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Rainny&apos;s own hands.
           </p>
           <div className="hero-cta">
             <Link href="/#reserve" className="btn-primary">

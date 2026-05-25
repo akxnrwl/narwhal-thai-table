@@ -95,7 +95,7 @@ export default function MenuTabs({ initial = 'specials' as CategoryId }: { initi
         );
       })}
 
-      <p className="menu-note">★ are Chef Namfon&apos;s signature creations. Tell us about your allergies or spice level when you order — we&apos;ll cook it just for you.</p>
+      <p className="menu-note">★ are Chef Rainny&apos;s signature creations. Tell us about your allergies or spice level when you order — we&apos;ll cook it just for you.</p>
     </>
   );
 }
