@@ -392,10 +392,10 @@
           </div>
           <div class="stat">
             <span>ด่าน</span>
-            <strong id="levelNow">1/10</strong>
+            <strong id="levelNow">1/5</strong>
           </div>
           <div class="stat">
-            <span>ดีที่สุด</span>
+            <span id="bestLabel">ดีที่สุด</span>
             <strong id="bestScore">0</strong>
           </div>
         </div>
@@ -452,16 +452,19 @@
       };
 
       const LEVELS = [
-        { id: 1, name: "Lagoon Start", goal: 220, duration: 45, bubbleGap: 0.66, inkGap: 10.8, goldGap: 9.8, powerGap: 10.5, speed: 0.9, current: 0, penaltyScore: 0, penaltyTime: 0, pattern: "single", palette: ["#d9f7ff", "#79d9e8", "#3db7d4"], powers: ["shield"] },
-        { id: 2, name: "Bubble Rush", goal: 420, duration: 42, bubbleGap: 0.62, inkGap: 7.4, goldGap: 9.0, powerGap: 10.8, speed: 1.0, current: 0, penaltyScore: 0, penaltyTime: 0, pattern: "single", palette: ["#e7fff4", "#7ee3cf", "#2fb1bd"], powers: ["shield"] },
-        { id: 3, name: "Kelp Wiggle", goal: 650, duration: 40, bubbleGap: 0.58, inkGap: 5.9, goldGap: 8.2, powerGap: 11.2, speed: 1.08, current: 0.06, penaltyScore: 0, penaltyTime: 0, pattern: "single", palette: ["#e8fff6", "#71d6bb", "#258f9d"], powers: ["shield"] },
-        { id: 4, name: "Pearl Growth", goal: 900, duration: 38, bubbleGap: 0.56, inkGap: 5.0, goldGap: 7.8, powerGap: 11.8, speed: 1.16, current: 0.09, penaltyScore: 8, penaltyTime: 0, pattern: "paired", palette: ["#fff9d8", "#8dded7", "#33a5bb"], powers: ["shield"] },
-        { id: 5, name: "Moon Bubble", goal: 1180, duration: 36, bubbleGap: 0.54, inkGap: 4.3, goldGap: 7.4, powerGap: 12.5, speed: 1.25, current: 0.13, penaltyScore: 22, penaltyTime: 0, pattern: "paired", palette: ["#eef0ff", "#82c9e9", "#4264a7"], powers: ["shield"] },
-        { id: 6, name: "Jelly Drift", goal: 1500, duration: 35, bubbleGap: 0.52, inkGap: 3.75, goldGap: 7.0, powerGap: 13.2, speed: 1.34, current: 0.18, penaltyScore: 28, penaltyTime: 1, pattern: "lane", palette: ["#fff0fb", "#8ecff0", "#4d5fad"], powers: ["shield"] },
-        { id: 7, name: "Golden Reef", goal: 1840, duration: 34, bubbleGap: 0.5, inkGap: 3.05, goldGap: 6.6, powerGap: 14.0, speed: 1.46, current: 0.22, penaltyScore: 34, penaltyTime: 1, pattern: "finaleSoft", palette: ["#fff4c6", "#64d9cf", "#227c9d"], powers: ["shield"] },
-        { id: 8, name: "Bubble Storm", goal: 2180, duration: 33, bubbleGap: 0.48, inkGap: 2.68, goldGap: 6.2, powerGap: 15.0, speed: 1.58, current: 0.28, penaltyScore: 42, penaltyTime: 2, pattern: "finaleStep", palette: ["#dfe8ff", "#5ba8d8", "#25466e"], powers: ["shield"] },
-        { id: 9, name: "Deep Spark", goal: 2500, duration: 32, bubbleGap: 0.46, inkGap: 2.32, goldGap: 5.9, powerGap: 15.8, speed: 1.72, current: 0.34, penaltyScore: 50, penaltyTime: 2, pattern: "finaleSurge", palette: ["#d6e6ff", "#5278b9", "#102943"], powers: ["shield"] },
-        { id: 10, name: "Aurora Narwhal", goal: 2850, duration: 30, bubbleGap: 0.42, inkGap: 1.98, goldGap: 5.4, powerGap: 17.0, speed: 1.9, current: 0.42, penaltyScore: 64, penaltyTime: 2, pattern: "finale", palette: ["#fff2cc", "#8be8dc", "#3b3d95"], powers: ["shield"] }
+        // v3 — 5-level California-coast tour ending at Huntington Beach.
+        // Difficulty mapped from old levels 5→1, 6→2, 7→3, 8→4, 10→5
+        // (skipped old 9 to keep a 5-slot run, kept old 10 as finale).
+        // Palette per level still keeps the playful bright cyan family but
+        // shifts toward brand brass/navy in the finale so the last screen
+        // looks like the rest of the restaurant site.
+        { id: 1, name: "Sunset Beach Lagoon",  goal: 1180, duration: 38, bubbleGap: 0.54, inkGap: 4.6, goldGap: 7.4, powerGap: 12.5, speed: 1.22, current: 0.11, penaltyScore: 18, penaltyTime: 0, pattern: "paired",     palette: ["#eaf6ff", "#82c9e9", "#3a78b3"], powers: ["shield"] },
+        { id: 2, name: "Bolsa Chica Drift",    goal: 1500, duration: 36, bubbleGap: 0.52, inkGap: 3.8, goldGap: 7.0, powerGap: 13.2, speed: 1.32, current: 0.16, penaltyScore: 26, penaltyTime: 1, pattern: "lane",       palette: ["#fff7dd", "#9bd9c0", "#377f6d"], powers: ["shield"] },
+        { id: 3, name: "Pacific Coast Glide",  goal: 1840, duration: 35, bubbleGap: 0.5,  inkGap: 3.1, goldGap: 6.6, powerGap: 14.0, speed: 1.44, current: 0.21, penaltyScore: 32, penaltyTime: 1, pattern: "finaleSoft", palette: ["#fffaef", "#d8b96f", "#8a6b26"], powers: ["shield"] },
+        { id: 4, name: "Newport Reef",         goal: 2200, duration: 34, bubbleGap: 0.48, inkGap: 2.7, goldGap: 6.2, powerGap: 15.0, speed: 1.56, current: 0.27, penaltyScore: 40, penaltyTime: 2, pattern: "finaleStep", palette: ["#e3edf7", "#5fa3c8", "#26456f"], powers: ["shield"] },
+        // Finale palette uses the restaurant brand: brass gold over deep navy
+        // so the win screen feels like part of narwhalthaihb.com.
+        { id: 5, name: "Huntington Beach",     goal: 2850, duration: 30, bubbleGap: 0.42, inkGap: 1.98, goldGap: 5.4, powerGap: 17.0, speed: 1.9,  current: 0.42, penaltyScore: 64, penaltyTime: 2, pattern: "finale",     palette: ["#fff2cc", "#d4b36a", "#0B1F33"], powers: ["shield"] }
       ];
 
       const FORM_META = {
@@ -479,6 +482,7 @@
       const timeEl = document.getElementById("timeLeft");
       const levelEl = document.getElementById("levelNow");
       const bestEl = document.getElementById("bestScore");
+      const bestLabelEl = document.getElementById("bestLabel");
       const pauseBtn = document.getElementById("pauseBtn");
       const soundBtn = document.getElementById("soundBtn");
       const pauseIcon = document.getElementById("pauseIcon");
@@ -718,7 +722,7 @@
       }
 
       function setScreen(type) {
-        const finalStage = type === "gameover" && (level().id === 10 || state.highestLevel >= 10);
+        const finalStage = type === "gameover" && (level().id === 5 || state.highestLevel >= 5);
         screen.classList.toggle("is-hidden", type === "hidden");
         screen.classList.toggle("is-surprise", type === "victory" && state.finalSurprise);
         screen.classList.toggle("is-final-try", finalStage);
@@ -729,7 +733,7 @@
         if (type === "menu") {
           screenKicker.textContent = "10 ด่านใหม่";
           screenTitle.textContent = "Bubble Glide";
-          screenCopy.textContent = "เก็บผัดไทย ต้มยำ หัวใจ และเกราะสั้นๆ เพื่อไปให้ถึง Aurora Narwhal";
+          screenCopy.textContent = "เก็บผัดไทย ต้มยำ หัวใจ และเกราะสั้นๆ พานาวาฬไปให้ถึง Huntington Beach";
           primaryBtn.textContent = "เริ่มเล่น";
         }
 
@@ -743,13 +747,13 @@
         if (finalStage) {
           screenKicker.textContent = "ถึงด่าน 10 แล้ว";
           screenTitle.textContent = "เก่งมากแล้ว";
-          screenCopy.textContent = `พานาวาฬมาถึงทะเลออโรร่าได้แล้ว | ${Math.floor(state.score)} คะแนน | ดีที่สุด ${Math.floor(state.best)} คะแนน`;
+          screenCopy.textContent = `พานาวาฬมาถึง Huntington Beach ได้แล้ว | ${Math.floor(state.score)} คะแนน | ดีที่สุด ${Math.floor(state.best)} คะแนน`;
           primaryBtn.textContent = "ลองคว้ามงกุฎอีกครั้ง";
           return;
         }
 
         if (type === "victory" && state.finalSurprise) {
-          screenKicker.textContent = "Aurora Surprise";
+          screenKicker.textContent = "Welcome to HB";
           screenTitle.textContent = "มงกุฎเชฟของนาวาฬ";
           screenCopy.textContent = `ผ่านครบ 10 ด่านทันเวลา เหลือ ${Math.ceil(state.finalTimeLeft)} วิ | ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
           primaryBtn.textContent = "เล่นรอบใหม่";
@@ -757,7 +761,7 @@
         }
 
         if (type === "gameover") {
-          screenKicker.textContent = `ถึงด่าน ${state.highestLevel}/10`;
+          screenKicker.textContent = `ถึงด่าน ${state.highestLevel}/5`;
           screenTitle.textContent = `${Math.floor(state.score)} คะแนน`;
           screenCopy.textContent = `${state.deathReason} | เป้าหมายด่านนี้ ${level().goal} | ดีที่สุด ${Math.floor(state.best)} คะแนน`;
           primaryBtn.textContent = "ลองอีกครั้ง";
@@ -765,7 +769,7 @@
 
         if (type === "victory") {
           screenKicker.textContent = "ครบ 10 ด่าน";
-          screenTitle.textContent = "Aurora Clear";
+          screenTitle.textContent = "Huntington Beach Clear";
           screenCopy.textContent = `จบด้วย ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
           primaryBtn.textContent = "เล่นรอบใหม่";
         }
@@ -861,9 +865,9 @@
       function endGame(victory = false, reason = "หมดเวลา") {
         state.mode = victory ? "victory" : "gameover";
         state.deathReason = victory ? "" : reason;
-        const atFinalStage = level().id === 10 || state.highestLevel >= 10;
+        const atFinalStage = level().id === 5 || state.highestLevel >= 5;
         if (victory) {
-          state.finalSurprise = state.finalSurprise || level().id === 10;
+          state.finalSurprise = state.finalSurprise || level().id === 5;
           state.finalTimeLeft = Math.max(state.finalTimeLeft, state.timeLeft, 0);
           state.celebrationKind = "victory";
           state.celebrationTimer = 4.2;
@@ -896,7 +900,7 @@
 
       function completeLevel() {
         const id = level().id;
-        if (id === 10) {
+        if (id === 5) {
           state.finalSurprise = state.timeLeft > 0;
           state.finalTimeLeft = Math.max(0, state.timeLeft);
         }
@@ -912,15 +916,15 @@
         }
 
         state.mode = "levelComplete";
-        state.transitionTimer = id === 10 ? 2.05 : 1.45;
-        state.transitionText = id === 10 ? "ประตูออโรร่าเปิดแล้ว" : `ผ่านด่าน ${id}`;
+        state.transitionTimer = id === 5 ? 2.05 : 1.45;
+        state.transitionText = id === 5 ? "ถึง Huntington Beach แล้ว!" : `ผ่านด่าน ${id}`;
         state.entities.length = 0;
-        state.feverTimer = Math.max(state.feverTimer, id === 10 ? 2.5 : 1.6);
+        state.feverTimer = Math.max(state.feverTimer, id === 5 ? 2.5 : 1.6);
         state.shake = 0;
-        state.flash = id === 10 ? 0.62 : 0.38;
-        whale.smile = id === 10 ? 2.1 : 1.4;
-        state.celebrationKind = id === 10 ? "gate" : "level";
-        state.celebrationTimer = id === 10 ? 2.25 : 1.55;
+        state.flash = id === 5 ? 0.62 : 0.38;
+        whale.smile = id === 5 ? 2.1 : 1.4;
+        state.celebrationKind = id === 5 ? "gate" : "level";
+        state.celebrationTimer = id === 5 ? 2.25 : 1.55;
         state.celebrationPulse = 0;
         addFloater(state.badgeText, CONFIG.width * 0.5, 180, "#8a5a00");
         addWaveBurst(whale.x, whale.y, FORM_META[whale.form].aura);
@@ -969,8 +973,17 @@
       function updateHud() {
         scoreEl.textContent = Math.floor(state.score);
         timeEl.textContent = Math.max(0, Math.ceil(state.timeLeft));
-        levelEl.textContent = `${level().id}/10`;
-        bestEl.textContent = Math.floor(state.best);
+        levelEl.textContent = `${level().id}/5`;
+        // v3: surface combo as a small ×N pill next to the score. We mutate
+        // bestScore label/value because the HUD only has 4 slots — combo
+        // mid-run is more interesting than "best" while you're playing.
+        if (state.combo >= 2) {
+          bestEl.textContent = `×${state.combo}`;
+          bestLabelEl.textContent = "คอมโบ";
+        } else {
+          bestEl.textContent = Math.floor(state.best);
+          bestLabelEl.textContent = "ดีที่สุด";
+        }
       }
 
       function spawnBubble(type = "star", options = {}) {
@@ -1063,15 +1076,13 @@
       }
 
       function chooseObstacleType(id) {
+        // v3: 5 levels mapped from old 5/6/7/8/10. Mix preserved so each
+        // level still feels distinct (jelly/reef on L1, lanes on L2, etc.).
         const roll = Math.random();
-        if (id <= 2) return "ink";
-        if (id === 3) return roll < 0.6 ? "kelp" : "ink";
-        if (id === 4) return roll < 0.45 ? "reef" : roll < 0.78 ? "kelp" : "ink";
-        if (id === 5) return roll < 0.42 ? "jelly" : roll < 0.7 ? "reef" : "ink";
-        if (id === 6) return roll < 0.36 ? "whirlpool" : roll < 0.66 ? "jelly" : roll < 0.86 ? "reef" : "ink";
-        if (id === 7) return roll < 0.34 ? "reef" : roll < 0.58 ? "whirlpool" : roll < 0.82 ? "jelly" : "ink";
-        if (id === 8) return roll < 0.36 ? "whirlpool" : roll < 0.62 ? "reef" : roll < 0.82 ? "jelly" : "ink";
-        if (id === 9) return roll < 0.42 ? "whirlpool" : roll < 0.68 ? "reef" : roll < 0.84 ? "jelly" : "ink";
+        if (id === 1) return roll < 0.42 ? "jelly" : roll < 0.7 ? "reef" : "ink";
+        if (id === 2) return roll < 0.36 ? "whirlpool" : roll < 0.66 ? "jelly" : roll < 0.86 ? "reef" : "ink";
+        if (id === 3) return roll < 0.34 ? "reef" : roll < 0.58 ? "whirlpool" : roll < 0.82 ? "jelly" : "ink";
+        if (id === 4) return roll < 0.36 ? "whirlpool" : roll < 0.62 ? "reef" : roll < 0.82 ? "jelly" : "ink";
         return roll < 0.46 ? "whirlpool" : roll < 0.74 ? "reef" : roll < 0.9 ? "jelly" : "ink";
       }
 
@@ -1148,17 +1159,17 @@
       }
 
       function addLevelCelebration(id) {
-        const finale = id === 10;
+        const finale = id === 5;
         addCelebrationPieces(whale.x, whale.y - 18, finale ? 54 : 28, finale);
         addWaveBurst(whale.x, whale.y, finale ? "rgba(255,209,102,0.72)" : "rgba(255,159,183,0.48)");
-        addFloater(finale ? "Aurora Gate" : "Nice Clear", CONFIG.width * 0.5, 212, finale ? "#8a5a00" : "#ff5d7a");
+        addFloater(finale ? "HB Pier" : "Nice Clear", CONFIG.width * 0.5, 212, finale ? "#8a5a00" : "#ff5d7a");
       }
 
       function addFinalCelebration(victory) {
         const centerY = victory ? 236 : 276;
         addCelebrationPieces(CONFIG.width * 0.5, centerY, victory ? 86 : 42, victory);
         addWaveBurst(CONFIG.width * 0.5, centerY, victory ? "rgba(255,209,102,0.76)" : "rgba(255,159,183,0.5)");
-        addFloater(victory ? "มงกุฎออโรร่า" : "ถึงด่านสุดท้ายแล้ว", CONFIG.width * 0.5, victory ? 150 : 182, victory ? "#8a5a00" : "#0b6f82");
+        addFloater(victory ? "ราชินีชายฝั่ง" : "ถึงด่านสุดท้ายแล้ว", CONFIG.width * 0.5, victory ? 150 : 182, victory ? "#8a5a00" : "#0b6f82");
       }
 
       function updateCelebration(dt) {
@@ -1345,6 +1356,22 @@
 
           if (entity.type === "whirlpool" && state.mode === "playing") {
             applyWhirlpoolPull(entity, dt);
+          }
+
+          // v3: Near-miss bonus. If an obstacle slides past the narwhal
+          // close enough to count as a dodge but doesn't actually hit, give
+          // a small +3 and a "Close!" popup, once per entity. Tuned tight
+          // (14px window) so the bonus rewards real dodges and doesn't
+          // inflate scores when stuff just clusters nearby.
+          if (entity.kind === "obstacle" && !entity.nearMissed && whale.invulnerable <= 0) {
+            const d = distance(entity.x, entity.y, whale.x, whale.y);
+            const hitBand = entity.r + obstacleRadius();
+            if (d > hitBand && d < hitBand + 14) {
+              entity.nearMissed = true;
+              state.score += 3;
+              addFloater("Close!", entity.x, entity.y - 6, "#0b6f82");
+              playTone(720, 0.04, "triangle", 0.022);
+            }
           }
 
           if (entity.kind === "obstacle" && whale.invulnerable <= 0 && hitsWhale(entity, obstacleRadius())) {
@@ -1574,9 +1601,9 @@
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
 
-        if (state.feverTimer > 0 || lv.id === 10) {
+        if (state.feverTimer > 0 || lv.id === 5) {
           ctx.save();
-          ctx.globalAlpha = lv.id === 10 ? 0.18 : 0.12;
+          ctx.globalAlpha = lv.id === 5 ? 0.18 : 0.12;
           for (let i = 0; i < 5; i += 1) {
             ctx.fillStyle = i % 2 ? "#ffd166" : "#d7c6ff";
             ctx.beginPath();
@@ -1634,7 +1661,7 @@
 
       function drawCelebrationBackdrop() {
         const activeFinal = state.mode === "victory" || state.celebrationKind === "victory";
-        const finalTry = state.mode === "gameover" && (level().id === 10 || state.highestLevel >= 10);
+        const finalTry = state.mode === "gameover" && (level().id === 5 || state.highestLevel >= 5);
         if (!activeFinal && !finalTry && state.mode !== "levelComplete") return;
 
         ctx.save();
@@ -2111,6 +2138,35 @@
           ctx.restore();
         }
 
+        // v3: combo-tier halo — additive ring around the whole narwhal that
+        // grows wider + warmer as the combo climbs. Sits BELOW the body
+        // draw so the body cleanly overlaps it. Off-white at the Coastal
+        // tier, brass-tinted at Royal, brass + sparkles at Aurora.
+        const comboTier = state.combo >= 30 ? 3 : state.combo >= 15 ? 2 : state.combo >= 5 ? 1 : 0;
+        if (comboTier > 0) {
+          const tierColor = comboTier === 1 ? "rgba(245,240,230,0.36)"
+                          : comboTier === 2 ? "rgba(212,179,106,0.5)"
+                          : "rgba(212,179,106,0.78)";
+          const tierRadius = comboTier === 1 ? 56 : comboTier === 2 ? 64 : 74;
+          ctx.save();
+          ctx.strokeStyle = tierColor;
+          ctx.lineWidth = comboTier + 1;
+          ctx.beginPath();
+          ctx.arc(0, 0, tierRadius, 0, Math.PI * 2);
+          ctx.stroke();
+          if (comboTier === 3) {
+            // Aurora sparkles orbiting the ring
+            for (let i = 0; i < 6; i += 1) {
+              const a = state.clock * 1.6 + i * Math.PI / 3;
+              ctx.fillStyle = "rgba(212,179,106,0.9)";
+              ctx.beginPath();
+              ctx.arc(Math.cos(a) * 78, Math.sin(a) * 78, 2.6, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          ctx.restore();
+        }
+
         ctx.fillStyle = whale.form === "giant" ? "#58cfc2" : "#58c6d9";
         ctx.beginPath();
         ctx.moveTo(-35, 3);
@@ -2126,15 +2182,15 @@
         ctx.ellipse(0, 0, 47, 31, 0, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#d9f7ff";
+        // Belly highlight — subtle pearl, not the harsh pastel of v2.
+        ctx.fillStyle = "#f0f9ff";
         ctx.beginPath();
         ctx.ellipse(11, 11, 29, 14, -0.04, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#ff9fb7";
-        ctx.beginPath();
-        ctx.ellipse(20, 8, 6, 4.6, 0.08, 0, Math.PI * 2);
-        ctx.fill();
+        // v3: pink cheeks removed (they pushed the narwhal into baby-toy
+        // territory). The smile + eye sparkle below still keep the
+        // character feeling alive, but without the kiddie blush.
 
         ctx.fillStyle = meta.fin;
         ctx.beginPath();
