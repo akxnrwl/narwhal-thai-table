@@ -1,0 +1,2466 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Narwhal Bubble Glide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17324d;
+      --foam: #d9f7ff;
+      --gold: #ffd166;
+      --panel: rgba(255, 255, 255, 0.78);
+      --line: rgba(23, 50, 77, 0.14);
+      font-family: "Noto Sans Thai", "Sarabun", "Segoe UI", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 209, 102, 0.2), transparent 24%),
+        linear-gradient(160deg, #ecfbff 0%, #c5f1f7 45%, #a8e6ef 100%);
+      color: var(--ink);
+    }
+
+    .narwhal-game { width: min(100%, 520px); }
+
+    .game-top {
+      position: absolute;
+      z-index: 4;
+      top: 12px;
+      left: 14px;
+      right: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .stats { pointer-events: none; }
+    .controls { pointer-events: auto; }
+
+    .game-stage.is-overlay-open .game-top {
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+    }
+
+    .game-stage.is-transitioning .game-top {
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+    }
+
+    .stats {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      overflow: hidden;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 8% 18%, rgba(255, 255, 255, 0.88) 0 5px, transparent 6px),
+        radial-gradient(circle at 87% 72%, rgba(255, 255, 255, 0.48) 0 4px, transparent 5px),
+        linear-gradient(180deg, rgba(236, 251, 255, 0.8), rgba(139, 232, 220, 0.36));
+      backdrop-filter: blur(10px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.78),
+        0 10px 24px rgba(23, 50, 77, 0.12);
+    }
+
+    .stat {
+      position: relative;
+      min-width: 0;
+      padding: 7px 8px 6px;
+      border-radius: 7px;
+      text-align: center;
+    }
+
+    .stat + .stat::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: linear-gradient(transparent, rgba(11, 111, 130, 0.18), transparent);
+    }
+
+    .stat span {
+      display: block;
+      font-size: 11px;
+      line-height: 1.1;
+      color: rgba(11, 111, 130, 0.76);
+      white-space: nowrap;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 19px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .controls {
+      display: flex;
+      gap: 7px;
+    }
+
+    .icon-button,
+    .primary-button {
+      border: 0;
+      border-radius: 8px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 10px 22px rgba(23, 50, 77, 0.12);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.66);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.86), transparent 28%),
+        linear-gradient(180deg, rgba(236, 251, 255, 0.82), rgba(217, 247, 255, 0.56));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        0 10px 22px rgba(23, 50, 77, 0.12);
+    }
+
+    .icon-button svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2.35;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-button:disabled {
+      cursor: default;
+      opacity: 0.46;
+    }
+
+    .icon-button[aria-pressed="true"] {
+      color: #0b6f82;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.9), transparent 30%),
+        linear-gradient(180deg, rgba(255, 242, 204, 0.92), rgba(217, 247, 255, 0.68));
+    }
+
+    .game-stage {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(23, 50, 77, 0.16);
+      box-shadow: 0 22px 54px rgba(23, 50, 77, 0.2);
+      background: #79d9e8;
+      touch-action: none;
+      user-select: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 500 / 620;
+      touch-action: none;
+    }
+
+    .screen {
+      position: absolute;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      background:
+        linear-gradient(180deg, rgba(217, 247, 255, 0.28), rgba(61, 183, 212, 0.28)),
+        rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(5px);
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+
+    .screen.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .screen.is-surprise {
+      background:
+        linear-gradient(180deg, rgba(255, 242, 204, 0.24), rgba(139, 232, 220, 0.18)),
+        rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(3px);
+    }
+
+    .screen.is-surprise .screen-inner {
+      border-color: rgba(255, 209, 102, 0.9);
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 18px 46px rgba(138, 90, 0, 0.2);
+    }
+
+    .screen.is-final-try .screen-inner {
+      border-color: rgba(255, 159, 183, 0.72);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .screen-inner {
+      width: min(100%, 360px);
+      padding: 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 18px 42px rgba(23, 50, 77, 0.16);
+    }
+
+    .kicker {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+      color: #0b6f82;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 8vw, 42px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .screen-copy {
+      margin: 10px 0 18px;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .score-form,
+    .leaderboard {
+      margin-top: 12px;
+    }
+
+    .score-form.is-hidden,
+    .leaderboard.is-hidden {
+      display: none;
+    }
+
+    .score-label,
+    .leaderboard-title,
+    .score-note {
+      display: block;
+      margin: 0 0 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #0b6f82;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .score-input {
+      min-width: 0;
+      height: 42px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .save-score-button {
+      min-width: 74px;
+      height: 42px;
+      border: 0;
+      border-radius: 8px;
+      background: #d9f7ff;
+      color: #0b6f82;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .save-score-button:disabled {
+      cursor: default;
+      opacity: 0.52;
+    }
+
+    .score-note {
+      min-height: 18px;
+      margin: 6px 0 0;
+      color: #8a5a00;
+    }
+
+    .score-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 4px;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .score-list li {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 5px 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.48);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .score-list .score-empty {
+      grid-template-columns: 1fr;
+      text-align: center;
+      color: rgba(23, 50, 77, 0.68);
+    }
+
+    .primary-button {
+      min-width: 156px;
+      min-height: 46px;
+      padding: 10px 18px;
+      font: inherit;
+      font-weight: 800;
+      background: var(--gold);
+      border: 1px solid rgba(23, 50, 77, 0.12);
+    }
+
+    .primary-button:hover,
+    .icon-button:hover { transform: translateY(-1px); }
+
+    .primary-button:active,
+    .icon-button:active { transform: translateY(1px); }
+
+    @media (max-width: 430px) {
+      body { padding: 6px; }
+      .game-top {
+        grid-template-columns: 1fr auto;
+        gap: 5px;
+        left: 8px;
+        right: 8px;
+        top: 8px;
+      }
+      .controls { justify-content: end; }
+      .stats { padding: 3px; }
+      .stat { padding: 6px 4px; }
+      .stat:nth-child(4) { display: none; }
+      .stat span { font-size: 10px; }
+      .stat strong { font-size: 16px; }
+      .icon-button { width: 38px; height: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="narwhal-game" aria-label="Narwhal Bubble Glide">
+    <section class="game-stage">
+      <div class="game-top">
+        <div class="stats" aria-live="polite">
+          <div class="stat">
+            <span>คะแนน</span>
+            <strong id="score">0</strong>
+          </div>
+          <div class="stat">
+            <span>เวลา</span>
+            <strong id="timeLeft">40</strong>
+          </div>
+          <div class="stat">
+            <span>ด่าน</span>
+            <strong id="levelNow">1/10</strong>
+          </div>
+          <div class="stat">
+            <span>ดีที่สุด</span>
+            <strong id="bestScore">0</strong>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="icon-button" id="pauseBtn" type="button" aria-label="พักเกม" title="พักเกม" disabled>
+            <svg id="pauseIcon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5v14"></path>
+              <path d="M16 5v14"></path>
+            </svg>
+          </button>
+          <button class="icon-button" id="soundBtn" type="button" aria-label="เปิดหรือปิดเสียง" title="เสียง">
+            <svg id="soundIcon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 10v4h4l5 4V6l-5 4H4z"></path>
+              <path d="M16 9.5a4 4 0 0 1 0 5"></path>
+              <path d="M18.5 7a8 8 0 0 1 0 10"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <canvas id="gameCanvas" width="500" height="620" aria-label="เกมนาร์วาฬเก็บฟองดาว"></canvas>
+      <div class="screen" id="screen">
+        <div class="screen-inner">
+          <p class="kicker" id="screenKicker">เกมนาร์วาฬ</p>
+          <h1 id="screenTitle">Bubble Glide</h1>
+          <p class="screen-copy" id="screenCopy">ผ่าน 10 ด่าน เก็บฟองดาว หัวใจ และเกราะสั้นๆ เพื่อรอดจากอุปสรรค</p>
+          <form class="score-form is-hidden" id="scoreForm" autocomplete="off">
+            <label class="score-label" for="playerName">ชื่อในตาราง hi-score</label>
+            <div class="score-row">
+              <input class="score-input" id="playerName" name="playerName" type="text" maxlength="14" placeholder="ชื่อนาวาฬ" inputmode="text">
+              <button class="save-score-button" id="saveScoreBtn" type="submit">บันทึก</button>
+            </div>
+            <p class="score-note" id="scoreNote" aria-live="polite"></p>
+          </form>
+          <div class="leaderboard is-hidden" id="leaderboard">
+            <p class="leaderboard-title">Hi-score</p>
+            <ol class="score-list" id="scoreList"></ol>
+          </div>
+          <button class="primary-button" id="primaryBtn" type="button">เริ่มเล่น</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const CONFIG = {
+        width: 500,
+        height: 620,
+        safeTop: 166,
+        safeBottom: 74,
+        storageKey: "narwhal-bubble-glide-best-v2",
+        scoresKey: "narwhal-bubble-glide-hi-scores-v1",
+        playerNameKey: "narwhal-bubble-glide-player-name"
+      };
+
+      const LEVELS = [
+        { id: 1, name: "Lagoon Start", goal: 220, duration: 45, bubbleGap: 0.66, inkGap: 10.8, goldGap: 9.8, powerGap: 10.5, speed: 0.9, current: 0, penaltyScore: 0, penaltyTime: 0, pattern: "single", palette: ["#d9f7ff", "#79d9e8", "#3db7d4"], powers: ["shield"] },
+        { id: 2, name: "Bubble Rush", goal: 420, duration: 42, bubbleGap: 0.62, inkGap: 7.4, goldGap: 9.0, powerGap: 10.8, speed: 1.0, current: 0, penaltyScore: 0, penaltyTime: 0, pattern: "single", palette: ["#e7fff4", "#7ee3cf", "#2fb1bd"], powers: ["shield"] },
+        { id: 3, name: "Kelp Wiggle", goal: 650, duration: 40, bubbleGap: 0.58, inkGap: 5.9, goldGap: 8.2, powerGap: 11.2, speed: 1.08, current: 0.06, penaltyScore: 0, penaltyTime: 0, pattern: "single", palette: ["#e8fff6", "#71d6bb", "#258f9d"], powers: ["shield"] },
+        { id: 4, name: "Pearl Growth", goal: 900, duration: 38, bubbleGap: 0.56, inkGap: 5.0, goldGap: 7.8, powerGap: 11.8, speed: 1.16, current: 0.09, penaltyScore: 8, penaltyTime: 0, pattern: "paired", palette: ["#fff9d8", "#8dded7", "#33a5bb"], powers: ["shield"] },
+        { id: 5, name: "Moon Bubble", goal: 1180, duration: 36, bubbleGap: 0.54, inkGap: 4.3, goldGap: 7.4, powerGap: 12.5, speed: 1.25, current: 0.13, penaltyScore: 22, penaltyTime: 0, pattern: "paired", palette: ["#eef0ff", "#82c9e9", "#4264a7"], powers: ["shield"] },
+        { id: 6, name: "Jelly Drift", goal: 1500, duration: 35, bubbleGap: 0.52, inkGap: 3.75, goldGap: 7.0, powerGap: 13.2, speed: 1.34, current: 0.18, penaltyScore: 28, penaltyTime: 1, pattern: "lane", palette: ["#fff0fb", "#8ecff0", "#4d5fad"], powers: ["shield"] },
+        { id: 7, name: "Golden Reef", goal: 1840, duration: 34, bubbleGap: 0.5, inkGap: 3.05, goldGap: 6.6, powerGap: 14.0, speed: 1.46, current: 0.22, penaltyScore: 34, penaltyTime: 1, pattern: "finaleSoft", palette: ["#fff4c6", "#64d9cf", "#227c9d"], powers: ["shield"] },
+        { id: 8, name: "Bubble Storm", goal: 2180, duration: 33, bubbleGap: 0.48, inkGap: 2.68, goldGap: 6.2, powerGap: 15.0, speed: 1.58, current: 0.28, penaltyScore: 42, penaltyTime: 2, pattern: "finaleStep", palette: ["#dfe8ff", "#5ba8d8", "#25466e"], powers: ["shield"] },
+        { id: 9, name: "Deep Spark", goal: 2500, duration: 32, bubbleGap: 0.46, inkGap: 2.32, goldGap: 5.9, powerGap: 15.8, speed: 1.72, current: 0.34, penaltyScore: 50, penaltyTime: 2, pattern: "finaleSurge", palette: ["#d6e6ff", "#5278b9", "#102943"], powers: ["shield"] },
+        { id: 10, name: "Aurora Narwhal", goal: 2850, duration: 30, bubbleGap: 0.42, inkGap: 1.98, goldGap: 5.4, powerGap: 17.0, speed: 1.9, current: 0.42, penaltyScore: 64, penaltyTime: 2, pattern: "finale", palette: ["#fff2cc", "#8be8dc", "#3b3d95"], powers: ["shield"] }
+      ];
+
+      const FORM_META = {
+        classic: { label: "Classic", body: "#7fddeb", fin: "#4fb9cd", horn: "#fff7c7", aura: "rgba(217,247,255,0.35)" },
+        giant: { label: "Giant", body: "#7ee6d0", fin: "#4ec7a9", horn: "#ffe08a", aura: "rgba(255,209,102,0.32)" },
+        moon: { label: "Moon", body: "#9bd9ff", fin: "#7388ff", horn: "#f7f1ff", aura: "rgba(160,180,255,0.38)" },
+        star: { label: "Starhorn", body: "#8df2e6", fin: "#ffd166", horn: "#fff1a8", aura: "rgba(255,209,102,0.46)" },
+        mirror: { label: "Mirror", body: "#bdeaff", fin: "#d7c6ff", horn: "#ffffff", aura: "rgba(215,198,255,0.42)" }
+      };
+
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const gameStage = document.querySelector(".game-stage");
+      const scoreEl = document.getElementById("score");
+      const timeEl = document.getElementById("timeLeft");
+      const levelEl = document.getElementById("levelNow");
+      const bestEl = document.getElementById("bestScore");
+      const pauseBtn = document.getElementById("pauseBtn");
+      const soundBtn = document.getElementById("soundBtn");
+      const pauseIcon = document.getElementById("pauseIcon");
+      const soundIcon = document.getElementById("soundIcon");
+      const screen = document.getElementById("screen");
+      const screenKicker = document.getElementById("screenKicker");
+      const screenTitle = document.getElementById("screenTitle");
+      const screenCopy = document.getElementById("screenCopy");
+      const scoreForm = document.getElementById("scoreForm");
+      const playerNameInput = document.getElementById("playerName");
+      const saveScoreBtn = document.getElementById("saveScoreBtn");
+      const scoreNote = document.getElementById("scoreNote");
+      const leaderboard = document.getElementById("leaderboard");
+      const scoreList = document.getElementById("scoreList");
+      const primaryBtn = document.getElementById("primaryBtn");
+
+      const random = (min, max) => min + Math.random() * (max - min);
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const distance = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+
+      const input = { keys: new Set(), pointer: false, pointerId: null };
+
+      const whale = {
+        x: CONFIG.width * 0.5,
+        y: CONFIG.height * 0.72,
+        targetX: CONFIG.width * 0.5,
+        targetY: CONFIG.height * 0.72,
+        vx: 0,
+        vy: 0,
+        faceTilt: 0,
+        smile: 0,
+        blink: 2.2,
+        form: "classic",
+        formTimer: 0,
+        scale: 1,
+        shield: 0,
+        invulnerable: 0,
+        trail: []
+      };
+
+      const state = {
+        mode: "menu",
+        deathReason: "",
+        lives: 1,
+        heartSpawned: false,
+        heartTimer: 5,
+        score: 0,
+        levelScore: 0,
+        levelIndex: 0,
+        highestLevel: 1,
+        finalSurprise: false,
+        finalTimeLeft: 0,
+        best: loadBest(),
+        bestCombo: 0,
+        scoreSaved: false,
+        timeLeft: LEVELS[0].duration,
+        elapsed: 0,
+        clock: 0,
+        combo: 0,
+        comboTimer: 0,
+        noHit: true,
+        noPause: true,
+        feverTimer: 0,
+        transitionTimer: 0,
+        transitionText: "",
+        badgeText: "",
+        celebrationTimer: 0,
+        celebrationPulse: 0,
+        celebrationKind: "",
+        spawnTimer: 0.2,
+        inkTimer: 9,
+        goldTimer: 5,
+        powerTimer: 6,
+        cometTimer: 12,
+        lastFrame: 0,
+        muted: false,
+        shake: 0,
+        flash: 0,
+        waveBurst: 0,
+        entities: [],
+        particles: [],
+        floaters: [],
+        bgBubbles: createBackgroundBubbles()
+      };
+
+      let audioContext = null;
+
+      function level() {
+        return LEVELS[state.levelIndex];
+      }
+
+      function loadBest() {
+        try {
+          const raw = localStorage.getItem(CONFIG.storageKey);
+          if (!raw) return 0;
+          const parsed = JSON.parse(raw);
+          return Number(parsed.score || parsed) || 0;
+        } catch (error) {
+          return 0;
+        }
+      }
+
+      function saveBest() {
+        try {
+          localStorage.setItem(CONFIG.storageKey, JSON.stringify({
+            score: Math.floor(state.best),
+            combo: Math.floor(state.bestCombo),
+            level: Math.floor(state.highestLevel)
+          }));
+        } catch (error) {
+          // Best score is optional; private browsing should not block play.
+        }
+      }
+
+      function loadScores() {
+        try {
+          const raw = localStorage.getItem(CONFIG.scoresKey);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed.filter((item) => Number.isFinite(Number(item.score))) : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function saveScores(scores) {
+        try {
+          localStorage.setItem(CONFIG.scoresKey, JSON.stringify(scores.slice(0, 5)));
+        } catch (error) {
+          // Scoreboard is optional; gameplay should still work.
+        }
+      }
+
+      function loadPlayerName() {
+        try {
+          return localStorage.getItem(CONFIG.playerNameKey) || "";
+        } catch (error) {
+          return "";
+        }
+      }
+
+      function savePlayerName(name) {
+        try {
+          localStorage.setItem(CONFIG.playerNameKey, name);
+        } catch (error) {
+          // Remembering the name is optional.
+        }
+      }
+
+      function cleanPlayerName(value) {
+        return (value || "").trim().replace(/\s+/g, " ").slice(0, 14) || "Narwhal";
+      }
+
+      function renderScoreboard() {
+        const scores = loadScores()
+          .sort((a, b) => Number(b.score) - Number(a.score))
+          .slice(0, 5);
+        scoreList.innerHTML = "";
+        if (!scores.length) {
+          const empty = document.createElement("li");
+          empty.className = "score-empty";
+          empty.textContent = "ยังไม่มีคะแนนบันทึก";
+          scoreList.appendChild(empty);
+          return;
+        }
+
+        for (const [index, item] of scores.entries()) {
+          const row = document.createElement("li");
+          const rank = document.createElement("span");
+          const name = document.createElement("span");
+          const points = document.createElement("span");
+          rank.textContent = `${index + 1}.`;
+          name.textContent = `${item.name || "Narwhal"} ${item.victory ? "★" : `ด่าน ${item.level || 1}`}`;
+          points.textContent = Math.floor(Number(item.score) || 0);
+          row.append(rank, name, points);
+          scoreList.appendChild(row);
+        }
+      }
+
+      function updateScorePanel(visible) {
+        scoreForm.classList.toggle("is-hidden", !visible);
+        leaderboard.classList.toggle("is-hidden", !visible);
+        if (!visible) return;
+
+        if (!playerNameInput.value.trim()) playerNameInput.value = loadPlayerName();
+        saveScoreBtn.disabled = state.scoreSaved;
+        scoreNote.textContent = state.scoreSaved ? "บันทึกคะแนนแล้ว" : "พิมพ์ชื่อแล้วกดบันทึก";
+        renderScoreboard();
+      }
+
+      function submitHiScore() {
+        if (!["gameover", "victory"].includes(state.mode)) return;
+        if (state.scoreSaved) {
+          scoreNote.textContent = "คะแนนรอบนี้บันทึกแล้ว";
+          return;
+        }
+
+        const name = cleanPlayerName(playerNameInput.value);
+        playerNameInput.value = name;
+        savePlayerName(name);
+        const entry = {
+          name,
+          score: Math.floor(state.score),
+          level: Math.floor(state.highestLevel),
+          combo: Math.floor(state.bestCombo),
+          victory: state.mode === "victory",
+          date: new Date().toISOString()
+        };
+        const scores = loadScores()
+          .concat(entry)
+          .sort((a, b) => Number(b.score) - Number(a.score))
+          .slice(0, 5);
+        saveScores(scores);
+        state.scoreSaved = true;
+        saveScoreBtn.disabled = true;
+        scoreNote.textContent = "บันทึก hi-score แล้ว";
+        renderScoreboard();
+      }
+
+      function createBackgroundBubbles() {
+        return Array.from({ length: 36 }, () => ({
+          x: random(10, CONFIG.width - 10),
+          y: random(0, CONFIG.height),
+          r: random(2, 8),
+          speed: random(8, 24),
+          drift: random(0.4, 1.7),
+          phase: random(0, Math.PI * 2),
+          alpha: random(0.12, 0.36)
+        }));
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(CONFIG.width * dpr);
+        canvas.height = Math.round(CONFIG.height * dpr);
+        canvas.style.aspectRatio = `${CONFIG.width} / ${CONFIG.height}`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function setScreen(type) {
+        const finalStage = type === "gameover" && (level().id === 10 || state.highestLevel >= 10);
+        screen.classList.toggle("is-hidden", type === "hidden");
+        screen.classList.toggle("is-surprise", type === "victory" && state.finalSurprise);
+        screen.classList.toggle("is-final-try", finalStage);
+        gameStage.classList.toggle("is-overlay-open", type !== "hidden");
+        pauseBtn.disabled = type !== "hidden" && state.mode !== "paused";
+        updateScorePanel(type === "gameover" || type === "victory");
+
+        if (type === "menu") {
+          screenKicker.textContent = "10 ด่านใหม่";
+          screenTitle.textContent = "Bubble Glide";
+          screenCopy.textContent = "เก็บฟองดาว หัวใจ และเกราะสั้นๆ เพื่อไปให้ถึง Aurora Narwhal";
+          primaryBtn.textContent = "เริ่มเล่น";
+        }
+
+        if (type === "paused") {
+          screenKicker.textContent = `ด่าน ${level().id}: ${level().name}`;
+          screenTitle.textContent = "หยุดไว้ก่อน";
+          screenCopy.textContent = `คะแนน ${Math.floor(state.score)} | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
+          primaryBtn.textContent = "เล่นต่อ";
+        }
+
+        if (finalStage) {
+          screenKicker.textContent = "ถึงด่าน 10 แล้ว";
+          screenTitle.textContent = "เก่งมากแล้ว";
+          screenCopy.textContent = `พานาวาฬมาถึงทะเลออโรร่าได้แล้ว | ${Math.floor(state.score)} คะแนน | ดีที่สุด ${Math.floor(state.best)} คะแนน`;
+          primaryBtn.textContent = "ลองคว้ามงกุฎอีกครั้ง";
+          return;
+        }
+
+        if (type === "victory" && state.finalSurprise) {
+          screenKicker.textContent = "Aurora Surprise";
+          screenTitle.textContent = "มงกุฎดาวของนาวาฬ";
+          screenCopy.textContent = `ผ่านครบ 10 ด่านทันเวลา เหลือ ${Math.ceil(state.finalTimeLeft)} วิ | ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
+          primaryBtn.textContent = "เล่นรอบใหม่";
+          return;
+        }
+
+        if (type === "gameover") {
+          screenKicker.textContent = `ถึงด่าน ${state.highestLevel}/10`;
+          screenTitle.textContent = `${Math.floor(state.score)} คะแนน`;
+          screenCopy.textContent = `${state.deathReason} | เป้าหมายด่านนี้ ${level().goal} | ดีที่สุด ${Math.floor(state.best)} คะแนน`;
+          primaryBtn.textContent = "ลองอีกครั้ง";
+        }
+
+        if (type === "victory") {
+          screenKicker.textContent = "ครบ 10 ด่าน";
+          screenTitle.textContent = "Aurora Clear";
+          screenCopy.textContent = `จบด้วย ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
+          primaryBtn.textContent = "เล่นรอบใหม่";
+        }
+      }
+
+      function syncStageChrome() {
+        const transitioning = state.transitionTimer > 0 && (state.mode === "playing" || state.mode === "levelComplete");
+        gameStage.classList.toggle("is-transitioning", transitioning);
+      }
+
+      function resetGame() {
+        state.score = 0;
+        state.deathReason = "";
+        state.lives = 1;
+        state.heartSpawned = false;
+        state.heartTimer = random(4.2, 7.2);
+        state.levelScore = 0;
+        state.levelIndex = 0;
+        state.highestLevel = 1;
+        state.finalSurprise = false;
+        state.finalTimeLeft = 0;
+        state.timeLeft = level().duration;
+        state.elapsed = 0;
+        state.combo = 0;
+        state.comboTimer = 0;
+        state.bestCombo = 0;
+        state.scoreSaved = false;
+        state.noHit = true;
+        state.noPause = true;
+        state.feverTimer = 0;
+        state.transitionTimer = 1.15;
+        state.transitionText = `ด่าน 1: ${level().name}`;
+        state.badgeText = "เริ่มการว่าย";
+        state.celebrationTimer = 0;
+        state.celebrationPulse = 0;
+        state.celebrationKind = "";
+        state.spawnTimer = 0.18;
+        state.inkTimer = level().inkGap;
+        state.goldTimer = level().goldGap;
+        state.powerTimer = level().powerGap;
+        state.cometTimer = 11;
+        state.shake = 0;
+        state.flash = 0;
+        state.waveBurst = 0;
+        state.entities.length = 0;
+        state.particles.length = 0;
+        state.floaters.length = 0;
+        resetWhale();
+        updateHud();
+      }
+
+      function resetWhale() {
+        whale.x = whale.targetX = CONFIG.width * 0.5;
+        whale.y = whale.targetY = CONFIG.height * 0.72;
+        whale.vx = 0;
+        whale.vy = 0;
+        whale.smile = 0;
+        whale.form = "classic";
+        whale.formTimer = 0;
+        whale.scale = 1;
+        whale.shield = 0;
+        whale.invulnerable = 0;
+        whale.trail.length = 0;
+      }
+
+      function startGame() {
+        unlockAudio();
+        resetGame();
+        state.mode = "playing";
+        setScreen("hidden");
+        pauseBtn.disabled = false;
+        pauseBtn.setAttribute("aria-pressed", "false");
+        drawPauseIcon(false);
+      }
+
+      function pauseGame() {
+        if (state.mode !== "playing") return;
+        state.mode = "paused";
+        state.noPause = false;
+        pauseBtn.setAttribute("aria-pressed", "true");
+        drawPauseIcon(true);
+        setScreen("paused");
+      }
+
+      function resumeGame() {
+        if (state.mode !== "paused") return;
+        state.mode = "playing";
+        pauseBtn.setAttribute("aria-pressed", "false");
+        drawPauseIcon(false);
+        setScreen("hidden");
+      }
+
+      function endGame(victory = false, reason = "หมดเวลา") {
+        state.mode = victory ? "victory" : "gameover";
+        state.deathReason = victory ? "" : reason;
+        const atFinalStage = level().id === 10 || state.highestLevel >= 10;
+        if (victory) {
+          state.finalSurprise = state.finalSurprise || level().id === 10;
+          state.finalTimeLeft = Math.max(state.finalTimeLeft, state.timeLeft, 0);
+          state.celebrationKind = "victory";
+          state.celebrationTimer = 4.2;
+          state.celebrationPulse = 0;
+          state.shake = 0;
+          state.flash = Math.max(state.flash, 0.55);
+          whale.smile = 2.2;
+          addFinalCelebration(true);
+        } else if (atFinalStage) {
+          state.celebrationKind = "finalTry";
+          state.celebrationTimer = 2.8;
+          state.celebrationPulse = 0;
+          state.shake = 0;
+          state.flash = Math.max(state.flash, 0.34);
+          whale.smile = 1.25;
+          addFinalCelebration(false);
+        }
+        if (state.score > state.best) {
+          state.best = Math.floor(state.score);
+          saveBest();
+        }
+        pauseBtn.disabled = true;
+        pauseBtn.setAttribute("aria-pressed", "false");
+        drawPauseIcon(false);
+        updateHud();
+        setScreen(victory ? "victory" : "gameover");
+        playTone(victory ? 440 : 220, 0.1, "triangle", 0.04);
+        setTimeout(() => playTone(victory ? 660 : 330, 0.14, "triangle", 0.035), 90);
+      }
+
+      function completeLevel() {
+        const id = level().id;
+        if (id === 10) {
+          state.finalSurprise = state.timeLeft > 0;
+          state.finalTimeLeft = Math.max(0, state.timeLeft);
+        }
+        const cleanBonus = state.noHit && state.noPause ? 15 + id * 3 : 0;
+        if (cleanBonus) {
+          state.score += cleanBonus;
+          state.levelScore += cleanBonus;
+          state.badgeText = "Secret Kind Bonus";
+        } else if (state.combo >= 10) {
+          state.badgeText = "Bubble Master";
+        } else {
+          state.badgeText = "Smooth Swimmer";
+        }
+
+        state.mode = "levelComplete";
+        state.transitionTimer = id === 10 ? 2.05 : 1.45;
+        state.transitionText = id === 10 ? "ประตูออโรร่าเปิดแล้ว" : `ผ่านด่าน ${id}`;
+        state.entities.length = 0;
+        state.feverTimer = Math.max(state.feverTimer, id === 10 ? 2.5 : 1.6);
+        state.shake = 0;
+        state.flash = id === 10 ? 0.62 : 0.38;
+        whale.smile = id === 10 ? 2.1 : 1.4;
+        state.celebrationKind = id === 10 ? "gate" : "level";
+        state.celebrationTimer = id === 10 ? 2.25 : 1.55;
+        state.celebrationPulse = 0;
+        addFloater(state.badgeText, CONFIG.width * 0.5, 180, "#8a5a00");
+        addWaveBurst(whale.x, whale.y, FORM_META[whale.form].aura);
+        addLevelCelebration(id);
+        playTone(640 + id * 20, 0.08, "triangle", 0.035);
+        setTimeout(() => playTone(760 + id * 18, 0.09, "sine", 0.026), 120);
+      }
+
+      function nextLevel() {
+        if (state.levelIndex >= LEVELS.length - 1) {
+          endGame(true);
+          return;
+        }
+
+        state.levelIndex += 1;
+        state.highestLevel = Math.max(state.highestLevel, level().id);
+        state.levelScore = 0;
+        state.timeLeft = level().duration;
+        state.elapsed = 0;
+        state.combo = 0;
+        state.comboTimer = 0;
+        state.celebrationTimer = 0;
+        state.celebrationPulse = 0;
+        state.celebrationKind = "";
+        state.lives = Math.max(1, state.lives);
+        state.heartSpawned = false;
+        state.heartTimer = random(4.0, 7.0);
+        state.noHit = true;
+        state.noPause = true;
+        state.spawnTimer = 0.25;
+        state.inkTimer = Math.max(2.4, level().inkGap);
+        state.goldTimer = random(level().goldGap * 0.75, level().goldGap * 1.1);
+        state.powerTimer = random(level().powerGap * 0.8, level().powerGap * 1.15);
+        state.cometTimer = random(8, 13);
+        state.entities.length = 0;
+        whale.targetX = whale.x = CONFIG.width * 0.5;
+        whale.targetY = whale.y = CONFIG.height * 0.72;
+        if (whale.formTimer <= 0) activateForm("classic", 0);
+        state.transitionTimer = 1.25;
+        state.transitionText = `ด่าน ${level().id}: ${level().name}`;
+        state.badgeText = level().id >= 8 ? "คลื่นแรงขึ้น" : "พร้อม";
+        state.mode = "playing";
+        updateHud();
+      }
+
+      function updateHud() {
+        scoreEl.textContent = Math.floor(state.score);
+        timeEl.textContent = Math.max(0, Math.ceil(state.timeLeft));
+        levelEl.textContent = `${level().id}/10`;
+        bestEl.textContent = Math.floor(state.best);
+      }
+
+      function spawnBubble(type = "star", options = {}) {
+        const base = { star: 21, gold: 25, pearl: 22, grow: 24, moon: 24, shield: 23, prism: 24, mirror: 23, heart: 22, mini: 12, comet: 20 };
+        const r = options.r || base[type] || 21;
+        const x = options.x ?? random(r + 12, CONFIG.width - r - 12);
+        const y = options.y ?? CONFIG.height + r + 8;
+        const fast = type === "comet";
+        state.entities.push({
+          type,
+          kind: "collect",
+          x,
+          y,
+          r,
+          vx: options.vx ?? (fast ? random(-80, 80) : 0),
+          vy: options.vy ?? (fast ? random(-230, -190) : random(-120, -82) * level().speed),
+          drift: options.drift ?? random(16, 38),
+          wave: random(1.2, 2.4),
+          phase: random(0, Math.PI * 2),
+          age: 0,
+          value: valueFor(type)
+        });
+      }
+
+      function valueFor(type) {
+        if (type === "gold") return 24;
+        if (type === "heart") return 0;
+        if (type === "pearl") return 5;
+        if (type === "grow" || type === "moon" || type === "shield" || type === "prism" || type === "mirror") return 10;
+        if (type === "mini") return 3;
+        if (type === "comet") return 36;
+        return 7;
+      }
+
+      function spawnObstaclePattern() {
+        const lv = level();
+        if (lv.pattern === "none") return;
+        const finalePattern = lv.pattern === "finaleSoft" || lv.pattern === "finaleStep" || lv.pattern === "finaleSurge" || lv.pattern === "finale";
+
+        if (lv.pattern === "single") {
+          spawnInk();
+          return;
+        }
+
+        if (lv.pattern === "paired") {
+          const gap = random(128, CONFIG.width - 128);
+          spawnInk({ x: clamp(gap - 112, 32, CONFIG.width - 32), drift: 8 });
+          spawnInk({ x: clamp(gap + 112, 32, CONFIG.width - 32), drift: 8 });
+          return;
+        }
+
+        if (lv.pattern === "lane" || finalePattern) {
+          const lanes = [0.13, 0.37, 0.63, 0.87].map((ratio) => CONFIG.width * ratio);
+          const safeLane = Math.floor(random(0, lanes.length));
+          const laneRules = {
+            lane: { count: Math.random() < 0.38 ? 2 : 3, vyMin: -128, vyMax: -104 },
+            finaleSoft: { count: 2, vyMin: -122, vyMax: -98 },
+            finaleStep: { count: Math.random() < 0.42 ? 2 : 3, vyMin: -126, vyMax: -102 },
+            finaleSurge: { count: 3, vyMin: -130, vyMax: -106 },
+            finale: { count: 3, vyMin: -134, vyMax: -108 }
+          };
+          const laneRule = laneRules[lv.pattern] || laneRules.lane;
+          const laneChoices = lanes
+            .map((x, index) => ({ x, index, order: Math.random() }))
+            .filter((lane) => lane.index !== safeLane)
+            .sort((a, b) => a.order - b.order)
+            .slice(0, laneRule.count);
+
+          for (const lane of laneChoices) {
+            spawnInk({ x: lane.x, drift: 5, vy: random(laneRule.vyMin, laneRule.vyMax) * lv.speed });
+          }
+          if (lv.pattern === "lane") return;
+        }
+
+        if (lv.pattern === "cross" || finalePattern) {
+          const crossRules = {
+            cross: { chance: 1, vxMin: 38, vxMax: 72, vyMin: -132, vyMax: -106, spread: 18 },
+            finaleSoft: { chance: 0.44, vxMin: 24, vxMax: 44, vyMin: -118, vyMax: -96, spread: 58 },
+            finaleStep: { chance: 0.68, vxMin: 30, vxMax: 56, vyMin: -124, vyMax: -100, spread: 42 },
+            finaleSurge: { chance: 0.86, vxMin: 36, vxMax: 68, vyMin: -130, vyMax: -104, spread: 28 },
+            finale: { chance: 1, vxMin: 42, vxMax: 78, vyMin: -134, vyMax: -108, spread: 12 }
+          };
+          const crossRule = crossRules[lv.pattern] || crossRules.cross;
+          if (Math.random() > crossRule.chance) return;
+
+          const baseY = CONFIG.height + 32;
+          spawnInk({ x: 38, y: baseY, vx: random(crossRule.vxMin, crossRule.vxMax), drift: 4, vy: random(crossRule.vyMin, crossRule.vyMax) * lv.speed });
+          spawnInk({ x: CONFIG.width - 38, y: baseY + crossRule.spread, vx: -random(crossRule.vxMin, crossRule.vxMax), drift: 4, vy: random(crossRule.vyMin, crossRule.vyMax) * lv.speed });
+        }
+      }
+
+      function chooseObstacleType(id) {
+        const roll = Math.random();
+        if (id <= 2) return "ink";
+        if (id === 3) return roll < 0.6 ? "kelp" : "ink";
+        if (id === 4) return roll < 0.45 ? "reef" : roll < 0.78 ? "kelp" : "ink";
+        if (id === 5) return roll < 0.42 ? "jelly" : roll < 0.7 ? "reef" : "ink";
+        if (id === 6) return roll < 0.36 ? "whirlpool" : roll < 0.66 ? "jelly" : roll < 0.86 ? "reef" : "ink";
+        if (id === 7) return roll < 0.34 ? "reef" : roll < 0.58 ? "whirlpool" : roll < 0.82 ? "jelly" : "ink";
+        if (id === 8) return roll < 0.36 ? "whirlpool" : roll < 0.62 ? "reef" : roll < 0.82 ? "jelly" : "ink";
+        if (id === 9) return roll < 0.42 ? "whirlpool" : roll < 0.68 ? "reef" : roll < 0.84 ? "jelly" : "ink";
+        return roll < 0.46 ? "whirlpool" : roll < 0.74 ? "reef" : roll < 0.9 ? "jelly" : "ink";
+      }
+
+      function spawnInk(options = {}) {
+        const id = level().id;
+        const r = options.r || random(20, 27);
+        const type = options.type || chooseObstacleType(id);
+        state.entities.push({
+          type,
+          kind: "obstacle",
+          x: options.x ?? random(r + 14, CONFIG.width - r - 14),
+          y: options.y ?? CONFIG.height + r + 8,
+          r: type === "kelp" ? random(24, 34) : type === "reef" ? random(23, 31) : type === "whirlpool" ? random(31, 40) : r,
+          vx: options.vx ?? 0,
+          vy: options.vy ?? random(type === "whirlpool" ? -88 : -118, type === "whirlpool" ? -68 : -92) * level().speed,
+          drift: options.drift ?? random(type === "whirlpool" ? 6 : 12, type === "whirlpool" ? 18 : 30),
+          wave: random(type === "reef" ? 0.4 : 0.9, type === "reef" ? 1.0 : 1.8),
+          phase: random(0, Math.PI * 2),
+          age: 0
+        });
+      }
+
+      function addParticles(x, y, color, count = 14) {
+        const room = Math.max(0, 120 - state.particles.length);
+        const total = Math.min(count, room);
+        for (let i = 0; i < total; i += 1) {
+          const angle = random(0, Math.PI * 2);
+          const speed = random(36, 150);
+          state.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            r: random(2, 5),
+            life: random(0.34, 0.78),
+            maxLife: 0.78,
+            color
+          });
+        }
+      }
+
+      function addFloater(text, x, y, color = "#17324d") {
+        state.floaters.push({ text, x, y, vy: -46, life: 0.95, color });
+      }
+
+      function addWaveBurst(x, y, color) {
+        state.particles.push({ x, y, vx: 0, vy: 0, r: 8, life: 0.72, maxLife: 0.72, color, ring: true });
+      }
+
+      function addCelebrationPieces(x, y, count, finale = false) {
+        const colors = finale
+          ? ["#ffd166", "#ff9fb7", "#d7c6ff", "#8be8dc", "#fff7c7"]
+          : ["#ffd166", "#ff9fb7", "#d9f7ff", "#8be8dc"];
+        const room = Math.max(0, 190 - state.particles.length);
+        const total = Math.min(count, room);
+        for (let i = 0; i < total; i += 1) {
+          const angle = random(-Math.PI, 0);
+          const speed = random(finale ? 78 : 42, finale ? 190 : 130);
+          const shape = Math.random() < 0.42 ? "heart" : Math.random() < 0.76 ? "star" : "dot";
+          state.particles.push({
+            x: x + random(-22, 22),
+            y: y + random(-12, 12),
+            vx: Math.cos(angle) * speed + random(-24, 24),
+            vy: Math.sin(angle) * speed - random(16, finale ? 84 : 48),
+            r: random(finale ? 4 : 3, finale ? 8 : 6),
+            life: random(0.78, finale ? 1.45 : 1.08),
+            maxLife: finale ? 1.45 : 1.08,
+            color: colors[Math.floor(random(0, colors.length))],
+            shape,
+            angle: random(0, Math.PI * 2),
+            spin: random(-4, 4)
+          });
+        }
+      }
+
+      function addLevelCelebration(id) {
+        const finale = id === 10;
+        addCelebrationPieces(whale.x, whale.y - 18, finale ? 54 : 28, finale);
+        addWaveBurst(whale.x, whale.y, finale ? "rgba(255,209,102,0.72)" : "rgba(255,159,183,0.48)");
+        addFloater(finale ? "Aurora Gate" : "Nice Clear", CONFIG.width * 0.5, 212, finale ? "#8a5a00" : "#ff5d7a");
+      }
+
+      function addFinalCelebration(victory) {
+        const centerY = victory ? 236 : 276;
+        addCelebrationPieces(CONFIG.width * 0.5, centerY, victory ? 86 : 42, victory);
+        addWaveBurst(CONFIG.width * 0.5, centerY, victory ? "rgba(255,209,102,0.76)" : "rgba(255,159,183,0.5)");
+        addFloater(victory ? "มงกุฎออโรร่า" : "ถึงด่านสุดท้ายแล้ว", CONFIG.width * 0.5, victory ? 150 : 182, victory ? "#8a5a00" : "#0b6f82");
+      }
+
+      function updateCelebration(dt) {
+        if (state.celebrationTimer <= 0) return;
+        state.celebrationTimer = Math.max(0, state.celebrationTimer - dt);
+        state.celebrationPulse -= dt;
+        if (state.celebrationPulse > 0) return;
+
+        const finale = state.celebrationKind === "victory" || state.celebrationKind === "gate";
+        const burstX = finale ? random(84, CONFIG.width - 84) : random(130, CONFIG.width - 130);
+        const burstY = finale ? random(118, 250) : random(190, 300);
+        addCelebrationPieces(burstX, burstY, finale ? 12 : 7, finale);
+        state.celebrationPulse = random(finale ? 0.13 : 0.18, finale ? 0.24 : 0.32);
+      }
+
+      function update(dt) {
+        state.clock += dt;
+        updateBackground(dt);
+        updateParticles(dt);
+        updateFloaters(dt);
+        updateCelebration(dt);
+        state.shake = Math.max(0, state.shake - dt * 26);
+        state.flash = Math.max(0, state.flash - dt * 2.8);
+        whale.smile = Math.max(0, whale.smile - dt);
+
+        if (state.mode === "levelComplete") {
+          state.transitionTimer -= dt;
+          if (state.transitionTimer <= 0) nextLevel();
+          syncStageChrome();
+          return;
+        }
+
+        if (state.mode !== "playing") {
+          updateWhaleIdle(dt);
+          syncStageChrome();
+          return;
+        }
+
+        state.elapsed += dt;
+        state.timeLeft -= dt;
+        state.transitionTimer = Math.max(0, state.transitionTimer - dt);
+        state.comboTimer -= dt;
+        state.feverTimer = Math.max(0, state.feverTimer - dt);
+        whale.formTimer = Math.max(0, whale.formTimer - dt);
+        whale.shield = Math.max(0, whale.shield - dt);
+        whale.invulnerable = Math.max(0, whale.invulnerable - dt);
+        if (whale.formTimer <= 0 && whale.form !== "classic") activateForm("classic", 0);
+        updateWhaleIdle(dt);
+        if (state.comboTimer <= 0 && state.combo) {
+          state.combo = 0;
+          if (whale.form === "giant") activateForm("classic", 0);
+        }
+
+        updateWhale(dt);
+        applyMagnet(dt);
+        updateSpawns(dt);
+        updateEntities(dt);
+
+        if (state.levelScore >= level().goal) completeLevel();
+        else if (state.timeLeft <= 0) endGame(false);
+        updateHud();
+        syncStageChrome();
+      }
+
+      function updateWhaleIdle(dt) {
+        whale.blink -= dt;
+        if (whale.blink <= 0) whale.blink = random(2.2, 4.8);
+        whale.trail.unshift({ x: whale.x, y: whale.y, scale: whale.scale, form: whale.form, life: 0.38 });
+        whale.trail = whale.trail.filter((p, index) => index < 14 && (p.life -= dt) > 0);
+      }
+
+      function updateBackground(dt) {
+        for (const bubble of state.bgBubbles) {
+          bubble.y -= bubble.speed * dt * (level().id >= 8 ? 1.24 : 1);
+          bubble.x += Math.sin(state.clock * bubble.drift + bubble.phase) * dt * 7;
+          if (bubble.y < -12) {
+            bubble.y = CONFIG.height + 12;
+            bubble.x = random(10, CONFIG.width - 10);
+          }
+        }
+      }
+
+      function updateWhale(dt) {
+        const keyX = (input.keys.has("ArrowRight") || input.keys.has("KeyD") ? 1 : 0) -
+          (input.keys.has("ArrowLeft") || input.keys.has("KeyA") ? 1 : 0);
+        const keyY = (input.keys.has("ArrowDown") || input.keys.has("KeyS") ? 1 : 0) -
+          (input.keys.has("ArrowUp") || input.keys.has("KeyW") ? 1 : 0);
+        const speedBoost = whale.form === "star" ? 1.22 : whale.form === "giant" ? 0.86 : 1;
+
+        if (keyX || keyY) {
+          whale.targetX += keyX * 285 * speedBoost * dt;
+          whale.targetY += keyY * 242 * speedBoost * dt;
+        }
+
+        const currentPush = Math.sin(state.clock * 1.5 + level().id) * level().current * 72;
+        whale.targetX += currentPush * dt;
+        whale.targetX = clamp(whale.targetX, 42, CONFIG.width - 42);
+        whale.targetY = clamp(whale.targetY, CONFIG.safeTop, CONFIG.height - CONFIG.safeBottom);
+
+        const oldX = whale.x;
+        const oldY = whale.y;
+        const follow = 1 - Math.exp(-10 * speedBoost * dt);
+        whale.x += (whale.targetX - whale.x) * follow;
+        whale.y += (whale.targetY - whale.y) * follow;
+        whale.vx = (whale.x - oldX) / Math.max(dt, 0.001);
+        whale.vy = (whale.y - oldY) / Math.max(dt, 0.001);
+        whale.faceTilt = clamp(whale.vx * 0.0014, -0.22, 0.22);
+      }
+
+      function updateSpawns(dt) {
+        const lv = level();
+        const fever = state.feverTimer > 0;
+
+        state.spawnTimer -= dt;
+        if (state.spawnTimer <= 0) {
+          spawnBubble(Math.random() < (fever ? 0.22 : 0.08) ? "gold" : "star");
+          state.spawnTimer = Math.max(0.24, random(lv.bubbleGap * 0.75, lv.bubbleGap * 1.12) * (fever ? 0.55 : 1));
+        }
+
+        state.inkTimer -= dt;
+        if (state.inkTimer <= 0) {
+          spawnObstaclePattern();
+          state.inkTimer = random(lv.inkGap * 0.72, lv.inkGap * 1.15);
+        }
+
+        state.goldTimer -= dt;
+        if (state.goldTimer <= 0) {
+          spawnBubble("gold");
+          state.goldTimer = random(lv.goldGap * 0.78, lv.goldGap * 1.15);
+        }
+
+        state.powerTimer -= dt;
+        if (state.powerTimer <= 0) {
+          const choices = lv.powers;
+          spawnBubble(choices[Math.floor(random(0, choices.length))]);
+          state.powerTimer = random(lv.powerGap * 0.82, lv.powerGap * 1.18);
+        }
+
+        state.heartTimer -= dt;
+        if (!state.heartSpawned && state.heartTimer <= 0) {
+          spawnBubble("heart");
+          state.heartSpawned = true;
+        }
+
+        state.cometTimer -= dt;
+        if (state.cometTimer <= 0 && lv.powers.includes("comet")) {
+          spawnBubble("comet", {
+            x: random(30, CONFIG.width - 30),
+            y: CONFIG.height + 25,
+            vx: random(-70, 70),
+            vy: random(-260, -220),
+            r: 20
+          });
+          state.cometTimer = random(8.5, 13);
+        }
+      }
+
+      function applyMagnet(dt) {
+        const magnetic = whale.form === "moon" || whale.form === "star" || state.combo >= 10;
+        if (!magnetic) return;
+        const radius = whale.form === "star" ? 140 : 112;
+        for (const entity of state.entities) {
+          if (entity.kind !== "collect" || entity.type === "comet") continue;
+          const d = distance(entity.x, entity.y, whale.x, whale.y);
+          if (d < radius && d > 2) {
+            const pull = (1 - d / radius) * (whale.form === "star" ? 280 : 190) * dt;
+            entity.x += (whale.x - entity.x) / d * pull;
+            entity.y += (whale.y - entity.y) / d * pull;
+          }
+        }
+      }
+
+      function updateEntities(dt) {
+        for (let i = state.entities.length - 1; i >= 0; i -= 1) {
+          const entity = state.entities[i];
+          entity.age += dt;
+          entity.y += entity.vy * dt;
+          entity.x += entity.vx * dt + Math.sin(entity.age * entity.wave + entity.phase) * entity.drift * dt;
+
+          if (entity.y < -entity.r - 34 || entity.x < -60 || entity.x > CONFIG.width + 60) {
+            state.entities.splice(i, 1);
+            continue;
+          }
+
+          if (entity.type === "whirlpool" && state.mode === "playing") {
+            applyWhirlpoolPull(entity, dt);
+          }
+
+          if (entity.kind === "obstacle" && whale.invulnerable <= 0 && hitsWhale(entity, obstacleRadius())) {
+            state.entities.splice(i, 1);
+            hitObstacle(entity);
+            continue;
+          }
+
+          if (entity.kind === "collect" && hitsWhale(entity, collectRadius())) {
+            state.entities.splice(i, 1);
+            collectBubble(entity);
+          }
+        }
+      }
+
+      function applyWhirlpoolPull(entity, dt) {
+        const d = distance(entity.x, entity.y, whale.x, whale.y);
+        if (d > 118 || d < 4 || whale.shield > 0) return;
+        const pull = (1 - d / 118) * (26 + level().id * 4) * dt;
+        whale.targetX += (entity.x - whale.x) / d * pull;
+        whale.targetY += (entity.y - whale.y) / d * pull;
+      }
+
+      function collectRadius() {
+        return 31 + (whale.scale - 1) * 30 + (whale.form === "star" ? 10 : 0) + (state.combo >= 10 ? 6 : 0);
+      }
+
+      function obstacleRadius() {
+        return 24 + (whale.scale - 1) * 12;
+      }
+
+      function hitsWhale(entity, bodyRadius) {
+        const hornReach = whale.form === "star" ? 33 : 22;
+        const hornX = whale.x + 26 * whale.scale;
+        const hornY = whale.y - 18 * whale.scale;
+        const bodyHit = distance(entity.x, entity.y, whale.x, whale.y) < entity.r + bodyRadius;
+        const hornHit = distance(entity.x, entity.y, hornX, hornY) < entity.r + hornReach;
+        const mirror = whale.form === "mirror" && whale.trail[6] &&
+          distance(entity.x, entity.y, whale.trail[6].x, whale.trail[6].y) < entity.r + 26;
+        return bodyHit || hornHit || mirror;
+      }
+
+      function hitObstacle(entity) {
+        if (whale.shield > 0) {
+          whale.shield = 0;
+          whale.invulnerable = 0.85;
+          activateForm("classic", 0);
+          state.shake = 6;
+          addParticles(entity.x, entity.y, "rgba(217, 247, 255, 0.9)", 24);
+          addFloater("โล่แตก", entity.x, entity.y, "#0b6f82");
+          playTone(260, 0.08, "triangle", 0.03);
+          return;
+        }
+
+        state.noHit = false;
+        state.combo = 0;
+        state.comboTimer = 0;
+        state.shake = 16;
+        state.flash = 1;
+        whale.smile = 0;
+        if (whale.form !== "classic") activateForm("classic", 0);
+        addParticles(entity.x, entity.y, "rgba(41, 73, 101, 0.78)", 28);
+        playTone(120, 0.08, "sawtooth", 0.025);
+        state.lives = Math.max(0, state.lives - 1);
+        if (state.lives <= 0) {
+          addFloater("หัวใจหมด", entity.x, entity.y, "#17324d");
+          endGame(false, "หัวใจหมด");
+        } else {
+          whale.invulnerable = 1.05;
+          addFloater(`-${1} Heart`, entity.x, entity.y, "#17324d");
+        }
+      }
+
+      function collectBubble(entity) {
+        whale.smile = 0.56;
+        if (entity.type === "heart") {
+          const beforeLives = state.lives;
+          state.lives = Math.min(3, state.lives + 1);
+          addFloater(beforeLives < 3 ? "+1 Heart" : "Heart Max", entity.x, entity.y, "#ff5d7a");
+          addParticles(entity.x, entity.y, "rgba(255, 93, 122, 0.92)", 24);
+          playTone(760, 0.09, "triangle", 0.035);
+          return;
+        }
+
+        state.combo += 1;
+        state.comboTimer = 2.45;
+        state.bestCombo = Math.max(state.bestCombo, state.combo);
+
+        let gain = entity.value + Math.floor(Math.min(state.combo, 18) * 0.85);
+        const multiplier = whale.form === "giant" ? 1.12 : whale.form === "star" ? 1.34 : state.feverTimer > 0 ? 1.1 : 1;
+
+        if (entity.type === "pearl") {
+          state.timeLeft = Math.min(level().duration + 8, state.timeLeft + 3);
+          addFloater("+3 วิ", entity.x, entity.y, "#0b6f82");
+          activateForm("classic", Math.max(whale.formTimer, 0));
+        } else if (entity.type === "grow") {
+          activateForm("giant", 7.5);
+          addFloater("Giant", entity.x, entity.y, "#8a5a00");
+        } else if (entity.type === "moon") {
+          activateForm("moon", 8);
+          addFloater("Magnet", entity.x, entity.y, "#4452b8");
+        } else if (entity.type === "shield") {
+          whale.shield = 3;
+          activateForm("classic", 0);
+          addFloater("Shield 3 วิ", entity.x, entity.y, "#0b6f82");
+        } else if (entity.type === "prism") {
+          activateForm("star", 8.5);
+          addFloater("Starhorn", entity.x, entity.y, "#8a5a00");
+        } else if (entity.type === "mirror") {
+          activateForm("mirror", 6.5);
+          addFloater("Mirror", entity.x, entity.y, "#4452b8");
+        } else if (entity.type === "comet") {
+          state.feverTimer = 5.2;
+          activateForm("star", Math.max(whale.formTimer, 5.2));
+          addFloater("Fever", entity.x, entity.y, "#8a5a00");
+          addWaveBurst(entity.x, entity.y, "rgba(255,209,102,0.7)");
+        }
+
+        if (entity.type === "gold" && Math.random() < 0.45) splitGold(entity);
+        gain = Math.floor(gain * multiplier);
+        state.score += gain;
+        state.levelScore += gain;
+        addFloater(`+${gain}`, entity.x, entity.y - 8, entity.type === "gold" || whale.form === "star" ? "#8a5a00" : "#0b6f82");
+        burstFor(entity);
+
+        if (state.combo > 0 && state.combo % 5 === 0) {
+          addFloater(`Combo x${state.combo}`, whale.x, whale.y - 58, "#ff7b9b");
+          addWaveBurst(whale.x, whale.y, state.combo % 10 === 0 ? "rgba(255,209,102,0.65)" : "rgba(255,159,183,0.5)");
+          if (state.combo % 10 === 0) state.feverTimer = Math.max(state.feverTimer, 3.2);
+          playTone(820, 0.08, "triangle", 0.032);
+        } else {
+          playTone(entity.type === "gold" ? 620 : 460, 0.055, "sine", 0.028);
+        }
+      }
+
+      function splitGold(entity) {
+        for (let i = 0; i < 5; i += 1) {
+          spawnBubble("mini", {
+            x: entity.x + random(-12, 12),
+            y: entity.y + random(-8, 8),
+            vx: random(-55, 55),
+            vy: random(-112, -68),
+            r: 11,
+            drift: random(6, 18)
+          });
+        }
+      }
+
+      function burstFor(entity) {
+        const colors = {
+          gold: "rgba(255, 209, 102, 0.95)",
+          pearl: "rgba(255, 159, 183, 0.9)",
+          heart: "rgba(255, 93, 122, 0.92)",
+          grow: "rgba(255, 209, 102, 0.88)",
+          moon: "rgba(150, 170, 255, 0.9)",
+          shield: "rgba(217, 247, 255, 0.95)",
+          prism: "rgba(255, 240, 140, 0.96)",
+          mirror: "rgba(215, 198, 255, 0.96)",
+          comet: "rgba(255, 209, 102, 0.96)"
+        };
+        addParticles(entity.x, entity.y, colors[entity.type] || "rgba(217, 247, 255, 0.92)", entity.type === "gold" || entity.type === "comet" ? 28 : 16);
+      }
+
+      function activateForm(form, seconds) {
+        if (form === "classic") {
+          if (seconds > 0) return;
+          whale.form = "classic";
+          whale.formTimer = 0;
+          whale.scale = 1;
+          return;
+        }
+        whale.form = form;
+        whale.formTimer = Math.max(whale.formTimer, seconds);
+        whale.scale = form === "giant" ? 1.32 : form === "star" ? 1.08 : 1;
+        state.flash = Math.max(state.flash, 0.34);
+      }
+
+      function updateParticles(dt) {
+        for (let i = state.particles.length - 1; i >= 0; i -= 1) {
+          const p = state.particles[i];
+          p.life -= dt;
+          if (!p.ring) {
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            p.vy += 50 * dt;
+            if (p.spin) p.angle += p.spin * dt;
+          } else {
+            p.r += 150 * dt;
+          }
+          if (p.life <= 0) state.particles.splice(i, 1);
+        }
+      }
+
+      function updateFloaters(dt) {
+        for (let i = state.floaters.length - 1; i >= 0; i -= 1) {
+          const f = state.floaters[i];
+          f.life -= dt;
+          f.y += f.vy * dt;
+          if (f.life <= 0) state.floaters.splice(i, 1);
+        }
+      }
+
+      function render() {
+        ctx.save();
+        const shakeX = state.shake ? random(-state.shake, state.shake) : 0;
+        const shakeY = state.shake ? random(-state.shake * 0.7, state.shake * 0.7) : 0;
+        ctx.translate(shakeX, shakeY);
+        drawBackground();
+        drawCelebrationBackdrop();
+        drawEntities();
+        drawParticles();
+        drawWhaleTrail();
+        drawWhale();
+        drawFloaters();
+        drawCanvasHud();
+        if (state.flash > 0) drawFlash();
+        drawTransition();
+        ctx.restore();
+      }
+
+      function drawBackground() {
+        const lv = level();
+        const gradient = ctx.createLinearGradient(0, 0, 0, CONFIG.height);
+        gradient.addColorStop(0, lv.palette[0]);
+        gradient.addColorStop(0.48, lv.palette[1]);
+        gradient.addColorStop(1, lv.palette[2]);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+
+        if (state.feverTimer > 0 || lv.id === 10) {
+          ctx.save();
+          ctx.globalAlpha = lv.id === 10 ? 0.18 : 0.12;
+          for (let i = 0; i < 5; i += 1) {
+            ctx.fillStyle = i % 2 ? "#ffd166" : "#d7c6ff";
+            ctx.beginPath();
+            ctx.ellipse(40 + i * ((CONFIG.width - 80) / 4), 62 + Math.sin(state.clock * 1.1 + i) * 14, 70, 12, 0.15, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+
+        ctx.save();
+        ctx.globalAlpha = 0.22;
+        drawWave(64, 12, "#ffffff", 1.2);
+        drawWave(138, 16, "#ffffff", 0.8);
+        drawWave(526, 18 + lv.current * 24, "#0b6f82", 0.35 + lv.current);
+        ctx.restore();
+
+        if (lv.current > 0.12) drawCurrentArrows(lv.current);
+        drawBrandWatermark();
+
+        for (const bubble of state.bgBubbles) {
+          ctx.save();
+          ctx.globalAlpha = bubble.alpha;
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        ctx.save();
+        ctx.globalAlpha = 0.08;
+        ctx.fillStyle = "#17324d";
+        ctx.beginPath();
+        ctx.ellipse(64, 584, 74, 18, -0.08, 0, Math.PI * 2);
+        ctx.ellipse(CONFIG.width - 88, 588, 106, 20, 0.05, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawBrandWatermark() {
+        ctx.save();
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "900 24px Noto Sans Thai, Segoe UI, sans-serif";
+        ctx.globalAlpha = 0.2;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 4;
+        ctx.strokeText("Narwhal Thai Table", CONFIG.width / 2, 214);
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = "#0b6f82";
+        ctx.fillText("Narwhal Thai Table", CONFIG.width / 2, 214);
+        ctx.restore();
+      }
+
+      function drawCelebrationBackdrop() {
+        const activeFinal = state.mode === "victory" || state.celebrationKind === "victory";
+        const finalTry = state.mode === "gameover" && (level().id === 10 || state.highestLevel >= 10);
+        if (!activeFinal && !finalTry && state.mode !== "levelComplete") return;
+
+        ctx.save();
+        if (activeFinal) {
+          const glow = 0.42 + Math.sin(state.clock * 2.2) * 0.08;
+          ctx.globalAlpha = glow;
+          for (let i = 0; i < 5; i += 1) {
+            ctx.fillStyle = i % 2 ? "#ff9fb7" : "#ffd166";
+            ctx.beginPath();
+            ctx.ellipse(72 + i * ((CONFIG.width - 144) / 4), 118 + Math.sin(state.clock * 1.4 + i) * 18, 82, 14, -0.18, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 0.78;
+          drawCrown(CONFIG.width * 0.5, 132);
+        } else if (finalTry) {
+          ctx.globalAlpha = 0.18;
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.ellipse(CONFIG.width * 0.5, 156, 150, 28, 0, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.globalAlpha = 0.2 + Math.sin(state.clock * 5) * 0.04;
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.ellipse(CONFIG.width * 0.5, 284, 116, 30, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function drawWave(y, amplitude, color, speed) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        for (let x = 0; x <= CONFIG.width; x += 12) {
+          const waveY = y + Math.sin(x * 0.028 + state.clock * speed) * amplitude;
+          ctx.lineTo(x, waveY);
+        }
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+      }
+
+      function drawCurrentArrows(strength) {
+        ctx.save();
+        ctx.globalAlpha = 0.18 + strength * 0.25;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        for (let y = 210; y < 500; y += 70) {
+          const dir = Math.sin(state.clock * 1.5 + level().id) > 0 ? 1 : -1;
+          const x = dir > 0 ? 58 : CONFIG.width - 58;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + dir * 46, y);
+          ctx.moveTo(x + dir * 46, y);
+          ctx.lineTo(x + dir * 32, y - 9);
+          ctx.moveTo(x + dir * 46, y);
+          ctx.lineTo(x + dir * 32, y + 9);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawEntities() {
+        for (const entity of state.entities) {
+          if (entity.kind === "obstacle") drawObstacle(entity);
+          else drawBubble(entity);
+        }
+      }
+
+      function drawBubble(entity) {
+        const pulse = 1 + Math.sin(state.clock * 5 + entity.phase) * 0.035;
+        const r = entity.r * pulse;
+        ctx.save();
+        ctx.translate(entity.x, entity.y);
+        ctx.globalAlpha = 0.96;
+
+        const style = bubbleStyle(entity.type);
+        ctx.fillStyle = style.fill;
+        ctx.strokeStyle = style.stroke;
+        ctx.lineWidth = entity.type === "comet" ? 3 : 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.78;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(-r * 0.34, -r * 0.36, Math.max(3, r * 0.18), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        drawBubbleIcon(entity.type, r);
+        ctx.restore();
+      }
+
+      function bubbleStyle(type) {
+        if (type === "gold" || type === "comet") return { fill: "rgba(255, 209, 102, 0.74)", stroke: "rgba(138, 90, 0, 0.42)" };
+        if (type === "pearl") return { fill: "rgba(255, 255, 255, 0.76)", stroke: "rgba(255, 159, 183, 0.54)" };
+        if (type === "grow") return { fill: "rgba(255, 226, 147, 0.78)", stroke: "rgba(138, 90, 0, 0.34)" };
+        if (type === "heart") return { fill: "rgba(255, 220, 230, 0.82)", stroke: "rgba(255, 93, 122, 0.58)" };
+        if (type === "moon") return { fill: "rgba(210, 218, 255, 0.78)", stroke: "rgba(100, 112, 210, 0.5)" };
+        if (type === "shield") return { fill: "rgba(217, 247, 255, 0.78)", stroke: "rgba(11, 111, 130, 0.48)" };
+        if (type === "prism") return { fill: "rgba(255, 246, 184, 0.78)", stroke: "rgba(255, 123, 155, 0.5)" };
+        if (type === "mirror") return { fill: "rgba(226, 216, 255, 0.78)", stroke: "rgba(94, 76, 164, 0.44)" };
+        return { fill: "rgba(217, 247, 255, 0.66)", stroke: "rgba(255, 255, 255, 0.82)" };
+      }
+
+      function drawBubbleIcon(type, r) {
+        if (type === "pearl") {
+          ctx.fillStyle = "#ff9fb7";
+          ctx.beginPath();
+          ctx.ellipse(0, 1, r * 0.38, r * 0.28, -0.22, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (type === "grow") {
+          ctx.fillStyle = "#7ee6d0";
+          ctx.beginPath();
+          ctx.arc(0, 0, r * 0.36, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#ff9fb7";
+          ctx.beginPath();
+          ctx.arc(r * 0.18, -r * 0.1, r * 0.09, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (type === "heart") {
+          drawHeart(0, 0, r * 0.42, "#ff5d7a", "rgba(23,50,77,0.28)");
+        } else if (type === "moon") {
+          ctx.fillStyle = "#4452b8";
+          ctx.beginPath();
+          ctx.arc(2, 0, r * 0.42, 0, Math.PI * 2);
+          ctx.arc(10, -2, r * 0.42, 0, Math.PI * 2);
+          ctx.fill("evenodd");
+        } else if (type === "shield") {
+          ctx.fillStyle = "#0b6f82";
+          ctx.beginPath();
+          ctx.moveTo(0, -r * 0.44);
+          ctx.quadraticCurveTo(r * 0.42, -r * 0.2, r * 0.28, r * 0.22);
+          ctx.quadraticCurveTo(0, r * 0.48, -r * 0.28, r * 0.22);
+          ctx.quadraticCurveTo(-r * 0.42, -r * 0.2, 0, -r * 0.44);
+          ctx.fill();
+        } else if (type === "mirror") {
+          ctx.strokeStyle = "#6c5cc0";
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.moveTo(-r * 0.26, -r * 0.38);
+          ctx.lineTo(r * 0.28, -r * 0.14);
+          ctx.lineTo(-r * 0.1, r * 0.38);
+          ctx.stroke();
+        } else {
+          drawStar(0, 0, r * 0.52, r * 0.25, type === "prism" ? "#ff7b9b" : type === "gold" || type === "comet" ? "#fff7c7" : "#ffd166");
+        }
+      }
+
+      function drawObstacle(entity) {
+        if (entity.age < 0.72 || level().id >= 8) {
+          ctx.save();
+          ctx.translate(entity.x, entity.y);
+          ctx.globalAlpha = entity.age < 0.72 ? 0.42 : 0.18;
+          ctx.strokeStyle = "#ff9fb7";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, entity.r + 10 + Math.sin(state.clock * 9) * 2, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        if (entity.type === "reef") return drawReef(entity);
+        if (entity.type === "whirlpool") return drawWhirlpool(entity);
+        if (entity.type === "kelp") return drawKelp(entity);
+        if (entity.type === "jelly") return drawJelly(entity);
+        drawInk(entity);
+      }
+
+      function drawInk(entity) {
+        ctx.save();
+        ctx.translate(entity.x, entity.y);
+        ctx.rotate(Math.sin(entity.age * 2) * 0.08);
+        ctx.globalAlpha = 0.88;
+        ctx.fillStyle = "#294965";
+        ctx.beginPath();
+        ctx.arc(-entity.r * 0.38, 0, entity.r * 0.58, 0, Math.PI * 2);
+        ctx.arc(entity.r * 0.22, -entity.r * 0.17, entity.r * 0.72, 0, Math.PI * 2);
+        ctx.arc(entity.r * 0.44, entity.r * 0.24, entity.r * 0.48, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 0.22;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(-entity.r * 0.22, -entity.r * 0.14, entity.r * 0.76, 0.4, Math.PI * 1.36);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawKelp(entity) {
+        ctx.save();
+        ctx.translate(entity.x, entity.y);
+        ctx.strokeStyle = "#196f65";
+        ctx.lineWidth = 8;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(0, entity.r);
+        ctx.quadraticCurveTo(Math.sin(entity.age * 2) * 18, 0, Math.sin(entity.age * 2 + 1) * 8, -entity.r);
+        ctx.stroke();
+        ctx.fillStyle = "rgba(255,255,255,0.25)";
+        ctx.beginPath();
+        ctx.ellipse(8, -entity.r * 0.35, 9, 4, -0.6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawJelly(entity) {
+        ctx.save();
+        ctx.translate(entity.x, entity.y);
+        ctx.globalAlpha = 0.82;
+        ctx.fillStyle = "#8d6fd1";
+        ctx.beginPath();
+        ctx.ellipse(0, -4, entity.r * 0.86, entity.r * 0.58, 0, Math.PI, Math.PI * 2);
+        ctx.lineTo(entity.r * 0.65, 8);
+        ctx.quadraticCurveTo(0, entity.r * 0.52, -entity.r * 0.65, 8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.lineWidth = 2;
+        for (let i = -1; i <= 1; i += 1) {
+          ctx.beginPath();
+          ctx.moveTo(i * 9, 8);
+          ctx.quadraticCurveTo(i * 11 + Math.sin(entity.age * 5 + i) * 8, 22, i * 8, 34);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawReef(entity) {
+        ctx.save();
+        ctx.translate(entity.x, entity.y);
+        ctx.rotate(Math.sin(entity.age * 1.4) * 0.04);
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "#ff7b9b";
+        for (let i = -2; i <= 2; i += 1) {
+          const h = entity.r * randomSeed(entity.phase + i, 0.7, 1.2);
+          ctx.beginPath();
+          ctx.moveTo(i * entity.r * 0.26, entity.r * 0.55);
+          ctx.quadraticCurveTo(i * entity.r * 0.18, -h * 0.25, i * entity.r * 0.36, -h);
+          ctx.quadraticCurveTo(i * entity.r * 0.05, -h * 0.68, i * entity.r * -0.18, entity.r * 0.55);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.fillStyle = "rgba(255,255,255,0.32)";
+        ctx.beginPath();
+        ctx.arc(-entity.r * 0.28, -entity.r * 0.12, 3, 0, Math.PI * 2);
+        ctx.arc(entity.r * 0.26, -entity.r * 0.28, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawWhirlpool(entity) {
+        ctx.save();
+        ctx.translate(entity.x, entity.y);
+        ctx.rotate(entity.age * 2.5);
+        ctx.globalAlpha = 0.86;
+        ctx.strokeStyle = "#294965";
+        ctx.lineWidth = 4;
+        for (let i = 0; i < 3; i += 1) {
+          ctx.beginPath();
+          ctx.arc(0, 0, entity.r * (0.42 + i * 0.25), i * 0.8, Math.PI * 1.45 + i * 0.8);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = "rgba(255,255,255,0.62)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, entity.r * 0.9, 0.2, Math.PI * 1.2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function randomSeed(seed, min, max) {
+        const value = Math.sin(seed * 999) * 43758.5453;
+        return min + (value - Math.floor(value)) * (max - min);
+      }
+
+      function drawParticles() {
+        for (const p of state.particles) {
+          const alpha = clamp(p.life / p.maxLife, 0, 1);
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          if (p.ring) {
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth = 3 * alpha;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.stroke();
+          } else if (p.shape === "star") {
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle || 0);
+            drawStar(0, 0, p.r * 1.75 * alpha, p.r * 0.78 * alpha, p.color);
+          } else if (p.shape === "heart") {
+            drawHeart(p.x, p.y, p.r * alpha, p.color, "rgba(23,50,77,0.14)");
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * alpha, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      }
+
+      function drawWhaleTrail() {
+        if (whale.form !== "star" && whale.form !== "mirror") return;
+        ctx.save();
+        for (let i = whale.trail.length - 1; i >= 0; i -= 1) {
+          const t = whale.trail[i];
+          const alpha = t.life / 0.38 * 0.22;
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = whale.form === "mirror" ? "#d7c6ff" : "#ffd166";
+          ctx.beginPath();
+          ctx.ellipse(t.x - i * 0.5, t.y + 3, 36 * t.scale, 22 * t.scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function drawWhale() {
+        const bob = Math.sin(state.clock * 3.1) * 2.2;
+        const wag = Math.sin(state.clock * (state.combo >= 5 ? 11 : 7)) * 0.22;
+        const blinkClosed = whale.blink < 0.12;
+        const meta = FORM_META[whale.form] || FORM_META.classic;
+        const s = whale.scale;
+
+        ctx.save();
+        ctx.translate(whale.x, whale.y + bob);
+        ctx.rotate(whale.faceTilt);
+        ctx.scale(s, s);
+
+        if (whale.form !== "classic" || whale.shield > 0 || whale.invulnerable > 0 || state.combo >= 10) {
+          ctx.save();
+          if (whale.shield > 0) {
+            ctx.globalAlpha = 0.28 + Math.sin(state.clock * 12) * 0.06;
+            ctx.fillStyle = "rgba(95, 222, 255, 0.32)";
+            ctx.beginPath();
+            ctx.arc(0, 0, 67, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = whale.invulnerable > 0 ? 0.28 + Math.sin(state.clock * 18) * 0.1 : whale.shield ? 0.82 : 0.34;
+          ctx.strokeStyle = whale.invulnerable > 0 ? "rgba(255,255,255,0.95)" : whale.shield ? "rgba(84,225,255,0.98)" : meta.aura;
+          ctx.lineWidth = whale.shield ? 7 : 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, whale.shield ? 63 : 50, 0, Math.PI * 2);
+          ctx.stroke();
+          if (whale.shield > 0) {
+            ctx.globalAlpha = 0.9;
+            ctx.strokeStyle = "rgba(255,255,255,0.85)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, 72, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (whale.shield / 3));
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        ctx.fillStyle = whale.form === "giant" ? "#58cfc2" : "#58c6d9";
+        ctx.beginPath();
+        ctx.moveTo(-35, 3);
+        ctx.quadraticCurveTo(-64, -24 + wag * 22, -78, -34);
+        ctx.quadraticCurveTo(-65, -15, -43, 2);
+        ctx.quadraticCurveTo(-66, 23 - wag * 22, -78, 38);
+        ctx.quadraticCurveTo(-56, 26, -35, 8);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = meta.body;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 47, 31, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#d9f7ff";
+        ctx.beginPath();
+        ctx.ellipse(11, 11, 29, 14, -0.04, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ff9fb7";
+        ctx.beginPath();
+        ctx.ellipse(20, 8, 6, 4.6, 0.08, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = meta.fin;
+        ctx.beginPath();
+        ctx.moveTo(-9, 24);
+        ctx.quadraticCurveTo(6, 44, 18, 19);
+        ctx.quadraticCurveTo(4, 27, -9, 24);
+        ctx.fill();
+
+        ctx.save();
+        ctx.translate(34, -21);
+        ctx.rotate(-0.34);
+        ctx.fillStyle = meta.horn;
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.lineTo(whale.form === "star" ? 48 : 38, 0);
+        ctx.lineTo(0, 10);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = whale.form === "star" ? "#ff9f1c" : "#d4a93a";
+        ctx.lineWidth = 2;
+        for (let stripe = 7; stripe < (whale.form === "star" ? 42 : 33); stripe += 9) {
+          ctx.beginPath();
+          ctx.moveTo(stripe, -6);
+          ctx.lineTo(stripe - 5, 6);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        ctx.strokeStyle = "#17324d";
+        ctx.lineWidth = 2.2;
+        if (blinkClosed) {
+          ctx.beginPath();
+          ctx.moveTo(17, -10);
+          ctx.lineTo(26, -10);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = "#17324d";
+          ctx.beginPath();
+          ctx.arc(22, -11, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(23, -12.5, 1.1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        if (whale.smile > 0) {
+          ctx.moveTo(24, -1);
+          ctx.quadraticCurveTo(30, 5, 38, -1);
+        } else {
+          ctx.moveTo(27, 0);
+          ctx.quadraticCurveTo(31, 3, 36, 0);
+        }
+        ctx.stroke();
+
+        if (state.mode === "victory") {
+          drawCrown(1, -44);
+        }
+        ctx.restore();
+      }
+
+      function drawCrown(x, y) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = "#ffd166";
+        ctx.beginPath();
+        ctx.moveTo(-18, 12);
+        ctx.lineTo(-14, -8);
+        ctx.lineTo(-4, 5);
+        ctx.lineTo(5, -12);
+        ctx.lineTo(14, 5);
+        ctx.lineTo(22, -8);
+        ctx.lineTo(18, 12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawFloaters() {
+        ctx.save();
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "800 18px Noto Sans Thai, Segoe UI, sans-serif";
+        for (const f of state.floaters) {
+          const alpha = clamp(f.life, 0, 1);
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.86)";
+          ctx.lineWidth = 4;
+          ctx.strokeText(f.text, f.x, f.y);
+          ctx.fillStyle = f.color;
+          ctx.fillText(f.text, f.x, f.y);
+        }
+        ctx.restore();
+      }
+
+      function drawCanvasHud() {
+        const lv = level();
+        const progress = clamp(state.levelScore / lv.goal, 0, 1);
+        const hudY = 76;
+        const hudW = CONFIG.width - 36;
+        const progressX = 154;
+        const progressW = Math.max(160, CONFIG.width - 296);
+        const levelDotStart = CONFIG.width - 116;
+        ctx.save();
+        ctx.fillStyle = "rgba(217,247,255,0.46)";
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.lineWidth = 1;
+        roundRect(18, hudY, hudW, 54, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#17324d";
+        ctx.font = "800 15px Noto Sans Thai, Segoe UI, sans-serif";
+        ctx.fillText(`${lv.id}. ${lv.name}`, 32, hudY + 22);
+        ctx.font = "700 12px Noto Sans Thai, Segoe UI, sans-serif";
+        ctx.fillText(`${Math.floor(state.levelScore)} / ${lv.goal}`, 32, hudY + 42);
+
+        ctx.fillStyle = "rgba(255,255,255,0.38)";
+        roundRect(progressX, hudY + 31, progressW, 9, 5);
+        ctx.fill();
+        ctx.fillStyle = state.feverTimer > 0 ? "#ffd166" : "rgba(11,111,130,0.82)";
+        roundRect(progressX, hudY + 31, progressW * progress, 9, 5);
+        ctx.fill();
+
+        for (let i = 0; i < LEVELS.length; i += 1) {
+          const x = levelDotStart + i * 8.2;
+          ctx.beginPath();
+          ctx.arc(x, hudY + 36, i === state.levelIndex ? 4.2 : 3.1, 0, Math.PI * 2);
+          ctx.fillStyle = i < state.levelIndex ? "#ffd166" : i === state.levelIndex ? "#ff9fb7" : "rgba(255,255,255,0.46)";
+          ctx.fill();
+        }
+        drawStatusHeart(CONFIG.width - 68, hudY + 78);
+
+        if (whale.form !== "classic" || whale.shield > 0 || state.feverTimer > 0) {
+          const label = state.feverTimer > 0 ? "Fever" : whale.shield ? `Shield ${Math.ceil(whale.shield)}` : FORM_META[whale.form].label;
+          ctx.fillStyle = "rgba(217,247,255,0.58)";
+          roundRect(18, hudY + 66, 112, 28, 8);
+          ctx.fill();
+          ctx.fillStyle = whale.form === "star" || state.feverTimer > 0 ? "#8a5a00" : "#0b6f82";
+          ctx.font = "800 13px Noto Sans Thai, Segoe UI, sans-serif";
+          ctx.fillText(label, 31, hudY + 84);
+        }
+
+        if (state.timeLeft <= 10 && state.mode === "playing") {
+          ctx.globalAlpha = 0.35 + Math.sin(state.clock * 12) * 0.16;
+          ctx.strokeStyle = "#ff7b9b";
+          ctx.lineWidth = 5;
+          ctx.strokeRect(2, 2, CONFIG.width - 4, CONFIG.height - 4);
+        }
+        ctx.restore();
+      }
+
+      function drawStatusHeart(x, y) {
+        ctx.save();
+        const shielded = whale.shield > 0;
+        ctx.fillStyle = shielded ? "rgba(217,247,255,0.86)" : "rgba(255,255,255,0.7)";
+        ctx.strokeStyle = shielded ? "rgba(84,225,255,0.8)" : "rgba(23,50,77,0.12)";
+        ctx.lineWidth = 1.4;
+        roundRect(x - 47, y - 19, 94, 38, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        for (let i = 0; i < 3; i += 1) {
+          const hx = x - 24 + i * 24;
+          const active = i < state.lives;
+          drawHeart(hx, y + 1, 7.5, active ? "#ff5d7a" : "rgba(23,50,77,0.16)", "rgba(23,50,77,0.24)");
+        }
+
+        if (shielded) {
+          ctx.globalAlpha = 0.95;
+          ctx.fillStyle = "rgba(84,225,255,0.22)";
+          ctx.beginPath();
+          ctx.arc(x + 39, y, 16, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(84,225,255,0.95)";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(x + 39, y, 16, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (whale.shield / 3));
+          ctx.stroke();
+          ctx.fillStyle = "#0b6f82";
+          ctx.font = "900 11px Noto Sans Thai, Segoe UI, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(Math.ceil(whale.shield), x + 39, y + 4);
+        }
+        ctx.restore();
+      }
+
+      function drawHeart(x, y, size, fill, stroke) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = fill;
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(0, size * 0.86);
+        ctx.bezierCurveTo(-size * 1.28, size * 0.12, -size * 1.18, -size * 0.78, -size * 0.38, -size * 0.78);
+        ctx.bezierCurveTo(-size * 0.02, -size * 0.78, 0, -size * 0.42, 0, -size * 0.28);
+        ctx.bezierCurveTo(0, -size * 0.42, size * 0.02, -size * 0.78, size * 0.38, -size * 0.78);
+        ctx.bezierCurveTo(size * 1.18, -size * 0.78, size * 1.28, size * 0.12, 0, size * 0.86);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawTransition() {
+        if (state.transitionTimer <= 0) return;
+        const alpha = clamp(state.transitionTimer, 0, 1);
+        const cardW = Math.min(360, CONFIG.width - 72);
+        const cardX = (CONFIG.width - cardW) / 2;
+        const cardY = 226;
+        ctx.save();
+        ctx.globalAlpha = alpha * 0.72;
+        const wash = ctx.createLinearGradient(0, 0, 0, CONFIG.height);
+        wash.addColorStop(0, "rgba(236, 251, 255, 0.86)");
+        wash.addColorStop(0.52, "rgba(139, 232, 220, 0.52)");
+        wash.addColorStop(1, "rgba(61, 183, 212, 0.36)");
+        ctx.fillStyle = wash;
+        ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+
+        ctx.globalAlpha = alpha * 0.36;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.ellipse(CONFIG.width / 2, 188, 178, 30, 0, 0, Math.PI * 2);
+        ctx.ellipse(CONFIG.width / 2, 362, 210, 36, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = "rgba(255,255,255,0.78)";
+        ctx.strokeStyle = "rgba(255,255,255,0.82)";
+        ctx.lineWidth = 1.2;
+        roundRect(cardX, cardY, cardW, 116, 8);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#17324d";
+        ctx.textAlign = "center";
+        ctx.font = "900 26px Noto Sans Thai, Segoe UI, sans-serif";
+        ctx.fillText(state.transitionText, CONFIG.width / 2, cardY + 48);
+        ctx.font = "800 15px Noto Sans Thai, Segoe UI, sans-serif";
+        ctx.fillStyle = "#0b6f82";
+        ctx.fillText(state.badgeText, CONFIG.width / 2, cardY + 78);
+        ctx.restore();
+      }
+
+      function drawFlash() {
+        ctx.save();
+        ctx.globalAlpha = state.flash * 0.12;
+        ctx.fillStyle = level().id >= 9 ? "#fff2cc" : "#17324d";
+        ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+        ctx.restore();
+      }
+
+      function drawStar(cx, cy, outer, inner, color) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        for (let i = 0; i < 10; i += 1) {
+          const radius = i % 2 === 0 ? outer : inner;
+          const angle = i * Math.PI / 5;
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function roundRect(x, y, w, h, r) {
+        const rr = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + rr, y);
+        ctx.arcTo(x + w, y, x + w, y + h, rr);
+        ctx.arcTo(x + w, y + h, x, y + h, rr);
+        ctx.arcTo(x, y + h, x, y, rr);
+        ctx.arcTo(x, y, x + w, y, rr);
+        ctx.closePath();
+      }
+
+      function loop(timestamp) {
+        if (!state.lastFrame) state.lastFrame = timestamp;
+        const dt = Math.min((timestamp - state.lastFrame) / 1000, 0.033);
+        state.lastFrame = timestamp;
+        update(dt);
+        render();
+        requestAnimationFrame(loop);
+      }
+
+      function canvasPoint(event) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (event.clientX - rect.left) * CONFIG.width / rect.width,
+          y: (event.clientY - rect.top) * CONFIG.height / rect.height
+        };
+      }
+
+      function setTargetFromPointer(event) {
+        const point = canvasPoint(event);
+        whale.targetX = clamp(point.x, 42, CONFIG.width - 42);
+        whale.targetY = clamp(point.y, CONFIG.safeTop, CONFIG.height - CONFIG.safeBottom);
+      }
+
+      function drawPauseIcon(isPaused) {
+        pauseIcon.innerHTML = isPaused
+          ? '<path d="M8 5v14l11-7-11-7z"></path>'
+          : '<path d="M8 5v14"></path><path d="M16 5v14"></path>';
+        pauseBtn.setAttribute("aria-label", isPaused ? "เล่นต่อ" : "พักเกม");
+        pauseBtn.setAttribute("title", isPaused ? "เล่นต่อ" : "พักเกม");
+      }
+
+      function drawSoundIcon() {
+        soundIcon.innerHTML = state.muted
+          ? '<path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M18 9l-5 5"></path><path d="M13 9l5 5"></path>'
+          : '<path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M16 9.5a4 4 0 0 1 0 5"></path><path d="M18.5 7a8 8 0 0 1 0 10"></path>';
+        soundBtn.setAttribute("aria-pressed", String(state.muted));
+      }
+
+      function unlockAudio() {
+        if (!audioContext && window.AudioContext) audioContext = new AudioContext();
+        if (audioContext && audioContext.state === "suspended") audioContext.resume();
+      }
+
+      function playTone(frequency, duration, type = "sine", gain = 0.03) {
+        if (state.muted || !audioContext) return;
+        const osc = audioContext.createOscillator();
+        const amp = audioContext.createGain();
+        osc.type = type;
+        osc.frequency.value = frequency;
+        amp.gain.setValueAtTime(gain, audioContext.currentTime);
+        amp.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+        osc.connect(amp);
+        amp.connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + duration);
+      }
+
+      canvas.addEventListener("pointerdown", (event) => {
+        if (state.mode !== "playing") return;
+        event.preventDefault();
+        input.pointer = true;
+        input.pointerId = event.pointerId;
+        canvas.setPointerCapture(event.pointerId);
+        setTargetFromPointer(event);
+      });
+
+      canvas.addEventListener("pointermove", (event) => {
+        if (!input.pointer || event.pointerId !== input.pointerId || state.mode !== "playing") return;
+        event.preventDefault();
+        setTargetFromPointer(event);
+      });
+
+      canvas.addEventListener("pointerup", (event) => {
+        if (event.pointerId !== input.pointerId) return;
+        input.pointer = false;
+        input.pointerId = null;
+      });
+
+      canvas.addEventListener("pointercancel", () => {
+        input.pointer = false;
+        input.pointerId = null;
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (document.activeElement === playerNameInput) {
+          if (event.code === "Enter") {
+            event.preventDefault();
+            submitHiScore();
+          }
+          return;
+        }
+
+        const controlKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS", "Space", "Enter"];
+        if (controlKeys.includes(event.code)) event.preventDefault();
+
+        if (event.code === "Enter" && ["menu", "gameover", "victory"].includes(state.mode)) {
+          startGame();
+          return;
+        }
+
+        if (event.code === "Space") {
+          if (["menu", "gameover", "victory"].includes(state.mode)) startGame();
+          else if (state.mode === "playing") pauseGame();
+          else if (state.mode === "paused") resumeGame();
+          return;
+        }
+
+        input.keys.add(event.code);
+      });
+
+      window.addEventListener("keyup", (event) => {
+        input.keys.delete(event.code);
+      });
+
+      window.addEventListener("blur", () => {
+        input.keys.clear();
+        input.pointer = false;
+        if (state.mode === "playing") pauseGame();
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && state.mode === "playing") pauseGame();
+      });
+
+      pauseBtn.addEventListener("click", () => {
+        unlockAudio();
+        if (state.mode === "playing") pauseGame();
+        else if (state.mode === "paused") resumeGame();
+      });
+
+      soundBtn.addEventListener("click", () => {
+        unlockAudio();
+        state.muted = !state.muted;
+        drawSoundIcon();
+      });
+
+      scoreForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitHiScore();
+      });
+
+      primaryBtn.addEventListener("click", () => {
+        if (state.mode === "paused") resumeGame();
+        else startGame();
+      });
+
+      window.addEventListener("resize", resizeCanvas);
+
+      resizeCanvas();
+      drawSoundIcon();
+      setScreen("menu");
+      updateHud();
+      requestAnimationFrame(loop);
+
+      window.NarwhalBubbleGlide = {
+        start: startGame,
+        pause: pauseGame,
+        resume: resumeGame,
+        reset: resetGame
+      };
+    })();
+  </script>
+</body>
+</html>
