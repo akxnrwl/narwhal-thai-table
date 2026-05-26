@@ -81,4 +81,39 @@ export default function Hero() {
             Come sit<br/>with us, <em>neighbor</em>.
           </h1>
           <p>
-            A Thai family kitchen on Beach Boulevard — where the recipes we grew up wit
+            A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Rainny&apos;s own hands. <strong>Opening soon</strong> — pull up a chair while we get the kitchen warm.
+          </p>
+          <div className="hero-cta">
+            <Link href="/menu" className="btn-primary">
+              Peek at the Menu
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+            <Link href="/play" className="btn-secondary">
+              Play While You Wait
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+          </div>
+        </div>
+        <div className="hero-visual">
+          {/* Future: replace this stand-in with a real hero photo via <MediaFrame ratio="4/5" ornament="corners" src="/images/hero.jpg" alt="..." priority /> */}
+          <div className="visual-frame">
+            <div className="ornament">
+              <button
+                type="button"
+                className="ornament-narwhal"
+                aria-label="Tap to see the narwhal jump"
+                onClick={(e) => playNarwhal(e.currentTarget)}
+              >
+                <NarwhalMark />
+              </button>
+              <div className="ornament-text">Narwhal</div>
+              <div className="ornament-divider"></div>
+              <div className="ornament-tagline">Thai Table · Est. 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="hero-scroll" aria-hidden="true">Scroll</div>
+    </section>
+  );
+}
