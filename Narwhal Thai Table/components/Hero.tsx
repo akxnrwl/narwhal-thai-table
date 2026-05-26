@@ -66,13 +66,10 @@ export default function Hero() {
         {/* <source src="/media/wok.mp4" type="video/mp4" /> */}
       </video>
 
-      {/*
-        Giant outline-only "Coming Soon" watermark — atmospheric.
-        Sits behind the hero content (z-index 1, content is z-2) and is
-        pointer-events:none so it never blocks clicks. All styling lives
-        in globals.css under .hero-watermark.
-      */}
-      <div className="hero-watermark" aria-hidden="true">Coming Soon</div>
+      {/* Coming Soon messaging now lives in the multilingual top-of-page
+          ticker (<ComingSoonTicker />) instead of a Hero watermark — the
+          giant outline text didn't scale gracefully on mobile and the
+          ticker reaches a broader audience in Huntington Beach. */}
 
       <div className="hero-inner">
         <div className="hero-text">
