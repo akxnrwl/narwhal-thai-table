@@ -4,6 +4,19 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import NarwhalMark from './NarwhalMark';
 
+/**
+ * Hero structure (z-stack inside the .hero section):
+ *   z-0: .hero-video         — background video (when present)
+ *   z-0: .hero-fallback      — flicker gradient under the video
+ *   z-1: ::before / ::after  — vignette + grid pattern
+ *   z-1: .hero-watermark     — giant outline "Coming Soon" atmospheric text
+ *   z-2: .hero-inner         — actual content (text column + ornament card)
+ *   z-2: .hero-scroll        — scroll cue at the bottom
+ *
+ * The ornament card now wraps the narwhal in a <button> so hover, focus,
+ * and tap all trigger the whale-jump + wave-ripple animation defined in
+ * globals.css. The animation runs once per interaction (no constant loop).
+ */
 export default function Hero() {
   const fallbackRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,6 +29,17 @@ export default function Hero() {
     v.addEventListener('playing', reveal, { once: true });
     v.addEventListener('canplay', () => { if (!v.paused) reveal(); });
   }, []);
+
+  // Restart the narwhal animation on tap (covers touch devices where
+  // :hover doesn't really exist). Briefly removing+re-adding the class
+  // forces a CSS animation restart even if the element is still focused.
+  const playNarwhal = (el: HTMLElement) => {
+    el.classList.remove('is-playing');
+    // Force reflow so the next class addition re-triggers the animation.
+    void el.offsetWidth;
+    el.classList.add('is-playing');
+    window.setTimeout(() => el.classList.remove('is-playing'), 1500);
+  };
 
   return (
     <section className="hero" aria-labelledby="hero-title">
@@ -42,6 +66,14 @@ export default function Hero() {
         {/* <source src="/media/wok.mp4" type="video/mp4" /> */}
       </video>
 
+      {/*
+        Giant outline-only "Coming Soon" watermark — atmospheric.
+        Sits behind the hero content (z-index 1, content is z-2) and is
+        pointer-events:none so it never blocks clicks. All styling lives
+        in globals.css under .hero-watermark.
+      */}
+      <div className="hero-watermark" aria-hidden="true">Coming Soon</div>
+
       <div className="hero-inner">
         <div className="hero-text">
           <span className="label hero-coming-soon">Coming Soon · Huntington Beach</span>
@@ -49,32 +81,4 @@ export default function Hero() {
             Come sit<br/>with us, <em>neighbor</em>.
           </h1>
           <p>
-            A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Rainny&apos;s own hands. <strong>Opening soon</strong> — pull up a chair while we get the kitchen warm.
-          </p>
-          <div className="hero-cta">
-            <Link href="/menu" className="btn-primary">
-              Peek at the Menu
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </Link>
-            <Link href="/play" className="btn-secondary">
-              Play While You Wait
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </Link>
-          </div>
-        </div>
-        <div className="hero-visual">
-          {/* Future: replace this stand-in with a real hero photo via <MediaFrame ratio="4/5" ornament="corners" src="/images/hero.jpg" alt="..." priority /> */}
-          <div className="visual-frame" role="img" aria-label="Narwhal Thai Table mark">
-            <div className="ornament">
-              <div className="ornament-narwhal"><NarwhalMark /></div>
-              <div className="ornament-text">Narwhal</div>
-              <div className="ornament-divider"></div>
-              <div className="ornament-tagline">Thai Table · Est. 2026</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="hero-scroll" aria-hidden="true">Scroll</div>
-    </section>
-  );
-}
+            A Thai family kitchen on Beach Boulevard — where the recipes we grew up wit
