@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Bubble Glide · Between Courses',
-  description: 'A little narwhal game between courses at Narwhal Thai Table — glide through ten levels, catch the bubbles, win the Aurora crown.',
+  title: 'Bubble Glide · While You Wait for Us to Open',
+  description: 'A little narwhal game from Narwhal Thai Table while we finish getting the kitchen ready — glide through ten levels, catch the bubbles, win the Aurora crown.',
   openGraph: {
     title: 'Bubble Glide · Narwhal Thai Table',
-    description: 'A little narwhal game between courses — ten levels, one Aurora crown.',
+    description: 'A little narwhal game while we get ready to open — ten levels, one Aurora crown.',
   },
 };
 
@@ -32,10 +32,10 @@ export default function PlayPage() {
     <section className="play-section">
       <div className="container">
         <div className="section-head">
-          <span className="label">Between Courses</span>
-          <h2>Bubble Glide — <em>a little game from the kitchen</em>.</h2>
+          <span className="label">While You Wait for Us to Open</span>
+          <h2>Bubble Glide — <em>a little something from the kitchen</em>.</h2>
           <p>
-            While the curry simmers, glide our narwhal through ten levels of bubbles, kelp and whirlpools. Catch the gold stars, dodge the ink, chase the Aurora crown. Hi-scores save to your own device.
+            We&apos;re still polishing the pans and tasting the curries, but the doors aren&apos;t open yet. In the meantime — glide our narwhal through ten levels of bubbles, kelp and whirlpools. Catch the gold stars, dodge the ink, chase the Aurora crown. Hi-scores save to your own device.
           </p>
         </div>
 
