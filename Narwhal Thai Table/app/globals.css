@@ -120,9 +120,65 @@ section{padding:140px 48px;position:relative;}
   border:1px solid var(--line);z-index:3;pointer-events:none;
 }
 
-/* ===== NAV ===== */
+/* ===== COMING SOON TICKER =====
+   Slim multilingual marquee pinned at the very top of every page.
+   Sits above the nav (z-110 vs nav's z-100). Nav is offset down by
+   --cs-ticker-h so it docks immediately below this bar at every scroll
+   position. Reduced-motion users get a static row anchored to the left. */
+:root{ --cs-ticker-h: 38px; }
+@media (max-width:768px){ :root{ --cs-ticker-h: 32px; } }
+
+.cs-ticker{
+  position:fixed;top:0;left:0;right:0;z-index:110;
+  height:var(--cs-ticker-h);
+  background:var(--navy-deep);
+  color:var(--brass-light);
+  border-bottom:1px solid rgba(176,141,60,0.32);
+  overflow:hidden;
+  display:flex;align-items:center;
+}
+.cs-ticker-track{
+  display:inline-flex;align-items:center;flex-shrink:0;
+  white-space:nowrap;
+  animation:csScroll 42s linear infinite;
+  will-change:transform;
+}
+.cs-ticker-item{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-size:15px;
+  letter-spacing:0.02em;
+  padding:0 28px;
+  position:relative;
+  color:var(--brass-light);
+}
+.cs-ticker-item + .cs-ticker-item::before{
+  content:'·';
+  position:absolute;left:-3px;top:50%;
+  transform:translateY(-55%);
+  color:var(--brass);
+  font-size:20px;
+  font-style:normal;
+  font-weight:500;
+}
+@keyframes csScroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+@media (max-width:768px){
+  .cs-ticker-item{font-size:13px;padding:0 22px;}
+  .cs-ticker-item + .cs-ticker-item::before{font-size:17px;}
+  .cs-ticker-track{animation-duration:36s;}
+}
+@media (prefers-reduced-motion: reduce){
+  .cs-ticker-track{animation:none;}
+}
+
+/* ===== NAV =====
+   Offset down by ticker height so the brass bar always sits above the
+   nav. position:fixed top inherits the CSS variable defined above. */
 nav.site-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:var(--cs-ticker-h);left:0;right:0;z-index:100;
   padding:22px 48px;
   display:flex;justify-content:space-between;align-items:center;
   background:rgba(245,240,230,0.85);
@@ -228,12 +284,15 @@ nav.site-nav.scrolled{padding:14px 48px;background:rgba(245,240,230,0.96);}
 
 /* ===== HERO ===== */
 .hero{
-  min-height:100vh;
+  /* min-height shrinks by ticker height so the hero still feels like
+     a full viewport — without forcing the layout to scroll past the bar. */
+  min-height:calc(100vh - var(--cs-ticker-h));
   background:var(--navy);
   color:var(--off-white);
   position:relative;
   display:flex;align-items:center;justify-content:center;
-  padding:140px 48px 100px;
+  /* top padding clears (ticker + nav). 178 = 38 ticker + 140 nav clearance */
+  padding:178px 48px 100px;
   overflow:hidden;
 }
 .hero-video{
@@ -270,36 +329,6 @@ nav.site-nav.scrolled{padding:14px 48px;background:rgba(245,240,230,0.96);}
     linear-gradient(90deg, rgba(245,240,230,0.025) 1px, transparent 1px);
   background-size:80px 80px;
   pointer-events:none;
-}
-/* Giant outline-only "Coming Soon" watermark.
-   Sits at z-1 between the background and .hero-inner (z-2), pointer-events
-   disabled so the text behaves as pure atmosphere. The float keyframe is a
-   2px drift over 12s — slow enough to feel ambient, not animated. */
-.hero-watermark{
-  position:absolute;
-  left:50%;
-  bottom:6%;
-  transform:translateX(-50%);
-  z-index:1;
-  pointer-events:none;
-  user-select:none;
-  white-space:nowrap;
-  font-family:var(--font-display);
-  font-size:clamp(120px, 22vw, 340px);
-  font-weight:400;
-  letter-spacing:-0.04em;
-  line-height:0.85;
-  color:transparent;
-  -webkit-text-stroke:1.4px var(--brass);
-  opacity:0.16;
-  text-shadow:
-    0 0 60px rgba(212,179,106,0.22),
-    0 0 140px rgba(212,179,106,0.12);
-  animation:watermarkFloat 12s ease-in-out infinite;
-}
-@keyframes watermarkFloat{
-  0%,100%{transform:translateX(-50%) translateY(0);}
-  50%{transform:translateX(-50%) translateY(-4px);}
 }
 .hero-inner{
   position:relative;z-index:2;
@@ -429,8 +458,7 @@ nav.site-nav.scrolled{padding:14px 48px;background:rgba(245,240,230,0.96);}
   .ornament-narwhal.is-playing .nm-waves,
   .ornament-narwhal:hover .nm-spark,
   .ornament-narwhal:focus-visible .nm-spark,
-  .ornament-narwhal.is-playing .nm-spark,
-  .hero-watermark{animation:none;}
+  .ornament-narwhal.is-playing .nm-spark{animation:none;}
 }
 .ornament-text{font-family:var(--font-serif);font-style:italic;font-size:38px;letter-spacing:0.02em;color:var(--off-white);margin-bottom:10px;}
 .ornament-divider{width:50px;height:1px;background:var(--brass);margin:18px auto;}
@@ -727,7 +755,8 @@ a.dish:hover .dish-name{color:var(--brass-deep);}
    ============================================================ */
 .play-section{
   background:var(--off-white);
-  padding:140px 48px 100px;
+  /* top = ticker + nav clearance (same maths as .hero) */
+  padding:178px 48px 100px;
 }
 .play-section .section-head{margin-bottom:48px;}
 .play-section .section-head p{max-width:640px;}
@@ -781,7 +810,7 @@ footer{background:var(--navy-deep);color:var(--muted);padding:48px;border-top:1p
 /* ============================================================
    DISH DETAIL PAGE  (used on /menu/[slug])
    ============================================================ */
-.dish-detail{padding:140px 48px 100px;background:var(--off-white);}
+.dish-detail{padding:178px 48px 100px;background:var(--off-white);}
 .dish-detail-back{display:inline-flex;align-items:center;gap:8px;color:var(--brass-deep);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;text-decoration:none;margin-bottom:40px;font-weight:500;}
 .dish-detail-back::before{content:"\2190";transition:transform 0.3s;}
 .dish-detail-back:hover::before{transform:translateX(-4px);}
@@ -819,7 +848,8 @@ footer{background:var(--navy-deep);color:var(--muted);padding:48px;border-top:1p
   .nav-links, .desktop-only{display:none;}
   .nav-toggle{display:inline-flex;}
   section{padding:80px 24px;}
-  .hero{padding:120px 24px 80px;}
+  /* +32 ticker → 152 on the @980 breakpoint */
+  .hero{padding:152px 24px 80px;}
   .hero-inner{grid-template-columns:1fr;gap:48px;}
   .hero-visual{max-width:360px;margin:0 auto;}
   .about-grid,.chef-grid{grid-template-columns:1fr;gap:60px;}
@@ -846,7 +876,7 @@ footer{background:var(--navy-deep);color:var(--muted);padding:48px;border-top:1p
   section{padding:64px 20px;}
   .play-section{padding:96px 20px 64px;}
   .play-frame iframe{height:680px;}
-  .hero{padding:110px 20px 70px;min-height:90vh;}
+  .hero{padding:140px 20px 70px;min-height:calc(90vh - var(--cs-ticker-h));}
   .hero-text h1{margin-bottom:24px;}
   .hero-text p{font-size:19px;margin-bottom:32px;}
   .hero-cta{gap:12px;}
@@ -855,9 +885,6 @@ footer{background:var(--navy-deep);color:var(--muted);padding:48px;border-top:1p
   .visual-frame{padding:28px;}
   .ornament-narwhal{width:170px;height:170px;margin-bottom:22px;}
   .ornament-text{font-size:30px;}
-  /* The giant watermark shrinks to fit narrow screens — outline only,
-     positioned slightly higher so it doesn't fight with the scroll cue. */
-  .hero-watermark{font-size:clamp(72px, 22vw, 150px);bottom:14%;-webkit-text-stroke-width:1px;}
   .about-grid,.chef-grid{gap:48px;}
   .about-stats{grid-template-columns:repeat(3,1fr);gap:16px;}
   .stat .num{font-size:32px;}
@@ -878,7 +905,7 @@ footer{background:var(--navy-deep);color:var(--muted);padding:48px;border-top:1p
   .logo-mark{width:30px;height:30px;font-size:14px;}
   .btn-reserve{padding:9px 12px;font-size:9.5px;letter-spacing:0.14em;}
   section{padding:56px 18px;}
-  .hero{padding:100px 18px 60px;}
+  .hero{padding:130px 18px 60px;}
   .hero-text .label{margin-bottom:24px;font-size:10px;letter-spacing:0.24em;}
   .hero-text p{font-size:17px;}
   .hero-cta{flex-direction:column;align-items:stretch;}
