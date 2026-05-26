@@ -415,12 +415,12 @@
           </button>
         </div>
       </div>
-      <canvas id="gameCanvas" width="500" height="620" aria-label="เกมนาร์วาฬเก็บฟองดาว"></canvas>
+      <canvas id="gameCanvas" width="500" height="620" aria-label="เกมนาร์วาฬเก็บจานผัดไทยและหม้อต้มยำ"></canvas>
       <div class="screen" id="screen">
         <div class="screen-inner">
           <p class="kicker" id="screenKicker">เกมนาร์วาฬ</p>
           <h1 id="screenTitle">Bubble Glide</h1>
-          <p class="screen-copy" id="screenCopy">ผ่าน 10 ด่าน เก็บฟองดาว หัวใจ และเกราะสั้นๆ เพื่อรอดจากอุปสรรค</p>
+          <p class="screen-copy" id="screenCopy">ผ่าน 10 ด่าน เก็บจานผัดไทย หม้อต้มยำ หัวใจ และเกราะสั้นๆ เพื่อรอดจากอุปสรรค</p>
           <form class="score-form is-hidden" id="scoreForm" autocomplete="off">
             <label class="score-label" for="playerName">ชื่อในตาราง hi-score</label>
             <div class="score-row">
@@ -729,7 +729,7 @@
         if (type === "menu") {
           screenKicker.textContent = "10 ด่านใหม่";
           screenTitle.textContent = "Bubble Glide";
-          screenCopy.textContent = "เก็บฟองดาว หัวใจ และเกราะสั้นๆ เพื่อไปให้ถึง Aurora Narwhal";
+          screenCopy.textContent = "เก็บผัดไทย ต้มยำ หัวใจ และเกราะสั้นๆ เพื่อไปให้ถึง Aurora Narwhal";
           primaryBtn.textContent = "เริ่มเล่น";
         }
 
@@ -750,7 +750,7 @@
 
         if (type === "victory" && state.finalSurprise) {
           screenKicker.textContent = "Aurora Surprise";
-          screenTitle.textContent = "มงกุฎดาวของนาวาฬ";
+          screenTitle.textContent = "มงกุฎเชฟของนาวาฬ";
           screenCopy.textContent = `ผ่านครบ 10 ด่านทันเวลา เหลือ ${Math.ceil(state.finalTimeLeft)} วิ | ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
           primaryBtn.textContent = "เล่นรอบใหม่";
           return;
@@ -1732,7 +1732,9 @@
       }
 
       function bubbleStyle(type) {
-        if (type === "gold" || type === "comet") return { fill: "rgba(255, 209, 102, 0.74)", stroke: "rgba(138, 90, 0, 0.42)" };
+        if (type === "gold" || type === "comet") return { fill: "rgba(255, 224, 164, 0.78)", stroke: "rgba(201, 77, 36, 0.46)" };
+        if (type === "star") return { fill: "rgba(255, 250, 214, 0.74)", stroke: "rgba(138, 90, 0, 0.36)" };
+        if (type === "mini") return { fill: "rgba(226, 255, 209, 0.76)", stroke: "rgba(55, 137, 70, 0.44)" };
         if (type === "pearl") return { fill: "rgba(255, 255, 255, 0.76)", stroke: "rgba(255, 159, 183, 0.54)" };
         if (type === "grow") return { fill: "rgba(255, 226, 147, 0.78)", stroke: "rgba(138, 90, 0, 0.34)" };
         if (type === "heart") return { fill: "rgba(255, 220, 230, 0.82)", stroke: "rgba(255, 93, 122, 0.58)" };
@@ -1744,7 +1746,13 @@
       }
 
       function drawBubbleIcon(type, r) {
-        if (type === "pearl") {
+        if (type === "star") {
+          drawPadThaiPlate(r);
+        } else if (type === "gold" || type === "comet") {
+          drawTomYumPot(r, type === "comet");
+        } else if (type === "mini") {
+          drawThaiBite(r);
+        } else if (type === "pearl") {
           ctx.fillStyle = "#ff9fb7";
           ctx.beginPath();
           ctx.ellipse(0, 1, r * 0.38, r * 0.28, -0.22, 0, Math.PI * 2);
@@ -1785,6 +1793,116 @@
         } else {
           drawStar(0, 0, r * 0.52, r * 0.25, type === "prism" ? "#ff7b9b" : type === "gold" || type === "comet" ? "#fff7c7" : "#ffd166");
         }
+      }
+
+      function drawPadThaiPlate(r) {
+        ctx.save();
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "rgba(23,50,77,0.22)";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.ellipse(0, 2, r * 0.58, r * 0.38, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = "#d9902f";
+        ctx.lineWidth = 2.3;
+        ctx.lineCap = "round";
+        for (let i = -2; i <= 2; i += 1) {
+          ctx.beginPath();
+          ctx.moveTo(-r * 0.34, i * r * 0.06 + 2);
+          ctx.quadraticCurveTo(0, -r * 0.16 + i * 1.2, r * 0.34, i * r * 0.05 + 2);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = "#7ccf71";
+        ctx.beginPath();
+        ctx.ellipse(-r * 0.24, -r * 0.18, r * 0.16, r * 0.07, -0.55, 0, Math.PI * 2);
+        ctx.ellipse(r * 0.26, -r * 0.13, r * 0.15, r * 0.065, 0.35, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ff7b4f";
+        ctx.beginPath();
+        ctx.arc(r * 0.05, -r * 0.05, r * 0.09, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffe08a";
+        ctx.beginPath();
+        ctx.moveTo(-r * 0.48, r * 0.2);
+        ctx.lineTo(-r * 0.25, r * 0.12);
+        ctx.lineTo(-r * 0.33, r * 0.34);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawTomYumPot(r, comet = false) {
+        ctx.save();
+        ctx.fillStyle = comet ? "#ff7b4f" : "#f05a3f";
+        ctx.strokeStyle = "rgba(97, 42, 23, 0.36)";
+        ctx.lineWidth = 1.6;
+        roundRect(-r * 0.42, -r * 0.1, r * 0.84, r * 0.5, r * 0.16);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#fff1a8";
+        ctx.beginPath();
+        ctx.ellipse(0, -r * 0.11, r * 0.42, r * 0.16, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = "#612a17";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(-r * 0.48, r * 0.08, r * 0.13, Math.PI * 0.42, Math.PI * 1.52);
+        ctx.arc(r * 0.48, r * 0.08, r * 0.13, -Math.PI * 0.52, Math.PI * 0.58);
+        ctx.stroke();
+
+        ctx.fillStyle = "#7ccf71";
+        ctx.beginPath();
+        ctx.ellipse(-r * 0.16, -r * 0.19, r * 0.14, r * 0.055, -0.45, 0, Math.PI * 2);
+        ctx.ellipse(r * 0.18, -r * 0.18, r * 0.13, r * 0.05, 0.55, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(r * 0.03, -r * 0.11, r * 0.08, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffdc5d";
+        ctx.beginPath();
+        ctx.arc(-r * 0.28, -r * 0.13, r * 0.07, 0, Math.PI * 2);
+        ctx.arc(r * 0.29, -r * 0.05, r * 0.055, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawThaiBite(r) {
+        ctx.save();
+        ctx.fillStyle = "#b8ef69";
+        ctx.strokeStyle = "rgba(55, 137, 70, 0.42)";
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        ctx.moveTo(0, -r * 0.45);
+        ctx.lineTo(r * 0.42, r * 0.28);
+        ctx.lineTo(-r * 0.42, r * 0.28);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#fff7c7";
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.18, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#ff5d4f";
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(r * 0.08, -r * 0.32);
+        ctx.quadraticCurveTo(r * 0.42, -r * 0.2, r * 0.28, r * 0.13);
+        ctx.stroke();
+        ctx.restore();
       }
 
       function drawObstacle(entity) {
@@ -2335,132 +2453,4 @@
         soundIcon.innerHTML = state.muted
           ? '<path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M18 9l-5 5"></path><path d="M13 9l5 5"></path>'
           : '<path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M16 9.5a4 4 0 0 1 0 5"></path><path d="M18.5 7a8 8 0 0 1 0 10"></path>';
-        soundBtn.setAttribute("aria-pressed", String(state.muted));
-      }
-
-      function unlockAudio() {
-        if (!audioContext && window.AudioContext) audioContext = new AudioContext();
-        if (audioContext && audioContext.state === "suspended") audioContext.resume();
-      }
-
-      function playTone(frequency, duration, type = "sine", gain = 0.03) {
-        if (state.muted || !audioContext) return;
-        const osc = audioContext.createOscillator();
-        const amp = audioContext.createGain();
-        osc.type = type;
-        osc.frequency.value = frequency;
-        amp.gain.setValueAtTime(gain, audioContext.currentTime);
-        amp.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
-        osc.connect(amp);
-        amp.connect(audioContext.destination);
-        osc.start();
-        osc.stop(audioContext.currentTime + duration);
-      }
-
-      canvas.addEventListener("pointerdown", (event) => {
-        if (state.mode !== "playing") return;
-        event.preventDefault();
-        input.pointer = true;
-        input.pointerId = event.pointerId;
-        canvas.setPointerCapture(event.pointerId);
-        setTargetFromPointer(event);
-      });
-
-      canvas.addEventListener("pointermove", (event) => {
-        if (!input.pointer || event.pointerId !== input.pointerId || state.mode !== "playing") return;
-        event.preventDefault();
-        setTargetFromPointer(event);
-      });
-
-      canvas.addEventListener("pointerup", (event) => {
-        if (event.pointerId !== input.pointerId) return;
-        input.pointer = false;
-        input.pointerId = null;
-      });
-
-      canvas.addEventListener("pointercancel", () => {
-        input.pointer = false;
-        input.pointerId = null;
-      });
-
-      window.addEventListener("keydown", (event) => {
-        if (document.activeElement === playerNameInput) {
-          if (event.code === "Enter") {
-            event.preventDefault();
-            submitHiScore();
-          }
-          return;
-        }
-
-        const controlKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS", "Space", "Enter"];
-        if (controlKeys.includes(event.code)) event.preventDefault();
-
-        if (event.code === "Enter" && ["menu", "gameover", "victory"].includes(state.mode)) {
-          startGame();
-          return;
-        }
-
-        if (event.code === "Space") {
-          if (["menu", "gameover", "victory"].includes(state.mode)) startGame();
-          else if (state.mode === "playing") pauseGame();
-          else if (state.mode === "paused") resumeGame();
-          return;
-        }
-
-        input.keys.add(event.code);
-      });
-
-      window.addEventListener("keyup", (event) => {
-        input.keys.delete(event.code);
-      });
-
-      window.addEventListener("blur", () => {
-        input.keys.clear();
-        input.pointer = false;
-        if (state.mode === "playing") pauseGame();
-      });
-
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden && state.mode === "playing") pauseGame();
-      });
-
-      pauseBtn.addEventListener("click", () => {
-        unlockAudio();
-        if (state.mode === "playing") pauseGame();
-        else if (state.mode === "paused") resumeGame();
-      });
-
-      soundBtn.addEventListener("click", () => {
-        unlockAudio();
-        state.muted = !state.muted;
-        drawSoundIcon();
-      });
-
-      scoreForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        submitHiScore();
-      });
-
-      primaryBtn.addEventListener("click", () => {
-        if (state.mode === "paused") resumeGame();
-        else startGame();
-      });
-
-      window.addEventListener("resize", resizeCanvas);
-
-      resizeCanvas();
-      drawSoundIcon();
-      setScreen("menu");
-      updateHud();
-      requestAnimationFrame(loop);
-
-      window.NarwhalBubbleGlide = {
-        start: startGame,
-        pause: pauseGame,
-        resume: resumeGame,
-        reset: resetGame
-      };
-    })();
-  </script>
-</body>
-</html>
+  
