@@ -2453,4 +2453,132 @@
         soundIcon.innerHTML = state.muted
           ? '<path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M18 9l-5 5"></path><path d="M13 9l5 5"></path>'
           : '<path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M16 9.5a4 4 0 0 1 0 5"></path><path d="M18.5 7a8 8 0 0 1 0 10"></path>';
-  
+        soundBtn.setAttribute("aria-pressed", String(state.muted));
+      }
+
+      function unlockAudio() {
+        if (!audioContext && window.AudioContext) audioContext = new AudioContext();
+        if (audioContext && audioContext.state === "suspended") audioContext.resume();
+      }
+
+      function playTone(frequency, duration, type = "sine", gain = 0.03) {
+        if (state.muted || !audioContext) return;
+        const osc = audioContext.createOscillator();
+        const amp = audioContext.createGain();
+        osc.type = type;
+        osc.frequency.value = frequency;
+        amp.gain.setValueAtTime(gain, audioContext.currentTime);
+        amp.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+        osc.connect(amp);
+        amp.connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + duration);
+      }
+
+      canvas.addEventListener("pointerdown", (event) => {
+        if (state.mode !== "playing") return;
+        event.preventDefault();
+        input.pointer = true;
+        input.pointerId = event.pointerId;
+        canvas.setPointerCapture(event.pointerId);
+        setTargetFromPointer(event);
+      });
+
+      canvas.addEventListener("pointermove", (event) => {
+        if (!input.pointer || event.pointerId !== input.pointerId || state.mode !== "playing") return;
+        event.preventDefault();
+        setTargetFromPointer(event);
+      });
+
+      canvas.addEventListener("pointerup", (event) => {
+        if (event.pointerId !== input.pointerId) return;
+        input.pointer = false;
+        input.pointerId = null;
+      });
+
+      canvas.addEventListener("pointercancel", () => {
+        input.pointer = false;
+        input.pointerId = null;
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (document.activeElement === playerNameInput) {
+          if (event.code === "Enter") {
+            event.preventDefault();
+            submitHiScore();
+          }
+          return;
+        }
+
+        const controlKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS", "Space", "Enter"];
+        if (controlKeys.includes(event.code)) event.preventDefault();
+
+        if (event.code === "Enter" && ["menu", "gameover", "victory"].includes(state.mode)) {
+          startGame();
+          return;
+        }
+
+        if (event.code === "Space") {
+          if (["menu", "gameover", "victory"].includes(state.mode)) startGame();
+          else if (state.mode === "playing") pauseGame();
+          else if (state.mode === "paused") resumeGame();
+          return;
+        }
+
+        input.keys.add(event.code);
+      });
+
+      window.addEventListener("keyup", (event) => {
+        input.keys.delete(event.code);
+      });
+
+      window.addEventListener("blur", () => {
+        input.keys.clear();
+        input.pointer = false;
+        if (state.mode === "playing") pauseGame();
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && state.mode === "playing") pauseGame();
+      });
+
+      pauseBtn.addEventListener("click", () => {
+        unlockAudio();
+        if (state.mode === "playing") pauseGame();
+        else if (state.mode === "paused") resumeGame();
+      });
+
+      soundBtn.addEventListener("click", () => {
+        unlockAudio();
+        state.muted = !state.muted;
+        drawSoundIcon();
+      });
+
+      scoreForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitHiScore();
+      });
+
+      primaryBtn.addEventListener("click", () => {
+        if (state.mode === "paused") resumeGame();
+        else startGame();
+      });
+
+      window.addEventListener("resize", resizeCanvas);
+
+      resizeCanvas();
+      drawSoundIcon();
+      setScreen("menu");
+      updateHud();
+      requestAnimationFrame(loop);
+
+      window.NarwhalBubbleGlide = {
+        start: startGame,
+        pause: pauseGame,
+        resume: resumeGame,
+        reset: resetGame
+      };
+    })();
+  </script>
+</body>
+</html>
