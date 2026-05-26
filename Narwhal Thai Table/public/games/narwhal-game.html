@@ -420,7 +420,7 @@
         <div class="screen-inner">
           <p class="kicker" id="screenKicker">เกมนาร์วาฬ</p>
           <h1 id="screenTitle">Bubble Glide</h1>
-          <p class="screen-copy" id="screenCopy">ผ่าน 10 ด่าน เก็บจานผัดไทย หม้อต้มยำ หัวใจ และเกราะสั้นๆ เพื่อรอดจากอุปสรรค</p>
+          <p class="screen-copy" id="screenCopy">ผ่าน 5 ด่าน เก็บจานผัดไทย หม้อต้มยำ หัวใจ และเกราะสั้นๆ เพื่อรอดจากอุปสรรค</p>
           <form class="score-form is-hidden" id="scoreForm" autocomplete="off">
             <label class="score-label" for="playerName">ชื่อในตาราง hi-score</label>
             <div class="score-row">
@@ -559,6 +559,11 @@
         cometTimer: 12,
         lastFrame: 0,
         muted: false,
+        // v3 music state — tickMusic() resets these whenever the game
+        // isn't actively running, so the loop never overlaps itself.
+        musicPlaying: false,
+        musicLoopStart: 0,
+        musicNoteIdx: 0,
         shake: 0,
         flash: 0,
         waveBurst: 0,
@@ -731,7 +736,7 @@
         updateScorePanel(type === "gameover" || type === "victory");
 
         if (type === "menu") {
-          screenKicker.textContent = "10 ด่านใหม่";
+          screenKicker.textContent = "5 ด่านใหม่";
           screenTitle.textContent = "Bubble Glide";
           screenCopy.textContent = "เก็บผัดไทย ต้มยำ หัวใจ และเกราะสั้นๆ พานาวาฬไปให้ถึง Huntington Beach";
           primaryBtn.textContent = "เริ่มเล่น";
@@ -755,7 +760,7 @@
         if (type === "victory" && state.finalSurprise) {
           screenKicker.textContent = "Welcome to HB";
           screenTitle.textContent = "มงกุฎเชฟของนาวาฬ";
-          screenCopy.textContent = `ผ่านครบ 10 ด่านทันเวลา เหลือ ${Math.ceil(state.finalTimeLeft)} วิ | ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
+          screenCopy.textContent = `ผ่านครบ 5 ด่านทันเวลา เหลือ ${Math.ceil(state.finalTimeLeft)} วิ | ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
           primaryBtn.textContent = "เล่นรอบใหม่";
           return;
         }
@@ -768,7 +773,7 @@
         }
 
         if (type === "victory") {
-          screenKicker.textContent = "ครบ 10 ด่าน";
+          screenKicker.textContent = "ครบ 5 ด่าน";
           screenTitle.textContent = "Huntington Beach Clear";
           screenCopy.textContent = `จบด้วย ${Math.floor(state.score)} คะแนน | คอมโบสูงสุด ${Math.floor(state.bestCombo)}`;
           primaryBtn.textContent = "เล่นรอบใหม่";
@@ -1187,6 +1192,7 @@
 
       function update(dt) {
         state.clock += dt;
+        tickMusic();
         updateBackground(dt);
         updateParticles(dt);
         updateFloaters(dt);
@@ -2529,6 +2535,63 @@
         amp.connect(audioContext.destination);
         osc.start();
         osc.stop(audioContext.currentTime + duration);
+      }
+
+      // ------- Background music (v3) -------
+      // Generative ambient loop, no audio asset needed. D-major pentatonic
+      // (a scale that sounds bright in both Thai and Western ears: D E F# A B).
+      // Bass drone on slow 3-second alternation D/A; melody dances above.
+      // Volumes deliberately tucked under SFX so collects/hits stay readable.
+      const MUSIC_LOOP_DUR = 7.2; // seconds — one full melodic phrase
+      const MUSIC_BEATS = [
+        // bass drone (long, low)
+        { t: 0.00, hz: 146.83, dur: 2.9, type: "sine",     gain: 0.030 }, // D3
+        { t: 3.60, hz: 110.00, dur: 2.9, type: "sine",     gain: 0.030 }, // A2
+        // melody phrase 1
+        { t: 0.00, hz: 587.33, dur: 0.55, type: "triangle", gain: 0.020 }, // D5
+        { t: 0.60, hz: 440.00, dur: 0.55, type: "triangle", gain: 0.018 }, // A4
+        { t: 1.20, hz: 369.99, dur: 0.50, type: "triangle", gain: 0.018 }, // F#4
+        { t: 1.80, hz: 329.63, dur: 0.45, type: "triangle", gain: 0.017 }, // E4
+        { t: 2.40, hz: 293.66, dur: 0.65, type: "triangle", gain: 0.020 }, // D4
+        // melody phrase 2 (rises)
+        { t: 3.60, hz: 440.00, dur: 0.55, type: "triangle", gain: 0.020 }, // A4
+        { t: 4.20, hz: 493.88, dur: 0.50, type: "triangle", gain: 0.019 }, // B4
+        { t: 4.80, hz: 587.33, dur: 0.50, type: "triangle", gain: 0.022 }, // D5
+        { t: 5.40, hz: 659.25, dur: 0.45, type: "triangle", gain: 0.020 }, // E5 (peak)
+        { t: 6.00, hz: 440.00, dur: 0.45, type: "triangle", gain: 0.016 }, // A4 grace
+        { t: 6.60, hz: 587.33, dur: 0.50, type: "triangle", gain: 0.014 }  // D5 resolve
+      ];
+
+      // Schedules notes for the current music loop. Called once per
+      // frame from update() but only emits notes whose time-in-loop has
+      // arrived since the last frame. Resets cleanly if muted, paused,
+      // or the game is on a menu/transition screen so the music never
+      // overlaps itself between sessions.
+      function tickMusic() {
+        if (state.muted || !audioContext || state.mode !== "playing") {
+          state.musicPlaying = false;
+          return;
+        }
+        const now = audioContext.currentTime;
+        if (!state.musicPlaying) {
+          state.musicLoopStart = now;
+          state.musicNoteIdx = 0;
+          state.musicPlaying = true;
+        }
+        if (now - state.musicLoopStart >= MUSIC_LOOP_DUR) {
+          state.musicLoopStart += MUSIC_LOOP_DUR;
+          state.musicNoteIdx = 0;
+        }
+        const loopElapsed = now - state.musicLoopStart;
+        while (state.musicNoteIdx < MUSIC_BEATS.length) {
+          const beat = MUSIC_BEATS[state.musicNoteIdx];
+          if (loopElapsed >= beat.t) {
+            playTone(beat.hz, beat.dur, beat.type, beat.gain);
+            state.musicNoteIdx += 1;
+          } else {
+            break;
+          }
+        }
       }
 
       canvas.addEventListener("pointerdown", (event) => {
