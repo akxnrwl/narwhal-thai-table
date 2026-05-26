@@ -444,7 +444,15 @@
       const CONFIG = {
         width: 500,
         height: 620,
-        safeTop: 166,
+        // v4: horizon Y defines where the water surface sits. Above this
+        // line is the SKY band (surfers / boats / jet skis / birds);
+        // below is the underwater play area the narwhal swims in.
+        // safeTop is kept generous so the narwhal never crashes into the
+        // surface ceiling — it has to choose to swim shallow to interact
+        // with surface stuff (and risk getting hit by a hull above).
+        horizonY: 148,
+        safeTop: 178,           // narwhal can't swim higher than this
+        surfaceDangerDepth: 92, // boats/jet skis project hazard this far down
         safeBottom: 74,
         storageKey: "narwhal-bubble-glide-best-v2",
         scoresKey: "narwhal-bubble-glide-hi-scores-v1",
@@ -564,6 +572,11 @@
         musicPlaying: false,
         musicLoopStart: 0,
         musicNoteIdx: 0,
+        // v4: above-water (sky) entities — surfers, boats, jet skis, birds.
+        // Separate from .entities so they have their own update/draw pass.
+        // surfaceTimer paces the next spawn; reset on each new run.
+        surfaceEntities: [],
+        surfaceTimer: 3.5,
         shake: 0,
         flash: 0,
         waveBurst: 0,
@@ -602,13 +615,60 @@
         }
       }
 
+      // v4: remote leaderboard cache. Filled by fetchRemoteScores() on
+      // panel open + after every submit. renderScoreboard() prefers it
+      // when populated; otherwise falls back to localStorage so the UI
+      // still works offline / on first paint before the fetch completes.
+      let remoteScoresCache = null;
+
       function loadScores() {
+        // Returns whichever list we have on hand — remote first, else local.
+        if (remoteScoresCache) return remoteScoresCache.slice();
         try {
           const raw = localStorage.getItem(CONFIG.scoresKey);
           const parsed = raw ? JSON.parse(raw) : [];
           return Array.isArray(parsed) ? parsed.filter((item) => Number.isFinite(Number(item.score))) : [];
         } catch (error) {
           return [];
+        }
+      }
+
+      async function fetchRemoteScores() {
+        try {
+          const res = await fetch("/api/scores", { cache: "no-store" });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (Array.isArray(data.scores)) {
+            remoteScoresCache = data.scores;
+            renderScoreboard();
+          }
+        } catch (_) {
+          // network down / no Netlify Functions yet — silently fall back to local
+        }
+      }
+
+      async function postScoreRemote(entry, durationMs) {
+        try {
+          const res = await fetch("/api/scores", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              name: entry.name,
+              score: entry.score,
+              level: entry.level,
+              victory: entry.victory,
+              durationMs
+            })
+          });
+          if (!res.ok) return false;
+          const data = await res.json();
+          if (Array.isArray(data.scores)) {
+            remoteScoresCache = data.scores;
+            renderScoreboard();
+          }
+          return true;
+        } catch (_) {
+          return false;
         }
       }
 
@@ -675,6 +735,8 @@
         saveScoreBtn.disabled = state.scoreSaved;
         scoreNote.textContent = state.scoreSaved ? "บันทึกคะแนนแล้ว" : "พิมพ์ชื่อแล้วกดบันทึก";
         renderScoreboard();
+        // Fire-and-forget refresh from the server. Re-renders when it lands.
+        fetchRemoteScores();
       }
 
       function submitHiScore() {
@@ -695,15 +757,21 @@
           victory: state.mode === "victory",
           date: new Date().toISOString()
         };
-        const scores = loadScores()
-          .concat(entry)
+        // Save locally immediately (so the player sees it even offline)
+        const localScores = (loadScores().concat(entry))
           .sort((a, b) => Number(b.score) - Number(a.score))
           .slice(0, 5);
-        saveScores(scores);
+        saveScores(localScores);
         state.scoreSaved = true;
         saveScoreBtn.disabled = true;
         scoreNote.textContent = "บันทึก hi-score แล้ว";
         renderScoreboard();
+        // Then try to publish to the central leaderboard. If it accepts,
+        // remoteScoresCache will refresh and the panel re-renders with
+        // everyone's scores. If it fails (offline / no function yet),
+        // we silently keep the local entry.
+        const durationMs = state.elapsed > 0 ? Math.floor(state.elapsed * 1000) : 0;
+        postScoreRemote(entry, durationMs);
       }
 
       function createBackgroundBubbles() {
@@ -822,6 +890,8 @@
         state.entities.length = 0;
         state.particles.length = 0;
         state.floaters.length = 0;
+        state.surfaceEntities.length = 0;
+        state.surfaceTimer = 3.5;
         resetWhale();
         updateHud();
       }
@@ -1194,6 +1264,7 @@
         state.clock += dt;
         tickMusic();
         updateBackground(dt);
+        updateSurface(dt);
         updateParticles(dt);
         updateFloaters(dt);
         updateCelebration(dt);
@@ -1591,6 +1662,7 @@
         drawParticles();
         drawWhaleTrail();
         drawWhale();
+        drawSurface();
         drawFloaters();
         drawCanvasHud();
         if (state.flash > 0) drawFlash();
@@ -1600,12 +1672,70 @@
 
       function drawBackground() {
         const lv = level();
-        const gradient = ctx.createLinearGradient(0, 0, 0, CONFIG.height);
-        gradient.addColorStop(0, lv.palette[0]);
-        gradient.addColorStop(0.48, lv.palette[1]);
-        gradient.addColorStop(1, lv.palette[2]);
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+        // v4: split background into SKY (above horizon) and WATER (below).
+        // Sky gets a bright dawn/coastal gradient (peach → light blue) with
+        // a sun disc. Water uses the level's mid/dark palette colors so
+        // each level still has its own underwater mood.
+        const horizon = CONFIG.horizonY;
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
+        // Finale: brand brass-on-navy sunset; other levels: peachy dawn → cyan
+        const isFinale = lv.id === 5;
+        skyGrad.addColorStop(0, isFinale ? "#fff2cc" : "#fff5e0");
+        skyGrad.addColorStop(0.55, isFinale ? "#f4d68a" : "#d6ecff");
+        skyGrad.addColorStop(1, isFinale ? "#b8995b" : "#a6d3e8");
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, CONFIG.width, horizon);
+
+        // Sun / soft glow disc, lower-right of sky region
+        ctx.save();
+        ctx.globalAlpha = 0.65;
+        const sunX = CONFIG.width * 0.78;
+        const sunY = horizon - 64;
+        const sunGrad = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, 52);
+        sunGrad.addColorStop(0, isFinale ? "rgba(255,232,170,1)" : "rgba(255,236,196,1)");
+        sunGrad.addColorStop(1, isFinale ? "rgba(255,232,170,0)" : "rgba(255,236,196,0)");
+        ctx.fillStyle = sunGrad;
+        ctx.beginPath();
+        ctx.arc(sunX, sunY, 52, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Cloud strips drifting slowly across the sky (state.clock-based)
+        ctx.save();
+        ctx.fillStyle = isFinale ? "rgba(255,242,204,0.62)" : "rgba(255,255,255,0.75)";
+        for (let i = 0; i < 3; i += 1) {
+          const cx = ((state.clock * 6) + i * 220) % (CONFIG.width + 200) - 80;
+          const cy = 28 + i * 26;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, 38, 9, 0, 0, Math.PI * 2);
+          ctx.ellipse(cx + 22, cy - 4, 26, 7, 0, 0, Math.PI * 2);
+          ctx.ellipse(cx - 18, cy + 2, 22, 6, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Water gradient — starts at horizon, uses level's mid + dark palette
+        const waterGrad = ctx.createLinearGradient(0, horizon, 0, CONFIG.height);
+        waterGrad.addColorStop(0, lv.palette[1]);
+        waterGrad.addColorStop(0.55, lv.palette[1]);
+        waterGrad.addColorStop(1, lv.palette[2]);
+        ctx.fillStyle = waterGrad;
+        ctx.fillRect(0, horizon, CONFIG.width, CONFIG.height - horizon);
+
+        // Foam / horizon line: small wave shape sitting RIGHT at the boundary
+        ctx.save();
+        ctx.fillStyle = "rgba(255,255,255,0.55)";
+        ctx.beginPath();
+        ctx.moveTo(0, horizon + 2);
+        for (let x = 0; x <= CONFIG.width; x += 8) {
+          const yy = horizon + Math.sin((x + state.clock * 40) * 0.06) * 2;
+          ctx.lineTo(x, yy);
+        }
+        ctx.lineTo(CONFIG.width, horizon + 6);
+        ctx.lineTo(0, horizon + 6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
 
         if (state.feverTimer > 0 || lv.id === 5) {
           ctx.save();
@@ -1663,6 +1793,291 @@
         ctx.fillStyle = "#0b6f82";
         ctx.fillText("Narwhal Thai Table", CONFIG.width / 2, 214);
         ctx.restore();
+      }
+
+      // ===== v4: surface (above-water) entities =====
+      // Surfers, boats, jet skis, and birds. They drift horizontally
+      // across the sky band. Boats + jet skis project a danger column
+      // straight down into the water (narwhal must dive to avoid).
+      // Surfers project a "friendly" column — narwhal can bonk one and
+      // the surfer comically tumbles into the water with a soft yelp.
+      // Birds soar high and drop a shield pickup at a random X.
+
+      function spawnSurfaceEntity(type) {
+        const fromLeft = Math.random() < 0.5;
+        const dir = fromLeft ? 1 : -1;
+        const e = {
+          type,
+          x: fromLeft ? -50 : CONFIG.width + 50,
+          y: 0,
+          vx: 0,
+          width: 0,
+          faceLeft: !fromLeft,  // boats/jet skis face away from spawn side
+          age: 0,
+          hasFallen: false,
+          hasDropped: false,
+          dropAt: 0
+        };
+        if (type === "surfer") {
+          e.y = CONFIG.horizonY - 14;
+          e.vx = dir * 72;
+          e.width = 30;
+        } else if (type === "boat") {
+          e.y = CONFIG.horizonY - 18;
+          e.vx = dir * 95;
+          e.width = 72;
+        } else if (type === "jetski") {
+          e.y = CONFIG.horizonY - 12;
+          e.vx = dir * 130;
+          e.width = 38;
+        } else if (type === "bird") {
+          e.y = 28 + Math.random() * 78;
+          e.vx = dir * 64;
+          e.width = 24;
+          e.dropAt = random(80, CONFIG.width - 80);
+        }
+        state.surfaceEntities.push(e);
+      }
+
+      // Pick which surface entity to spawn next. Higher levels see boats /
+      // jet skis more often; level 1 is mostly surfers + a few birds so
+      // the player can learn the new mechanic gently.
+      function chooseSurfaceType() {
+        const id = level().id;
+        const roll = Math.random();
+        if (id === 1) return roll < 0.55 ? "surfer" : roll < 0.78 ? "bird" : roll < 0.92 ? "jetski" : "boat";
+        if (id === 2) return roll < 0.42 ? "surfer" : roll < 0.62 ? "bird" : roll < 0.85 ? "jetski" : "boat";
+        if (id === 3) return roll < 0.34 ? "surfer" : roll < 0.52 ? "bird" : roll < 0.78 ? "jetski" : "boat";
+        if (id === 4) return roll < 0.28 ? "surfer" : roll < 0.44 ? "bird" : roll < 0.72 ? "jetski" : "boat";
+        return roll < 0.22 ? "surfer" : roll < 0.38 ? "bird" : roll < 0.68 ? "jetski" : "boat";
+      }
+
+      function updateSurface(dt) {
+        state.surfaceTimer -= dt;
+        if (state.surfaceTimer <= 0 && state.mode === "playing") {
+          spawnSurfaceEntity(chooseSurfaceType());
+          // Spawn cadence: ~6-9s base, tightens with level (so finale feels busy)
+          const id = level().id;
+          state.surfaceTimer = random(5.5, 8.5) - id * 0.3;
+        }
+
+        for (let i = state.surfaceEntities.length - 1; i >= 0; i -= 1) {
+          const e = state.surfaceEntities[i];
+          e.age += dt;
+          e.x += e.vx * dt;
+
+          // Surfer that's already been bumped tumbles into the sea
+          if (e.type === "surfer" && e.hasFallen) {
+            e.y += 90 * dt;
+            e.vx *= 0.94;
+            if (e.y > CONFIG.height + 30) {
+              state.surfaceEntities.splice(i, 1);
+              continue;
+            }
+          }
+
+          // Off-screen cleanup
+          if (e.x < -90 || e.x > CONFIG.width + 90) {
+            state.surfaceEntities.splice(i, 1);
+            continue;
+          }
+
+          // Bird drop point — spawn a shield pickup that falls into the sea
+          if (e.type === "bird" && !e.hasDropped) {
+            const past = (e.vx > 0 && e.x >= e.dropAt) || (e.vx < 0 && e.x <= e.dropAt);
+            if (past) {
+              e.hasDropped = true;
+              state.entities.push({
+                type: "shield",
+                kind: "collect",
+                x: e.x,
+                y: CONFIG.horizonY + 4,
+                r: 22,
+                vx: 0,
+                vy: 60,
+                drift: 0,
+                wave: 0,
+                phase: 0,
+                age: 0,
+                value: valueFor("shield"),
+                fromBird: true
+              });
+              playTone(540, 0.05, "sine", 0.02);
+            }
+          }
+
+          // Collision with the narwhal — only when the narwhal is swimming
+          // shallow (within surfaceDangerDepth of the horizon).
+          if (e.type !== "bird" && !e.hasFallen && whale.invulnerable <= 0 && state.mode === "playing") {
+            const halfW = e.width / 2;
+            const inColumn = whale.x > e.x - halfW && whale.x < e.x + halfW;
+            const inDepth = whale.y < CONFIG.horizonY + CONFIG.surfaceDangerDepth;
+            if (inColumn && inDepth) {
+              if (e.type === "surfer") {
+                // Friendly bump: surfer flips, narwhal gets a tiny score
+                // and a soft "Sorry!" cue. No life lost.
+                e.hasFallen = true;
+                e.vx = e.vx * 0.4 + (Math.random() < 0.5 ? -1 : 1) * 18;
+                playTone(820, 0.16, "triangle", 0.025);
+                window.setTimeout(() => playTone(580, 0.13, "triangle", 0.020), 80);
+                addFloater("Sorry!", e.x, CONFIG.horizonY + 22, "#ff5d7a");
+                state.score += 1; // tiny nudge, not gameable
+              } else {
+                // Boat / jet ski — full obstacle hit
+                state.surfaceEntities.splice(i, 1);
+                hitObstacle({ type: e.type, x: e.x, y: CONFIG.horizonY + 30, r: 24 });
+                continue;
+              }
+            }
+          }
+        }
+      }
+
+      function drawSurface() {
+        for (const e of state.surfaceEntities) {
+          ctx.save();
+          ctx.translate(e.x, e.y);
+          if (e.faceLeft) ctx.scale(-1, 1);
+          if (e.type === "surfer") drawSurfer(e);
+          else if (e.type === "boat") drawBoat(e);
+          else if (e.type === "jetski") drawJetski(e);
+          else if (e.type === "bird") drawBird(e);
+          ctx.restore();
+        }
+      }
+
+      function drawSurfer(e) {
+        const bob = Math.sin(e.age * 4) * 1.4;
+        // Surfboard (cream with brass rail)
+        ctx.fillStyle = "#fff5e0";
+        ctx.beginPath();
+        ctx.ellipse(0, bob, 22, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#d4b36a";
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+        if (e.hasFallen) {
+          // mid-air tumble — rotate the figure
+          ctx.rotate(Math.sin(e.age * 7) * 0.6);
+        }
+        // Body
+        ctx.fillStyle = "#3a78b3";
+        ctx.beginPath();
+        ctx.ellipse(2, bob - 11, 4, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Head
+        ctx.fillStyle = "#f4d68a";
+        ctx.beginPath();
+        ctx.arc(2, bob - 20, 3.6, 0, Math.PI * 2);
+        ctx.fill();
+        // Arms in T-pose for balance
+        ctx.strokeStyle = "#3a78b3";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-3, bob - 11); ctx.lineTo(-7, bob - 7);
+        ctx.moveTo(7, bob - 11); ctx.lineTo(11, bob - 7);
+        ctx.stroke();
+      }
+
+      function drawBoat(e) {
+        const bob = Math.sin(e.age * 2.2) * 1.2;
+        // Hull (deep navy)
+        ctx.fillStyle = "#26456f";
+        ctx.beginPath();
+        ctx.moveTo(-34, bob);
+        ctx.lineTo(30, bob);
+        ctx.lineTo(22, bob + 9);
+        ctx.lineTo(-28, bob + 9);
+        ctx.closePath();
+        ctx.fill();
+        // Hull stripe (brass)
+        ctx.fillStyle = "#d4b36a";
+        ctx.fillRect(-30, bob - 2, 56, 2);
+        // Cabin
+        ctx.fillStyle = "#fff5e0";
+        ctx.fillRect(-12, bob - 16, 22, 16);
+        // Window
+        ctx.fillStyle = "#0b1f33";
+        ctx.fillRect(-9, bob - 13, 18, 6);
+        // Mast + flag
+        ctx.strokeStyle = "#0b1f33";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(-12, bob - 16); ctx.lineTo(-12, bob - 28);
+        ctx.stroke();
+        ctx.fillStyle = "#d4b36a";
+        ctx.beginPath();
+        ctx.moveTo(-12, bob - 28); ctx.lineTo(-4, bob - 26); ctx.lineTo(-12, bob - 24);
+        ctx.closePath();
+        ctx.fill();
+        // Bow wake
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.beginPath();
+        ctx.ellipse(34, bob + 9, 8, 3, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawJetski(e) {
+        const bob = Math.sin(e.age * 5) * 1.6;
+        // Body — bright coral so it stands out as danger
+        ctx.fillStyle = "#ff6b6b";
+        ctx.beginPath();
+        ctx.moveTo(-18, bob);
+        ctx.lineTo(16, bob - 2);
+        ctx.lineTo(18, bob + 7);
+        ctx.lineTo(-16, bob + 9);
+        ctx.closePath();
+        ctx.fill();
+        // Seat
+        ctx.fillStyle = "#0b1f33";
+        ctx.fillRect(-8, bob - 4, 14, 4);
+        // Handlebar
+        ctx.strokeStyle = "#0b1f33";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(10, bob - 2); ctx.lineTo(10, bob - 10);
+        ctx.stroke();
+        // Rider — helmet + torso
+        ctx.fillStyle = "#0b1f33";
+        ctx.beginPath();
+        ctx.arc(0, bob - 13, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#5fa3c8";
+        ctx.fillRect(-3, bob - 9, 6, 6);
+        // Spray fan behind
+        ctx.fillStyle = "rgba(255,255,255,0.65)";
+        ctx.beginPath();
+        ctx.arc(-22, bob + 7, 4, 0, Math.PI * 2);
+        ctx.arc(-27, bob + 9, 3, 0, Math.PI * 2);
+        ctx.arc(-31, bob + 11, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawBird(e) {
+        const flap = Math.sin(e.age * 8) * 3;
+        ctx.strokeStyle = "#0b1f33";
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(-12, 4 - flap);
+        ctx.lineTo(0, -2 + flap * 0.4);
+        ctx.lineTo(12, 4 - flap);
+        ctx.stroke();
+        ctx.fillStyle = "#0b1f33";
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 4, 2.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        if (!e.hasDropped) {
+          // shield held under the bird, brass + cream
+          ctx.fillStyle = "#5fa3c8";
+          ctx.beginPath();
+          ctx.arc(0, 8, 5.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#fff5e0";
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.arc(0, 8, 5.5, 0, Math.PI * 2);
+          ctx.stroke();
+        }
       }
 
       function drawCelebrationBackdrop() {
