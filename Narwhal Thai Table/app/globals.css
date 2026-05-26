@@ -278,6 +278,17 @@ nav.site-nav.scrolled{padding:14px 48px;background:rgba(245,240,230,0.96);}
 }
 .hero-text .label{color:var(--brass-light);margin-bottom:32px;display:inline-flex;align-items:center;gap:14px;}
 .hero-text .label::before{content:'';width:36px;height:1px;background:var(--brass);}
+/* Coming Soon — slightly hotter brass + pulsing dot before the line */
+.hero-text .label.hero-coming-soon{color:var(--brass-light);}
+.hero-text .label.hero-coming-soon::after{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--brass-light);
+  animation:comingSoonPulse 2.4s ease-in-out infinite;
+}
+@keyframes comingSoonPulse{
+  0%,100%{opacity:0.4;transform:scale(0.85);}
+  50%{opacity:1;transform:scale(1.15);box-shadow:0 0 12px var(--brass);}
+}
 .hero-text h1{
   font-family:var(--font-display);
   font-size:clamp(48px,7vw,98px);
