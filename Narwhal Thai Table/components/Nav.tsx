@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '/#chef',        label: 'The Chef' },
   { href: '/menu',         label: 'Menu' },
   { href: '/#experience',  label: 'Experience' },
+  { href: '/play',         label: 'Play' },
   { href: '/#contact',     label: 'Visit' },
 ];
 
@@ -63,6 +64,7 @@ export default function Nav() {
 
   const isCurrent = (href: string) => {
     if (href === '/menu') return pathname === '/menu' || pathname?.startsWith('/menu/');
+    if (href === '/play') return pathname === '/play';
     return false;
   };
 

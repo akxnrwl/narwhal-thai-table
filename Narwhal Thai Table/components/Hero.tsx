@@ -44,20 +44,20 @@ export default function Hero() {
 
       <div className="hero-inner">
         <div className="hero-text">
-          <span className="label">A Thai Family Table · Huntington Beach</span>
+          <span className="label hero-coming-soon">Coming Soon · Huntington Beach</span>
           <h1 id="hero-title">
             Come sit<br/>with us, <em>neighbor</em>.
           </h1>
           <p>
-            A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Rainny&apos;s own hands.
+            A Thai family kitchen on Beach Boulevard — where the recipes we grew up with meet the California coast we now call home. Every plate, by Chef Rainny&apos;s own hands. <strong>Opening soon</strong> — pull up a chair while we get the kitchen warm.
           </p>
           <div className="hero-cta">
-            <Link href="/#reserve" className="btn-primary">
-              Save Me a Seat
+            <Link href="/menu" className="btn-primary">
+              Peek at the Menu
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>
-            <Link href="/menu" className="btn-secondary">
-              Peek at the Menu
+            <Link href="/play" className="btn-secondary">
+              Play While You Wait
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>
           </div>
