@@ -786,6 +786,19 @@ a.dish:hover .dish-name{color:var(--brass-deep);}
   background:transparent;
 }
 
+/* 3D variant — landscape orientation. Side-scroller doesn't fit the
+   portrait 520x780 slot used by the 2D game; give it a wider stage so
+   the camera-far end has room to reveal obstacles. Height scales with
+   width via aspect-ratio so phones still get a comfortable view. */
+.play-frame.play-frame-3d{
+  max-width: 960px;
+}
+.play-frame.play-frame-3d iframe{
+  height: auto;
+  aspect-ratio: 16 / 9;
+  min-height: 360px;
+}
+
 .play-footnote{
   max-width:520px;margin:32px auto 0;text-align:center;
 }
