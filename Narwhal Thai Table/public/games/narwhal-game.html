@@ -459,6 +459,24 @@
         playerNameKey: "narwhal-bubble-glide-player-name"
       };
 
+      // v4: sprite library — boat sprites embedded as base64 data URIs so the
+      // game ships as ONE file (no separate PNG uploads, no extra HTTP
+      // requests). Procedural fallbacks kick in if an Image() fails to decode.
+      const SPRITES = {};
+      const SPRITE_DATA = {
+        boat_fishing: "data:image/png;base64,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",
+        boat_jetski:  "data:image/png;base64,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",
+        boat_sail:    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAADAFBMVEVHcEywo77j5PO6rsW6pLOml7KiUVa3cnemlqrGw9ullaenmaqjlryfk7nIwtzk5vWuosTl4/bGxt+2sNBOUXqzqclocY1WVHpnb46Yi7fT0+mUirXub0f0+f9taYLa2O7Q0+SOWWLa2vDY1e/Rzeno6/Xx9PrkakP3+//WvsbSUULkakTKYVyumqiol6fIRy/FdXijmavCVU2ql6fl6vXdYz+vmKa9eXzaxcziZ0LdY0DqbEWvj56wo8TGSznGRS/CRzSpnb6nl7PT0+yhjqmFeJLkaUPna0Xd3vPaXkDMUD33+v+ojqXy9P3n6vWxqMhmZY59epZuZ4ijkq2Zi6yrnrq4s9CsrMNUTWfJyOe4psidi6S+SDjoa0q+amq/gYekiqDu6fHh5O7q7fbGSjXFVUvq0NS5u82pmrfr7fufkrWtocB2cY6CfJm0rs1raI2ll7mjlLahn7uEiqtcXoCRiqbZ2vFpZoC+rc6ZiqeFgZuhWWJzTl+ik7Ctm7nxb0izqcyTi7HFttRqa4jh4vXk5vfBvuJeXXl/c46Xh6LHWlC6sNXeZkjCvNleV2/maETWUkO4hY3bZ1PWXkTTv8+6jJW6fYO9uN7sqKSwj7KqpdDXoqTAl6bAWlTBTkPJamPlyc3quLfl5/LLtMLQg4J6dJWrocBjY4yyssilla9RVHmLhqRtb5WZjbSdj7Cmmbqopr/Mxd/sbkb8//+dl7N/e5+Ykq9kYIB9WWmOhKCSW2TuaUnTZU9LSWCzob7PXka4QzjMU0zSVEttSl3t4ubeVUOwm6nDYWKtna7SjYy6c3jZv8fMamTXr7Tmp6bWWTnERS7o4+ytmMC7Y2e+d4rJsbvf1+FWU2rowsTBs8W4namimcbfZEDj2+Xv2+DwwsHgwMPpoZrbho3Tw9ppX3/fdmzt19ra2+bWnZ3fu77KlKvJYlfBo6/au8HUsbiwhZXdzNPdr7HHw9zNUjbi3OW+i5XCvMvDb2/Qp7zLjpTLuc7Wi4jXzdp8fIvemZbYqKmmwq7qAAAAOXRSTlMAMp8oFFUUCigKUJqp7zLbgWPbsyh4KO/vRll3dyhaxyif74vRx8fH+R5uMmTbd2PR71mzbUbl5eUlyNgyAAACRklEQVRYw2NgGAWjYBSMAvoAKcq0ixWHC1FkgMSa5iJhSgwQXxVRmidKgQEiJTlh/v6cFJgQsDrM1laAEgNy87KzHcnXzxaQ2xAa6shKtgEcywP9MzIKeMg2gD890NbJqZCXbAMy05cuW1mblcVOpn7OzBU5jsHB69ZKkmkAX2t40HoXl5BGaTINEPTYEFQQXRmyWo5MA5ici4IKoyu3liuSaYD8xi3tIZ1V2/t6NsmQFY5lTdtKOgJ3VO+xtLJyV9cmWT+zc0Xp3vJdsdb9VjFebpaWpqQaoBwZtTOiene9tVXMfktLy88WJiQaoNK7r6pm0sFDngc8LS3vpKTMvuvHpEmKAc4Vda419daTu6zc3Kzs5k9e8i7prD4J+hkjo5xcD/dbu7u7W3vOex//Menbd3sj4vXLKrXZBrtGHPfy7Lc+P9fG5+unm6l25sTrV9hc1l3n4treOPOKl8Nln4Q3Xz6kpk5lIT4fqXoAfRDdcT181qxLPj4JVxe9tZ9rw0G8A9R8p0y3re180ueX1HvbJeG032z7ODMS9DNoHGnqdgx93vx30Z85M29eu3jSbpoxSWnAO7GtISzZ1zd5ys9Jz5JvnbGbqEdaIvL2mP7qsXOr3+IlPf885lzosuEiTT+L971HsbFPf/z6vTDN96V9HCnBBynPZ3jfn/FwYVpi4oL/8+1P6ZKcmdmPnruxIO3Bi9cODg4xE7nJKAq0JkzwsktxmBc3zeYYefWKjkF8/FSbE4bcXAxkAxZmxtEm2igYBUQDAEEwxLNCqkrCAAAAAElFTkSuQmCC"
+      };
+      (function preloadSprites() {
+        for (const key in SPRITE_DATA) {
+          const img = new Image();
+          img.onload = () => { SPRITES[key] = img; };
+          img.onerror = () => { /* procedural fallback handles it */ };
+          img.src = SPRITE_DATA[key];
+        }
+      })();
+
       const LEVELS = [
         // v3 — 5-level California-coast tour ending at Huntington Beach.
         // Difficulty mapped from old levels 5→1, 6→2, 7→3, 8→4, 10→5
@@ -1981,36 +1999,30 @@
 
       function drawBoat(e) {
         const bob = Math.sin(e.age * 2.2) * 1.2;
-        // Hull (deep navy)
-        ctx.fillStyle = "#26456f";
-        ctx.beginPath();
-        ctx.moveTo(-34, bob);
-        ctx.lineTo(30, bob);
-        ctx.lineTo(22, bob + 9);
-        ctx.lineTo(-28, bob + 9);
-        ctx.closePath();
-        ctx.fill();
-        // Hull stripe (brass)
-        ctx.fillStyle = "#d4b36a";
-        ctx.fillRect(-30, bob - 2, 56, 2);
-        // Cabin
-        ctx.fillStyle = "#fff5e0";
-        ctx.fillRect(-12, bob - 16, 22, 16);
-        // Window
-        ctx.fillStyle = "#0b1f33";
-        ctx.fillRect(-9, bob - 13, 18, 6);
-        // Mast + flag
-        ctx.strokeStyle = "#0b1f33";
-        ctx.lineWidth = 1.4;
-        ctx.beginPath();
-        ctx.moveTo(-12, bob - 16); ctx.lineTo(-12, bob - 28);
-        ctx.stroke();
-        ctx.fillStyle = "#d4b36a";
-        ctx.beginPath();
-        ctx.moveTo(-12, bob - 28); ctx.lineTo(-4, bob - 26); ctx.lineTo(-12, bob - 24);
-        ctx.closePath();
-        ctx.fill();
-        // Bow wake
+        const sprite = SPRITES.boat_fishing;
+        if (sprite) {
+          // Kenney watercraft pack — square top-down render. Rotate -90° so
+          // the boat points along the direction of travel (sprite was authored
+          // pointing UP). 80px wide gives roughly the same on-screen footprint
+          // as the previous procedural hull.
+          const w = 80, h = 80;
+          ctx.save();
+          ctx.translate(0, bob);
+          ctx.rotate(-Math.PI / 2);
+          ctx.drawImage(sprite, -w / 2, -h / 2, w, h);
+          ctx.restore();
+        } else {
+          // Procedural fallback (used during the brief window before the PNG
+          // finishes loading, or if it never does).
+          ctx.fillStyle = "#26456f";
+          ctx.beginPath();
+          ctx.moveTo(-34, bob); ctx.lineTo(30, bob);
+          ctx.lineTo(22, bob + 9); ctx.lineTo(-28, bob + 9);
+          ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "#fff5e0";
+          ctx.fillRect(-12, bob - 16, 22, 16);
+        }
+        // Bow wake — kept on top regardless of sprite/procedural, gives motion
         ctx.fillStyle = "rgba(255,255,255,0.7)";
         ctx.beginPath();
         ctx.ellipse(34, bob + 9, 8, 3, 0, 0, Math.PI * 2);
@@ -2019,32 +2031,28 @@
 
       function drawJetski(e) {
         const bob = Math.sin(e.age * 5) * 1.6;
-        // Body — bright coral so it stands out as danger
-        ctx.fillStyle = "#ff6b6b";
-        ctx.beginPath();
-        ctx.moveTo(-18, bob);
-        ctx.lineTo(16, bob - 2);
-        ctx.lineTo(18, bob + 7);
-        ctx.lineTo(-16, bob + 9);
-        ctx.closePath();
-        ctx.fill();
-        // Seat
-        ctx.fillStyle = "#0b1f33";
-        ctx.fillRect(-8, bob - 4, 14, 4);
-        // Handlebar
-        ctx.strokeStyle = "#0b1f33";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(10, bob - 2); ctx.lineTo(10, bob - 10);
-        ctx.stroke();
-        // Rider — helmet + torso
-        ctx.fillStyle = "#0b1f33";
-        ctx.beginPath();
-        ctx.arc(0, bob - 13, 4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#5fa3c8";
-        ctx.fillRect(-3, bob - 9, 6, 6);
-        // Spray fan behind
+        const sprite = SPRITES.boat_jetski;
+        if (sprite) {
+          // Same top-down → side-pointing rotation as drawBoat.
+          // Smaller (54px) since a jet ski is supposed to feel zippier.
+          const w = 54, h = 54;
+          ctx.save();
+          ctx.translate(0, bob);
+          ctx.rotate(-Math.PI / 2);
+          ctx.drawImage(sprite, -w / 2, -h / 2, w, h);
+          ctx.restore();
+        } else {
+          // Procedural fallback
+          ctx.fillStyle = "#ff6b6b";
+          ctx.beginPath();
+          ctx.moveTo(-18, bob); ctx.lineTo(16, bob - 2);
+          ctx.lineTo(18, bob + 7); ctx.lineTo(-16, bob + 9);
+          ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "#0b1f33";
+          ctx.beginPath();
+          ctx.arc(0, bob - 13, 4, 0, Math.PI * 2); ctx.fill();
+        }
+        // Spray fan behind — always render on top of sprite (sells the speed)
         ctx.fillStyle = "rgba(255,255,255,0.65)";
         ctx.beginPath();
         ctx.arc(-22, bob + 7, 4, 0, Math.PI * 2);
@@ -3052,67 +3060,4 @@
           return;
         }
 
-        if (event.code === "Space") {
-          if (["menu", "gameover", "victory"].includes(state.mode)) startGame();
-          else if (state.mode === "playing") pauseGame();
-          else if (state.mode === "paused") resumeGame();
-          return;
-        }
-
-        input.keys.add(event.code);
-      });
-
-      window.addEventListener("keyup", (event) => {
-        input.keys.delete(event.code);
-      });
-
-      window.addEventListener("blur", () => {
-        input.keys.clear();
-        input.pointer = false;
-        if (state.mode === "playing") pauseGame();
-      });
-
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden && state.mode === "playing") pauseGame();
-      });
-
-      pauseBtn.addEventListener("click", () => {
-        unlockAudio();
-        if (state.mode === "playing") pauseGame();
-        else if (state.mode === "paused") resumeGame();
-      });
-
-      soundBtn.addEventListener("click", () => {
-        unlockAudio();
-        state.muted = !state.muted;
-        drawSoundIcon();
-      });
-
-      scoreForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        submitHiScore();
-      });
-
-      primaryBtn.addEventListener("click", () => {
-        if (state.mode === "paused") resumeGame();
-        else startGame();
-      });
-
-      window.addEventListener("resize", resizeCanvas);
-
-      resizeCanvas();
-      drawSoundIcon();
-      setScreen("menu");
-      updateHud();
-      requestAnimationFrame(loop);
-
-      window.NarwhalBubbleGlide = {
-        start: startGame,
-        pause: pauseGame,
-        resume: resumeGame,
-        reset: resetGame
-      };
-    })();
-  </script>
-</body>
-</html>
+        if (event.code === "Space")
