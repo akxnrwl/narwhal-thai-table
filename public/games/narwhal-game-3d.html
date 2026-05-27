@@ -1,0 +1,500 @@
+<!doctype html>
+<!--
+  Narwhal Glide 3D — Three.js scaffold (Phase 0)
+  ==============================================
+  Goal of Phase 0: prove the 3D stack boots, GLB/FBX assets load, the
+  scene renders a believable sky+sea split, and the narwhal swims with
+  the same vertical-only controls as the 2D version. Gameplay, scoring,
+  and leaderboard are NOT ported yet — that's Phase 1.
+
+  Architecture:
+    - Three.js + GLTFLoader + FBXLoader from CDN (esm.sh)
+    - One <canvas> rendered by THREE.WebGLRenderer
+    - One HTML overlay for HUD (score/level) so layout stays accessible
+      and we don't have to render UI text inside the 3D scene
+    - Side-scroller camera: looks along +X axis, world scrolls past
+    - Sky/sea split: water plane at y=0; everything above is sky region,
+      everything below is underwater
+
+  Why FBXLoader for fish: Quaternius animated-fish pack ships .fbx only
+  (no GLB). Three.js has official FBXLoader so we don't need offline
+  conversion. Watercraft is Kenney .glb which loads natively.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Narwhal Glide 3D · Bubble Glide WebGL Preview</title>
+  <style>
+    html,body{margin:0;padding:0;height:100%;background:#020812;color:#e9e2cf;font-family:Inter,system-ui,sans-serif;overflow:hidden}
+    #stage{position:fixed;inset:0}
+    #stage canvas{display:block;width:100%;height:100%}
+    /* HUD overlay (HTML on top of the canvas). Keeping it as plain DOM
+       lets us reuse the brand fonts and accessibility we already have. */
+    .hud{position:fixed;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;pointer-events:none;z-index:5;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+    .hud .badge{padding:8px 14px;background:rgba(11,31,51,.55);border:1px solid rgba(176,141,60,.4);border-radius:8px;font-size:13px;letter-spacing:.08em}
+    .hud .badge b{color:#e0c373;font-weight:600}
+    .loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#0B1F33 0%,#020812 100%);z-index:10;transition:opacity .6s}
+    .loading.gone{opacity:0;pointer-events:none}
+    .loading .ring{width:42px;height:42px;border:2px solid rgba(224,195,115,.2);border-top-color:#e0c373;border-radius:50%;animation:spin 1s linear infinite}
+    .loading p{position:absolute;bottom:18%;font-size:13px;letter-spacing:.12em;color:#b0a378;text-transform:uppercase}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .controls-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:.06em;color:#8b9aab;background:rgba(11,31,51,.5);padding:6px 14px;border-radius:6px;z-index:5;pointer-events:none}
+    .err{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#3a1818;color:#ffb4b4;padding:18px 24px;border-radius:8px;font-size:13px;line-height:1.5;max-width:80vw;display:none;z-index:20;white-space:pre-wrap;font-family:ui-monospace,monospace}
+  </style>
+</head>
+<body>
+  <div id="stage"></div>
+
+  <div class="hud">
+    <div class="badge">NARWHAL · <b>3D PREVIEW</b></div>
+    <div class="badge" id="handToggle" style="pointer-events:auto;cursor:pointer">Hand: <b id="handLabel">Right</b></div>
+    <div class="badge">Three.js · <b id="fps">— fps</b></div>
+  </div>
+
+  <div class="loading" id="loadingScreen">
+    <div class="ring"></div>
+    <p>Loading the deep…</p>
+  </div>
+
+  <div class="controls-hint">Hold anywhere to swim up · release to sink · this is a scaffold preview</div>
+
+  <pre class="err" id="errBox"></pre>
+
+  <!--
+    Importmap so we can use modern ES module syntax in this single HTML
+    file. esm.sh resolves Three's internal imports (like 'three/addons').
+    Using r160 (stable, well-supported FBXLoader).
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://esm.sh/three@0.160.0",
+      "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+    /* ------------------------------------------------------------------
+       Error surface — if anything below throws we want the user to see
+       it, not a blank screen. The 2D version's worst bug was silent
+       failures; this overlay is the cure.
+    ------------------------------------------------------------------ */
+    const errBox = document.getElementById('errBox');
+    function fatal(msg) {
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+      document.getElementById('loadingScreen').classList.add('gone');
+    }
+    window.addEventListener('error', e => fatal('Error: ' + (e.error?.stack || e.message)));
+    window.addEventListener('unhandledrejection', e => fatal('Promise: ' + (e.reason?.stack || e.reason)));
+
+    /* ------------------------------------------------------------------
+       Direction model
+       ----------------
+       Mobile-first design: the player's thumb sits on one side of the
+       screen, so we want approaching obstacles to come from the OTHER
+       side — the thumb never blocks the action.
+
+       HAND_MODE = 'right' (default, right-handed) → narwhal swims
+         visually right-to-left, obstacles approach from the left.
+         Thumb on bottom-right is behind the narwhal, no occlusion.
+
+       HAND_MODE = 'left'  → mirror everything. Thumb on bottom-left,
+         narwhal swims left-to-right, obstacles approach from the right.
+
+       Implementation: we keep all world coordinates the same and flip
+       only the camera + narwhal facing via the `flipX` factor. That
+       way the spawn / collision logic in Phase 1 won't have to care.
+    ------------------------------------------------------------------ */
+    let HAND_MODE = (localStorage.getItem('narwhal_hand') || 'right'); // 'right' | 'left'
+    const flipX = () => (HAND_MODE === 'right' ? -1 : 1);
+
+    /* ------------------------------------------------------------------
+       Renderer + scene + camera
+       - antialias on; pixelratio capped at 2 so high-dpi phones don't
+         burn the GPU
+       - tone mapping ACESFilmic to keep brass-and-navy palette punchy
+    ------------------------------------------------------------------ */
+    const stage = document.getElementById('stage');
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    stage.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    // Fog gives the underwater "you can't see far" feel + hides the
+    // far edge of the geometry so we don't need a giant world.
+    scene.fog = new THREE.Fog(0x06223d, 18, 70);
+    scene.background = new THREE.Color(0x0B1F33);
+
+    // Side-scroller camera. Narwhal stays near origin; obstacles spawn
+    // on the FAR side from the player's thumb and drift toward them.
+    const camera = new THREE.PerspectiveCamera(48, window.innerWidth/window.innerHeight, 0.1, 200);
+    camera.position.set(0, 1.5, 12);
+    camera.lookAt(0, 0, 0);
+    // Default Three.js camera: +X is right on screen. For right-handed
+    // mode we want obstacles (at +X in world) to appear on the LEFT of
+    // screen, so flip camera up vector? No — simpler: rotate camera
+    // 180° around Y so +X world = -X screen.
+    function applyHandModeToCamera() {
+      if (HAND_MODE === 'right') {
+        camera.position.set(0, 1.5, -12);
+        camera.up.set(0, 1, 0);
+        camera.lookAt(0, 0, 0);
+      } else {
+        camera.position.set(0, 1.5, 12);
+        camera.up.set(0, 1, 0);
+        camera.lookAt(0, 0, 0);
+      }
+    }
+    applyHandModeToCamera();
+
+    /* ------------------------------------------------------------------
+       Lighting — directional sun coming from upper-back, fill ambient,
+       and one point light below water for the brass-glint vibe.
+    ------------------------------------------------------------------ */
+    const sun = new THREE.DirectionalLight(0xfff1d1, 1.2);
+    sun.position.set(8, 14, 6);
+    scene.add(sun);
+    const ambient = new THREE.AmbientLight(0x5b7a99, 0.55);
+    scene.add(ambient);
+    const brassFill = new THREE.PointLight(0xd9a85a, 0.45, 26);
+    brassFill.position.set(-4, -2, 4);
+    scene.add(brassFill);
+
+    /* ------------------------------------------------------------------
+       Water surface
+       Big plane at y=0. We use a simple shifting-normal approach for
+       movement — proper water shader is Phase 2. Right now it's a flat
+       semi-transparent navy plane so the underwater scene still reads.
+    ------------------------------------------------------------------ */
+    const waterGeo = new THREE.PlaneGeometry(120, 80, 32, 32);
+    const waterMat = new THREE.MeshStandardMaterial({
+      color: 0x1e4a73,
+      metalness: 0.1,
+      roughness: 0.35,
+      transparent: true,
+      opacity: 0.78,
+      side: THREE.DoubleSide,
+    });
+    const water = new THREE.Mesh(waterGeo, waterMat);
+    water.rotation.x = -Math.PI / 2;
+    water.position.y = 0;
+    scene.add(water);
+
+    /* Ocean floor far below */
+    const floorGeo = new THREE.PlaneGeometry(140, 80);
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x041629, roughness: 1 });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -8;
+    scene.add(floor);
+
+    /* ------------------------------------------------------------------
+       Loaders + asset list
+       Tracking promises so we hide the loading screen only when assets
+       resolve (or we know they failed — we still keep going with
+       placeholder geometry).
+    ------------------------------------------------------------------ */
+    const fbxLoader = new FBXLoader();
+    const gltfLoader = new GLTFLoader();
+    const assets = {};
+
+    function loadFBX(path, key, scale = 0.01) {
+      return new Promise(resolve => {
+        fbxLoader.load(path,
+          obj => {
+            obj.scale.setScalar(scale);
+            // Quaternius FBX uses MeshPhongMaterial with awkward shininess.
+            // Re-skin with MeshStandard so it picks up our PBR lights.
+            obj.traverse(child => {
+              if (child.isMesh) {
+                child.material = new THREE.MeshStandardMaterial({
+                  color: child.material?.color ?? new THREE.Color(0xb6c5d0),
+                  roughness: 0.55,
+                  metalness: 0.05,
+                });
+              }
+            });
+            assets[key] = obj;
+            resolve(obj);
+          },
+          undefined,
+          err => { console.warn('FBX load failed', path, err); resolve(null); });
+      });
+    }
+
+    function loadGLB(path, key, scale = 1) {
+      return new Promise(resolve => {
+        gltfLoader.load(path,
+          gltf => {
+            gltf.scene.scale.setScalar(scale);
+            assets[key] = gltf.scene;
+            resolve(gltf.scene);
+          },
+          undefined,
+          err => { console.warn('GLB load failed', path, err); resolve(null); });
+      });
+    }
+
+    /* ------------------------------------------------------------------
+       Placeholder narwhal — used until Whale.fbx finishes loading, AND
+       as a fallback if the FBX fetch fails. Stylized: long body capsule
+       + golden horn cone so the silhouette reads "narwhal" even before
+       textures arrive.
+    ------------------------------------------------------------------ */
+    function buildPlaceholderNarwhal() {
+      const group = new THREE.Group();
+      const body = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.5, 2.2, 6, 12),
+        new THREE.MeshStandardMaterial({ color: 0x2c4a6a, roughness: 0.5 })
+      );
+      body.rotation.z = Math.PI / 2;
+      group.add(body);
+      const horn = new THREE.Mesh(
+        new THREE.ConeGeometry(0.08, 1.1, 12),
+        new THREE.MeshStandardMaterial({ color: 0xd9a85a, roughness: 0.3, metalness: 0.4 })
+      );
+      horn.rotation.z = -Math.PI / 2;
+      horn.position.x = 2.0;
+      group.add(horn);
+      const eye = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 8, 8),
+        new THREE.MeshStandardMaterial({ color: 0x0a0a0a })
+      );
+      eye.position.set(1.2, 0.25, 0.4);
+      group.add(eye);
+      return group;
+    }
+
+    const narwhal = buildPlaceholderNarwhal();
+    narwhal.position.set(0, -1.5, 0);
+    scene.add(narwhal);
+
+    /* ------------------------------------------------------------------
+       Schedule asset loads — non-blocking. Game renders immediately
+       with placeholder, then upgrades narwhal in-place when Whale.fbx
+       arrives. This is the "fix root cause not patches" principle: we
+       don't show a broken silent state on slow networks.
+    ------------------------------------------------------------------ */
+    const assetPromises = [
+      loadFBX('/games/assets/models/fish/Whale.fbx', 'whale', 0.008).then(obj => {
+        if (!obj) return;
+        // Re-color the whale dark navy + add a horn cone so it reads
+        // as a narwhal (Quaternius pack has no narwhal model). Horn is
+        // brass to match brand.
+        obj.traverse(c => { if (c.isMesh) c.material.color.setHex(0x2c4a6a); });
+        const horn = new THREE.Mesh(
+          new THREE.ConeGeometry(0.08, 1.0, 12),
+          new THREE.MeshStandardMaterial({ color: 0xd9a85a, metalness: 0.5, roughness: 0.25 })
+        );
+        horn.rotation.z = -Math.PI / 2;
+        horn.position.set(1.6, 0.05, 0);
+        obj.add(horn);
+        // Swap placeholder out
+        scene.remove(narwhal);
+        obj.position.copy(narwhal.position);
+        obj.userData.isPlayer = true;
+        scene.add(obj);
+        playerRef.current = obj;
+      }),
+      loadFBX('/games/assets/models/fish/Shark.fbx', 'shark', 0.008),
+      loadFBX('/games/assets/models/fish/Manta.fbx', 'manta', 0.008),
+      loadGLB('/games/assets/models/watercraft/boat-speed.glb', 'boat', 1.4),
+      loadGLB('/games/assets/models/watercraft/jetski.glb', 'jetski', 1.2),
+    ];
+
+    // Player reference object — wrapped so the asset upgrade above can
+    // swap the underlying mesh without losing the rest of the game's
+    // grip on "the player".
+    const playerRef = { current: narwhal };
+
+    /* ------------------------------------------------------------------
+       Decorate scene once obstacle + watercraft assets resolve.
+       Spawn a handful at fixed positions just to prove visual variety.
+       Real spawn logic comes in Phase 1.
+    ------------------------------------------------------------------ */
+    Promise.all(assetPromises).then(() => {
+      // Two sharks lurking ahead
+      if (assets.shark) {
+        for (let i = 0; i < 2; i++) {
+          const s = assets.shark.clone();
+          s.traverse(c => { if (c.isMesh) c.material.color.setHex(0x4d5a66); });
+          s.position.set(8 + i * 6, -2 - i, -1 + i * 2);
+          s.rotation.y = Math.PI / 2;
+          scene.add(s);
+        }
+      }
+      // One manta ray drifting deeper
+      if (assets.manta) {
+        const m = assets.manta.clone();
+        m.traverse(c => { if (c.isMesh) c.material.color.setHex(0x3a4858); });
+        m.position.set(14, -5, 1);
+        m.rotation.y = Math.PI / 2;
+        scene.add(m);
+      }
+      // Speedboat at the surface
+      if (assets.boat) {
+        const b = assets.boat.clone();
+        b.position.set(6, 0.5, -3);
+        b.rotation.y = -Math.PI / 2;
+        scene.add(b);
+      }
+      // Jetski further out
+      if (assets.jetski) {
+        const j = assets.jetski.clone();
+        j.position.set(10, 0.4, 2);
+        j.rotation.y = -Math.PI / 2;
+        scene.add(j);
+      }
+      // Hide loading screen
+      document.getElementById('loadingScreen').classList.add('gone');
+    });
+
+    /* ------------------------------------------------------------------
+       Bubble particles — quick CPU-driven cloud. 60 spheres rising.
+       Cheap; meant to give the underwater scene life immediately even
+       before fish load. Will swap for instanced/particle system later.
+    ------------------------------------------------------------------ */
+    const bubbleGeo = new THREE.SphereGeometry(0.06, 8, 8);
+    const bubbleMat = new THREE.MeshStandardMaterial({
+      color: 0xb6e6ff, transparent: true, opacity: 0.55, roughness: 0.1
+    });
+    const bubbles = [];
+    for (let i = 0; i < 60; i++) {
+      const b = new THREE.Mesh(bubbleGeo, bubbleMat);
+      b.position.set(
+        (Math.random() - 0.5) * 30,
+        -7 + Math.random() * 6,
+        (Math.random() - 0.5) * 6
+      );
+      b.userData.speed = 0.5 + Math.random() * 0.6;
+      b.userData.scale = 0.6 + Math.random() * 0.8;
+      b.scale.setScalar(b.userData.scale);
+      scene.add(b);
+      bubbles.push(b);
+    }
+
+    /* ------------------------------------------------------------------
+       Input — Flappy-Bird style. One-button: hold = swim UP, release =
+       sink (gravity). Finger position doesn't matter, so the thumb can
+       sit comfortably wherever (we recommend bottom corner of the side
+       opposite to the obstacle direction).
+
+       Why this is better than ↑/↓:
+         - One control surface, no zone confusion
+         - Works on a single thumb of either hand
+         - Predictable difficulty curve (you fight gravity)
+         - Familiar to anyone who's played a mobile game in the last decade
+
+       Keyboard: Space / W / ↑ all do the same "swim up" thing.
+    ------------------------------------------------------------------ */
+    const input = { lift: false };
+    addEventListener('keydown', e => {
+      if (['ArrowUp', 'w', 'W', ' '].includes(e.key)) { input.lift = true; e.preventDefault(); }
+    });
+    addEventListener('keyup', e => {
+      if (['ArrowUp', 'w', 'W', ' '].includes(e.key)) { input.lift = false; }
+    });
+    // We attach to the stage rather than window so the HUD badge clicks
+    // (hand-toggle) don't trigger lift.
+    stage.addEventListener('touchstart', e => { input.lift = true; e.preventDefault(); }, { passive: false });
+    stage.addEventListener('touchend', () => { input.lift = false; }, { passive: true });
+    stage.addEventListener('mousedown', () => { input.lift = true; });
+    stage.addEventListener('mouseup', () => { input.lift = false; });
+
+    /* ------------------------------------------------------------------
+       Hand-mode toggle (HUD badge)
+    ------------------------------------------------------------------ */
+    const handLabel = document.getElementById('handLabel');
+    handLabel.textContent = HAND_MODE === 'right' ? 'Right' : 'Left';
+    document.getElementById('handToggle').addEventListener('click', () => {
+      HAND_MODE = (HAND_MODE === 'right') ? 'left' : 'right';
+      localStorage.setItem('narwhal_hand', HAND_MODE);
+      handLabel.textContent = HAND_MODE === 'right' ? 'Right' : 'Left';
+      applyHandModeToCamera();
+    });
+
+    /* ------------------------------------------------------------------
+       Resize handling
+    ------------------------------------------------------------------ */
+    addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    /* ------------------------------------------------------------------
+       Main loop
+    ------------------------------------------------------------------ */
+    let lastT = performance.now();
+    let frames = 0, fpsTime = 0;
+    const fpsEl = document.getElementById('fps');
+
+    function tick(now) {
+      const dt = Math.min((now - lastT) / 1000, 0.05); // clamp dt for tab-switch protection
+      lastT = now;
+      frames++;
+      fpsTime += dt;
+      if (fpsTime > 0.5) { fpsEl.textContent = Math.round(frames / fpsTime) + ' fps'; frames = 0; fpsTime = 0; }
+
+      // Swim (Flappy-Bird physics — gravity + lift impulse).
+      // Tuned conservative on a phone where small Y deltas feel huge.
+      const p = playerRef.current;
+      if (p) {
+        const GRAV = -7;       // m/s² downward
+        const LIFT = 4.5;      // m/s upward thrust while held
+        const MAX_DOWN = -5;   // terminal sink speed
+        const MAX_UP = 4;      // peak rise speed
+        playerRef.vy = (playerRef.vy ?? 0) + (input.lift ? LIFT : GRAV) * dt;
+        playerRef.vy = Math.max(MAX_DOWN, Math.min(MAX_UP, playerRef.vy));
+        p.position.y += playerRef.vy * dt;
+        // Clamp to underwater (don't break the surface)
+        if (p.position.y > -0.3) { p.position.y = -0.3; playerRef.vy = Math.min(0, playerRef.vy); }
+        if (p.position.y < -7)   { p.position.y = -7;   playerRef.vy = Math.max(0, playerRef.vy); }
+        // Pitch the body toward velocity for that "this thing is alive"
+        // feel. Smooth so it doesn't snap.
+        const targetPitch = THREE.MathUtils.clamp(playerRef.vy * 0.15, -0.5, 0.5);
+        p.rotation.z = THREE.MathUtils.lerp(p.rotation.z, targetPitch, dt * 5);
+        // Yaw — narwhal always faces +X world (toward where obstacles
+        // spawn). The hand mode only flips the CAMERA, not the world,
+        // so the rotation here stays constant. We pick Math.PI/2 as
+        // the working assumption; if the model imports facing the
+        // opposite way we'll add Math.PI in iteration 2.
+        p.rotation.y = Math.PI / 2;
+      }
+
+      // Bubbles rise + recycle
+      for (const b of bubbles) {
+        b.position.y += b.userData.speed * dt;
+        if (b.position.y > 0) {
+          b.position.y = -7 - Math.random() * 1.5;
+          b.position.x = (Math.random() - 0.5) * 30;
+        }
+      }
+
+      // Subtle water wobble — animate vertex z of the water plane
+      const t = now * 0.0008;
+      const pos = waterGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), y = pos.getY(i);
+        pos.setZ(i, Math.sin(x * 0.4 + t) * 0.12 + Math.cos(y * 0.5 + t * 1.3) * 0.08);
+      }
+      pos.needsUpdate = true;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
