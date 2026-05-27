@@ -144,10 +144,14 @@ section{padding:140px 48px;position:relative;}
   will-change:transform;
 }
 .cs-ticker-item{
-  font-family:var(--font-serif);
-  font-style:italic;
-  font-size:15px;
-  letter-spacing:0.02em;
+  /* Noto Sans family ทุก script (Thai/CJK/Latin) มี design weight ตรงกัน
+     เลยทำให้ภาษาทั้ง 8 ดูเสมอกันหมด ไม่มีตัวบางตัวหนา.
+     Italic ถูกตัดออก เพราะ CJK ไม่มี italic จริง — browser fake-skew
+     เลยดูเพี้ยน. ใช้ upright + weight 500 แทน — เก๋กว่าและสม่ำเสมอกว่า. */
+  font-family:"Noto Sans","Noto Sans Thai","Noto Sans SC","Noto Sans TC","Noto Sans KR","Noto Sans JP",var(--font-sans),sans-serif;
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:0.04em;
   padding:0 28px;
   position:relative;
   color:var(--brass-light);
