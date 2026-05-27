@@ -19,7 +19,7 @@
  */
 const LANGUAGES = [
   'Coming Soon',
-  'เปิดเร็ว ๆ นี้ค่ะ',
+  'พบกันเร็วๆนี้',
   'Próximamente',
   'Sắp khai trương',
   '即将开业 / 即將開業',
