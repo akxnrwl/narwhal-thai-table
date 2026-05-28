@@ -3043,6 +3043,20 @@
         input.pointerId = null;
       });
 
+      // Fix 2026-05-27: the primaryBtn ("เริ่มเล่น" / "เล่นต่อ" / "ลอง
+      // อีกครั้ง") never had a click handler — the game was only
+      // startable via the Enter key, which broke on mobile (no keyboard)
+      // and confused desktop players who clicked the obvious button.
+      // Route the click to the same logic as Enter: resume from pause,
+      // otherwise start a fresh game from menu/gameover/victory.
+      primaryBtn.addEventListener("click", () => {
+        if (state.mode === "paused") {
+          resumeGame();
+        } else if (["menu", "gameover", "victory"].includes(state.mode)) {
+          startGame();
+        }
+      });
+
       window.addEventListener("keydown", (event) => {
         if (document.activeElement === playerNameInput) {
           if (event.code === "Enter") {
