@@ -2,6 +2,20 @@
 
 import { useState } from 'react';
 
+/** Reservation time slots: 11:00 AM → 10:00 PM, every 30 minutes
+ *  (last seating about an hour before the 11:00 PM close). */
+const TIME_SLOTS: string[] = (() => {
+  const slots: string[] = [];
+  for (let mins = 11 * 60; mins <= 22 * 60; mins += 30) {
+    const h24 = Math.floor(mins / 60);
+    const m = mins % 60;
+    const period = h24 < 12 ? 'AM' : 'PM';
+    const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+    slots.push(`${h12}:${m.toString().padStart(2, '0')} ${period}`);
+  }
+  return slots;
+})();
+
 /**
  * Reservation form. Currently shows an inline confirmation message on submit
  * and does NOT POST anywhere. When ready to wire up a backend:
@@ -81,11 +95,7 @@ export default function ReserveForm() {
           <label htmlFor="rsv-time">Time</label>
           <select id="rsv-time" name="time" required defaultValue="">
             <option value="">Select</option>
-            <option>5:00 PM</option><option>5:30 PM</option>
-            <option>6:00 PM</option><option>6:30 PM</option>
-            <option>7:00 PM</option><option>7:30 PM</option>
-            <option>8:00 PM</option><option>8:30 PM</option>
-            <option>9:00 PM</option>
+            {TIME_SLOTS.map(t => <option key={t}>{t}</option>)}
           </select>
         </div>
       </div>

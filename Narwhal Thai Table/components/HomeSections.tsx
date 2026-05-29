@@ -2,7 +2,9 @@ import Link from 'next/link';
 import FadeUp from './FadeUp';
 import ReserveForm from './ReserveForm';
 import ChefBioReadMore from './ChefBioReadMore';
+import MediaFrame from './MediaFrame';
 import { DISHES } from '@/lib/dishes';
+import { getDishImage } from '@/lib/media';
 
 /* ============================================================
    STORY / ABOUT
@@ -132,24 +134,42 @@ export function MenuPreviewSection() {
           <p>Here&apos;s a taste of her signature plates. The full menu — thirteen categories from appetizers to dessert — lives on its own page.</p>
         </FadeUp>
 
-        <div className="cat-grid">
-          {signatures.map(d => (
-            <Link key={d.slug} href={`/menu/${d.slug}`} className="dish sig">
-              <div className="dish-head">
-                <div className="dish-name">
-                  {d.name}<span className="thai">{d.thai}</span>
+        <FadeUp className="sig-grid">
+          {signatures.map(d => {
+            const photo = d.image?.src ?? getDishImage(d.slug) ?? undefined;
+            return (
+              <Link key={d.slug} href={`/menu/${d.slug}`} className="sig-card">
+                <MediaFrame
+                  ratio="4/3"
+                  src={photo}
+                  alt={d.image?.alt ?? d.name}
+                  sizes="(max-width: 600px) 100vw, (max-width: 980px) 50vw, 33vw"
+                  placeholder={
+                    <>
+                      <svg className="sig-media-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true" focusable="false">
+                        <path d="M17 7v12a4 4 0 01-8 0V7M13 7v34" strokeLinecap="round" />
+                        <path d="M34 7c-3 0-5 4-5 11s2 7 5 7 5 0 5-7-2-11-5-11zM34 25v16" strokeLinecap="round" />
+                      </svg>
+                      <span className="sig-media-th">{d.thai}</span>
+                    </>
+                  }
+                />
+                <div className="sig-body">
+                  <div className="sig-head">
+                    <div className="sig-name">{d.name}<span className="thai">{d.thai}</span></div>
+                    {d.price && <div className="sig-price">{d.price}</div>}
+                  </div>
+                  <p className="sig-desc">{d.description}</p>
+                  <div className="sig-foot">
+                    <span className="sig-tag">Signature</span>
+                    {d.spicy && <span className="sig-tag spicy">Spicy</span>}
+                    <span className="sig-read">Read the story</span>
+                  </div>
                 </div>
-                {d.price && <div className="dish-price">{d.price}</div>}
-              </div>
-              <p className="dish-desc">{d.description}</p>
-              <div className="dish-tags">
-                <span className="tag">Signature</span>
-                {d.spicy && <span className="tag spicy">Spicy</span>}
-              </div>
-              <span className="dish-read">Read the story</span>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            );
+          })}
+        </FadeUp>
 
         <p className="menu-note" style={{ marginTop: 56 }}>
           <Link href="/menu" className="btn-primary" style={{ display: 'inline-flex', color: 'var(--navy)' }}>
@@ -228,10 +248,8 @@ export function ReserveSection() {
             <p>It&apos;s a cozy room. Give us a call, send a note, or fill out the form — we&apos;ll have your table ready when you get here. Birthdays, anniversaries, big family nights — just tell us, we love a good occasion.</p>
             <div className="hours-block">
               <h4>Hours of Service</h4>
-              <div className="hours-row"><span className="day">Tuesday – Thursday</span><span className="time">5:00 — 10:00 PM</span></div>
-              <div className="hours-row"><span className="day">Friday – Saturday</span><span className="time">5:00 — 11:00 PM</span></div>
-              <div className="hours-row"><span className="day">Sunday</span><span className="time">5:00 — 9:30 PM</span></div>
-              <div className="hours-row"><span className="day">Monday</span><span className="time">Closed</span></div>
+              <div className="hours-row"><span className="day">Monday – Sunday</span><span className="time">11:00 AM — 11:00 PM</span></div>
+              <div className="hours-row"><span className="day">Open Every Day</span><span className="time">Lunch through Dinner</span></div>
             </div>
           </FadeUp>
           <FadeUp className="reserve-form-wrap">

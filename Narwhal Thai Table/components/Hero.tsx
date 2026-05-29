@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import NarwhalMark from './NarwhalMark';
+import type { HeroMedia } from '@/lib/media';
 
 /**
  * Hero structure (z-stack inside the .hero section):
@@ -17,7 +18,7 @@ import NarwhalMark from './NarwhalMark';
  * and tap all trigger the whale-jump + wave-ripple animation defined in
  * globals.css. The animation runs once per interaction (no constant loop).
  */
-export default function Hero() {
+export default function Hero({ media = { video: null, image: null } }: { media?: HeroMedia }) {
   const fallbackRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -44,27 +45,33 @@ export default function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       {/*
-        HERO BACKGROUND VIDEO
-        Drop an .mp4 in /public/media (e.g. /public/media/wok.mp4) and uncomment
-        the <source> below. Recommended: 1080p, 8–15s, seamless loop, muted,
-        under 4MB. Free sources:
-          - pexels.com/search/videos/thai cooking
-          - pexels.com/search/videos/wok flame
+        HERO BACKGROUND (auto drop-in — no code edit needed):
+          • Video: drop /public/media/hero.mp4 (or .webm) → plays automatically.
+          • Image: drop /public/images/hero.jpg (.png/.webp/.avif) → shows as the
+            still background, and as the video poster if both exist.
+          • Neither present → the animated gradient fallback below shows.
+        Detection happens at build time in lib/media.ts. Video tips: 1080p,
+        8–15s seamless loop, muted, under ~4MB.
       */}
       <div className="hero-fallback" aria-hidden="true" ref={fallbackRef} />
-      <video
-        ref={videoRef}
-        className="hero-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden="true"
-        poster=""
-      >
-        {/* <source src="/media/wok.mp4" type="video/mp4" /> */}
-      </video>
+      {media.video ? (
+        <video
+          ref={videoRef}
+          className="hero-media hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          poster={media.image ?? undefined}
+        >
+          <source src={media.video} type={media.video.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+        </video>
+      ) : media.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="hero-media" src={media.image} alt="" aria-hidden="true" />
+      ) : null}
 
       {/* Coming Soon messaging now lives in the multilingual top-of-page
           ticker (<ComingSoonTicker />) instead of a Hero watermark — the
