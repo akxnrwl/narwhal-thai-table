@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero';
+import { getHeroMedia } from '@/lib/media';
 import {
   StorySection,
   ChefSection,
@@ -9,9 +10,10 @@ import {
 } from '@/components/HomeSections';
 
 export default function HomePage() {
+  const heroMedia = getHeroMedia();
   return (
     <>
-      <Hero />
+      <Hero media={heroMedia} />
       <StorySection />
       <ChefSection />
       <MenuPreviewSection />
