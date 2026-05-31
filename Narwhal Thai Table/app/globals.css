@@ -1191,3 +1191,14 @@ section{padding:112px 48px;}
   .experience,.reserve,.contact{padding:62px 20px;}
   .about-visual,.chef-visual{padding:44px 20px;}
 }
+
+
+/* ===== Ticker: tighter item spacing on mobile only (PC unchanged) ===== */
+@media(max-width:768px){
+  .cs-ticker-item{padding:0 13px;font-size:12.5px;}
+  .cs-ticker-item + .cs-ticker-item::before{font-size:15px;left:-2px;}
+}
+@media(max-width:480px){
+  .cs-ticker-item{padding:0 10px;font-size:12px;}
+  .cs-ticker-item + .cs-ticker-item::before{font-size:14px;}
+}
