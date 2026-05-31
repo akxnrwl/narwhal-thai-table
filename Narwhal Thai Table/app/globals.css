@@ -1159,3 +1159,35 @@ a.dish:hover .dish-name{color:var(--brass-light);}
   .about-visual,.chef-visual{aspect-ratio:4/3;max-width:none;}
   .about-visual-content .roman{font-size:64px;}
 }
+
+
+/* ===== Polish pass — design audit refinements (2026-05-29) ===== */
+/* Tighter vertical rhythm: sections frame content instead of leaving dark voids */
+section{padding:112px 48px;}
+.experience,.reserve,.contact{padding:120px 48px;}
+/* Constrain full-width centered headings to an elegant line length */
+.section-head{max-width:1040px;margin-left:auto;margin-right:auto;}
+/* Subtle "lit" depth — faint gold glow at the top of the big dark sections */
+.menu-section,.experience,.contact{background:radial-gradient(80% 55% at 50% 0%, rgba(203,163,90,0.05), rgba(203,163,90,0) 60%), var(--navy-deep);}
+/* Trim the empty map box so it doesn't read as a void before photos/embed */
+.map-placeholder{aspect-ratio:24/7;}
+@media(max-width:980px){
+  section{padding:74px 24px;}
+  .experience,.reserve,.contact{padding:84px 24px;}
+  .map-placeholder{aspect-ratio:4/3;}
+}
+
+
+/* ===== Mobile-first polish (real-device pass, 2026-05-29) ===== */
+/* Kill dead navy voids: placeholder cards hug their content on phones */
+@media(max-width:768px){
+  .about-visual,.chef-visual{aspect-ratio:auto;min-height:0;padding:52px 24px;}
+  .map-placeholder{aspect-ratio:3/2;}
+  /* 16px form inputs so iOS doesn't auto-zoom when a field is tapped */
+  .form-group input,.form-group select,.form-group textarea{font-size:16px;}
+}
+@media(max-width:480px){
+  section{padding:58px 20px;}
+  .experience,.reserve,.contact{padding:62px 20px;}
+  .about-visual,.chef-visual{padding:44px 20px;}
+}
