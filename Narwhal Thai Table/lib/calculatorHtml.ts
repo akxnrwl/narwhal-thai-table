@@ -1,11 +1,9 @@
-/* AUTO-GENERATED from Narwhal-Profit-Calculator.html — owner profit & draw
-   calculator, served gated by app/api/owner/cal/route.ts. Edit the source
-   HTML and regenerate rather than hand-editing this string. */
+/* AUTO-GENERATED from Narwhal-Profit-Calculator.html — edit source HTML then regenerate. */
 export const calculatorHtml = `<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Narwhal — เครื่องคิดเลขกำไร & Owner Draw</title>
 <style>
   :root{
@@ -16,82 +14,93 @@ export const calculatorHtml = `<!DOCTYPE html>
   *{box-sizing:border-box}
   body{margin:0;background:var(--navy);color:var(--off);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Sukhumvit Set","Noto Sans Thai",Tahoma,sans-serif;
-    line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1120px;margin:0 auto;padding:26px 18px 70px}
-  h1{font-family:Georgia,serif;font-size:26px;margin:0 0 2px}
+    line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 14px 56px}
+  h1{font-family:Georgia,serif;font-size:21px;margin:0 0 1px}
   h1 em{color:var(--brassL);font-style:normal}
-  .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
-  .presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-  .preset{padding:8px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);
-    color:var(--off);cursor:pointer;font-size:13px;transition:.15s}
-  .preset:hover{background:rgba(176,141,60,0.18)}
+  .sub{color:var(--muted);font-size:12px;margin-bottom:12px}
+
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;
+    padding:9px 14px;margin-bottom:12px;background:var(--navy2);border:1px solid var(--line);border-radius:12px}
+  .tb-lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .tb-val{font-family:Georgia,serif;font-size:24px;color:var(--off);font-weight:700}
+  .tb-sub{font-size:12.5px;color:var(--muted)}
+
+  .presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .preset{padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);
+    color:var(--off);cursor:pointer;font-size:12px}
   .preset.active{background:var(--brass);color:var(--navy);font-weight:600;border-color:var(--brass)}
-  .layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px;align-items:start}
-  @media(max-width:840px){.layout{grid-template-columns:1fr}}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
-  .card h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--brassL);margin:0 0 14px}
-  .field{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:12px}
+  .card h2{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brassL);margin:0 0 11px}
+  .field{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
   .field:last-child{margin-bottom:0}
-  .field label{font-size:13.5px;color:rgba(245,240,230,0.85);flex:1}
-  .field .hint{display:block;font-size:11px;color:var(--muted)}
-  input[type=number]{width:108px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);
+  .field label{font-size:13px;color:rgba(245,240,230,0.85);flex:1}
+  .field .hint{display:block;font-size:10.5px;color:var(--muted)}
+  input[type=number]{width:96px;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,0.06);
     border:1px solid var(--line);color:var(--off);font-size:14px;text-align:right;outline:none}
   input[type=number]:focus{border-color:var(--brass)}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .slideField{margin-bottom:13px}
-  .slideField .top{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:4px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .slideField{margin-bottom:11px}
+  .slideField .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px}
   .slideField .top b{color:var(--brassL)}
   input[type=range]{width:100%;accent-color:var(--brass)}
-  .toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-bottom:12px}
-  .toggle button{padding:7px 14px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:12.5px}
-  .toggle button.on{background:var(--brass);color:var(--navy);font-weight:600}
-  table.grid{width:100%;border-collapse:collapse;font-size:13px}
-  table.grid th{font-size:11px;color:var(--muted);font-weight:500;text-align:center;padding:4px}
-  table.grid td{padding:3px 4px}
+  table.grid{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.grid th{font-size:10.5px;color:var(--muted);font-weight:500;text-align:center;padding:3px}
+  table.grid td{padding:3px}
   table.grid td:first-child{text-align:left;color:rgba(245,240,230,0.85)}
-  table.grid input{width:54px;padding:6px;border-radius:6px;background:rgba(255,255,255,0.06);
+  table.grid input{width:100%;padding:6px;border-radius:6px;background:rgba(255,255,255,0.06);
     border:1px solid var(--line);color:var(--off);text-align:center;font-size:13px;outline:none}
   table.grid input:focus{border-color:var(--brass)}
-  /* results */
-  .results{position:sticky;top:14px}
-  .res-hero{background:linear-gradient(160deg,#13314d,#0c2236);border:1px solid var(--line);
-    border-radius:16px;padding:20px;margin-bottom:14px}
-  .res-hero .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brassL)}
-  .res-hero .draw{font-family:Georgia,serif;font-size:40px;font-weight:700;color:var(--off);margin:4px 0 2px}
-  .res-hero .draw small{font-size:15px;color:var(--muted)}
-  .res-hero .total{font-size:13px;color:var(--muted)}
-  .bar{display:flex;height:26px;border-radius:7px;overflow:hidden;margin:14px 0 6px;border:1px solid var(--line)}
+
+  .results{position:sticky;top:64px}
+  .bar{display:flex;height:24px;border-radius:7px;overflow:hidden;margin:2px 0 8px;border:1px solid var(--line)}
   .bar span{display:block;height:100%}
-  .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:11px;color:var(--muted)}
   .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
-  .lines{font-size:13.5px}
-  .lines .l{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-  .lines .l.tot{border-top:1px solid var(--line);border-bottom:none;margin-top:4px;padding-top:10px;font-weight:700}
+  .lines{font-size:13px}
+  .lines .l{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+  .lines .l.tot{border-top:1px solid var(--line);border-bottom:none;margin-top:3px;padding-top:8px;font-weight:700}
   .lines .l .neg{color:var(--red)}
   .lines .l .pos{color:var(--green)}
   .lines .l b{font-variant-numeric:tabular-nums}
-  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(176,141,60,0.18);
-    color:var(--brassL);margin-left:6px}
-  .note{font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.55}
-  .cap{font-size:12.5px;color:var(--muted);margin-top:8px}
-  details{margin-top:8px}
-  summary{cursor:pointer;font-size:12.5px;color:var(--brassL)}
-  .disabled{opacity:.4;pointer-events:none}
+  .pill{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:999px;background:rgba(176,141,60,0.18);color:var(--brassL);margin-left:5px}
+  .note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .cap{font-size:11.5px;color:var(--muted);margin-top:7px}
+  details{margin-top:7px}
+  summary{cursor:pointer;font-size:12px;color:var(--brassL)}
+
+  @media(max-width:760px){
+    .layout{grid-template-columns:1fr}
+    .results{position:static}
+  }
+  @media(max-width:520px){
+    .row2{grid-template-columns:1fr}
+    .tb-val{font-size:22px}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Narwhal — <em>เครื่องคิดเลขกำไร &amp; Owner Draw</em></h1>
-  <div class="sub">ปรับทุกค่าได้อิสระ ผลคำนวณเปลี่ยนทันที · LLC = ถอนกำไรเป็น draw แบ่งตามหุ้นส่วน</div>
+  <div class="sub">ปรับทุกค่าได้อิสระ ผลเปลี่ยนทันที · LLC = ถอนกำไรเป็น draw แบ่งตามหุ้นส่วน</div>
+
+  <div class="topbar">
+    <span class="tb-lab">Draw / คน / เดือน</span>
+    <strong class="tb-val" id="o_draw_top">$0</strong>
+    <span class="tb-sub" id="o_sub_top">margin 0% · /ปี $0 · แบ่ง 3 คน</span>
+  </div>
 
   <div class="presets">
-    <button class="preset" onclick="preset('soft')">เดือนแรก soft open ($3k/วัน)</button>
-    <button class="preset" onclick="preset('thainakorn')">ระดับไทยนคร (wd $6k / we $12k)</button>
-    <button class="preset" onclick="preset('mid')">เป้ากลาง (wd $4k / we $7k)</button>
+    <button class="preset" onclick="preset('first')">เดือนแรก ($3k/วัน)</button>
+    <button class="preset" onclick="preset('p6')">เป้า $6k</button>
+    <button class="preset" onclick="preset('p10')">เป้า $10k</button>
+    <button class="preset" onclick="preset('max')">MAX $15k</button>
   </div>
 
   <div class="layout">
-    <!-- ============ INPUTS ============ -->
+    <!-- INPUTS -->
     <div>
       <div class="card">
         <h2>ยอดขาย</h2>
@@ -101,7 +110,7 @@ export const calculatorHtml = `<!DOCTYPE html>
         </div>
         <div class="row2">
           <div class="field"><label>วันธรรมดา/สัปดาห์</label><input type="number" id="wdDays" value="4" oninput="calc()"></div>
-          <div class="field"><label>เสาร์-อาทิตย์/สัปดาห์</label><input type="number" id="weDays" value="2" oninput="calc()"></div>
+          <div class="field"><label>เสาร์-อาทิตย์/สัปดาห์</label><input type="number" id="weDays" value="3" oninput="calc()"></div>
         </div>
         <div class="field"><label>ราคาเฉลี่ย/หัว $ <span class="hint">ใช้ประเมินจำนวนลูกค้า</span></label><input type="number" id="check" value="35" oninput="calc()"></div>
       </div>
@@ -119,9 +128,9 @@ export const calculatorHtml = `<!DOCTYPE html>
         <div class="field"><label>ค่าคงที่/เดือน (เช่า+ฯลฯ)</label><input type="number" id="fixed" value="13120" oninput="calc()"></div>
         <details>
           <summary>รายละเอียดค่าคงที่ (ปรับแยกได้)</summary>
-          <div style="margin-top:10px">
+          <div style="margin-top:9px">
             <div class="row2">
-              <div class="field"><label>เช่า (Rent)</label><input type="number" id="fx_rent" value="5600" oninput="sumFixed()"></div>
+              <div class="field"><label>เช่า</label><input type="number" id="fx_rent" value="5600" oninput="sumFixed()"></div>
               <div class="field"><label>CAM/NNN</label><input type="number" id="fx_cam" value="1500" oninput="sumFixed()"></div>
             </div>
             <div class="row2">
@@ -146,34 +155,24 @@ export const calculatorHtml = `<!DOCTYPE html>
       </div>
 
       <div class="card">
-        <h2>คน / ค่าแรง (เฉพาะพนักงานจ้าง)</h2>
-        <div class="toggle" id="laborToggle">
-          <button id="tManual" class="on" onclick="setLaborMode('manual')">ใส่ชั่วโมงเอง</button>
-          <button id="tGrid" onclick="setLaborMode('grid')">ตามกะ (ไทยนคร)</button>
+        <h2>คน / ค่าแรง (เฉพาะพนักงานจ้าง) — แยกตามกะ</h2>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">หน้าบ้าน — จำนวนคน/กะ</div>
+        <table class="grid">
+          <tr><th></th><th>จ-พฤ</th><th>ศ-อา</th></tr>
+          <tr><td>เช้า</td><td><input type="number" id="g_amP_wd" value="2" oninput="calc()"></td><td><input type="number" id="g_amP_we" value="2" oninput="calc()"></td></tr>
+          <tr><td>เย็น</td><td><input type="number" id="g_pmP_wd" value="2" oninput="calc()"></td><td><input type="number" id="g_pmP_we" value="2" oninput="calc()"></td></tr>
+          <tr><td>บัสเซอร์</td><td style="text-align:center;color:var(--muted)">—</td><td><input type="number" id="g_busP" value="0" oninput="calc()"></td></tr>
+        </table>
+        <div class="row2" style="margin-top:9px">
+          <div class="field"><label>ชม./กะ หน้าบ้าน</label><input type="number" id="g_fohHrs" value="5" oninput="calc()"></div>
+          <div class="field"><label>ครัว · คน/วัน</label><input type="number" id="g_kitP" value="3" oninput="calc()"></div>
         </div>
-
-        <div id="manualBox">
-          <div class="field"><label>ชั่วโมงแรงงานจ้าง/สัปดาห์ <span class="hint">เช่น 3 คน × 40 ชม. = 120</span></label><input type="number" id="hoursWk" value="120" oninput="calc()"></div>
-        </div>
-
-        <div id="gridBox" style="display:none">
-          <table class="grid">
-            <tr><th></th><th>คน</th><th>ชม./กะ</th></tr>
-            <tr><td>หน้าบ้าน เช้า · จ-พฤ</td><td><input type="number" id="g_amP_wd" value="2" oninput="calc()"></td><td rowspan="3"><input type="number" id="g_amHrs" value="6" oninput="calc()"></td></tr>
-            <tr><td>หน้าบ้าน เช้า · ศ-อา</td><td><input type="number" id="g_amP_we" value="3" oninput="calc()"></td></tr>
-            <tr style="height:0"><td style="padding:0"></td><td style="padding:0"></td></tr>
-            <tr><td>หน้าบ้าน เย็น · จ-พฤ</td><td><input type="number" id="g_pmP_wd" value="3" oninput="calc()"></td><td rowspan="2"><input type="number" id="g_pmHrs" value="7" oninput="calc()"></td></tr>
-            <tr><td>หน้าบ้าน เย็น · ศ-อา</td><td><input type="number" id="g_pmP_we" value="4" oninput="calc()"></td></tr>
-            <tr><td>บัสเซอร์ · ศ-อา</td><td><input type="number" id="g_busP" value="1" oninput="calc()"></td><td><input type="number" id="g_busHrs" value="5" oninput="calc()"></td></tr>
-            <tr><td>ครัว · ทุกวัน</td><td><input type="number" id="g_kitP" value="5" oninput="calc()"></td><td><input type="number" id="g_kitHrs" value="9" oninput="calc()"></td></tr>
-          </table>
-          <div class="cap" id="gridHrs">ชั่วโมงรวม: — /สัปดาห์ · คนบนเพย์โรลประมาณ —</div>
-        </div>
-
-        <div class="row2" style="margin-top:12px">
+        <div class="row2">
+          <div class="field"><label>ครัว · ชม./วัน</label><input type="number" id="g_kitHrs" value="10" oninput="calc()"></div>
           <div class="field"><label>ค่าแรง $/ชม.</label><input type="number" id="wage" value="18" oninput="calc()"></div>
-          <div class="field"><label>ภาระนายจ้าง %</label><input type="number" id="burden" value="13" oninput="calc()"></div>
         </div>
+        <div class="field"><label>ภาระนายจ้าง %</label><input type="number" id="burden" value="13" oninput="calc()"></div>
+        <div class="cap" id="gridHrs">ชั่วโมงรวม: — /สัปดาห์ · คนบนเพย์โรลประมาณ —</div>
       </div>
 
       <div class="card">
@@ -186,14 +185,8 @@ export const calculatorHtml = `<!DOCTYPE html>
       </div>
     </div>
 
-    <!-- ============ RESULTS ============ -->
+    <!-- RESULTS -->
     <div class="results">
-      <div class="res-hero">
-        <div class="lab">Draw ต่อคน / เดือน</div>
-        <div class="draw" id="o_draw">$0 <small id="o_drawYr">/ ปี $0</small></div>
-        <div class="total">หลังกันภาษี · แบ่ง <span id="o_partners">3</span> คน</div>
-      </div>
-
       <div class="card">
         <h2>เงินไปไหนบ้าง (ต่อ $1 ยอดขาย)</h2>
         <div class="bar" id="bar"></div>
@@ -224,26 +217,16 @@ export const calculatorHtml = `<!DOCTYPE html>
 
       <div class="card" style="border-color:rgba(176,141,60,0.4)">
         <div class="note" id="o_advice"></div>
-        <div class="note" style="margin-top:8px;opacity:.8">* ข้อมูลทั่วไป ไม่ใช่คำแนะนำภาษี/กฎหมาย — ยืนยันกับ CPA</div>
+        <div class="note" style="margin-top:7px;opacity:.8">* ข้อมูลทั่วไป ไม่ใช่คำแนะนำภาษี — ยืนยันกับ CPA</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-var laborMode='manual';
 var f$=function(v){return '$'+Math.round(v).toLocaleString('en-US');};
 var pct=function(v){return (v*100).toFixed(1)+'%';};
 var num=function(id){var e=document.getElementById(id);var v=parseFloat(e.value);return isNaN(v)?0:v;};
-
-function setLaborMode(m){
-  laborMode=m;
-  document.getElementById('manualBox').style.display = m==='manual'?'block':'none';
-  document.getElementById('gridBox').style.display   = m==='grid'?'block':'none';
-  document.getElementById('tManual').className = m==='manual'?'on':'';
-  document.getElementById('tGrid').className   = m==='grid'?'on':'';
-  calc();
-}
 
 function sumFixed(){
   var ids=['fx_rent','fx_cam','fx_util','fx_net','fx_ins','fx_pos','fx_pay','fx_trash','fx_cpa','fx_mkt','fx_misc'];
@@ -254,13 +237,12 @@ function sumFixed(){
 
 function gridHours(){
   var wdDays=num('wdDays'), weDays=num('weDays');
-  var amHrs=num('g_amHrs'), pmHrs=num('g_pmHrs'), busHrs=num('g_busHrs'), kitHrs=num('g_kitHrs');
-  var foh = (num('g_amP_wd')*amHrs + num('g_pmP_wd')*pmHrs)*wdDays
-          + (num('g_amP_we')*amHrs + num('g_pmP_we')*pmHrs + num('g_busP')*busHrs)*weDays;
+  var fohHrs=num('g_fohHrs'), kitHrs=num('g_kitHrs');
+  var fohShifts = (num('g_amP_wd')+num('g_pmP_wd'))*wdDays
+                + (num('g_amP_we')+num('g_pmP_we')+num('g_busP'))*weDays;
+  var foh = fohShifts*fohHrs;
   var kit = num('g_kitP')*kitHrs*(wdDays+weDays);
-  var shifts = (num('g_amP_wd')+num('g_pmP_wd'))*wdDays
-             + (num('g_amP_we')+num('g_pmP_we')+num('g_busP'))*weDays
-             + num('g_kitP')*(wdDays+weDays);
+  var shifts = fohShifts + num('g_kitP')*(wdDays+weDays);
   return {hours:foh+kit, shifts:shifts};
 }
 
@@ -272,13 +254,10 @@ function calc(){
   document.getElementById('foodLab').textContent=num('foodPct')+'%';
   document.getElementById('cardLab').textContent=num('cardPct')+'%';
 
-  var hoursWk;
-  if(laborMode==='grid'){
-    var g=gridHours(); hoursWk=g.hours;
-    document.getElementById('gridHrs').textContent=
-      'ชั่วโมงรวม: '+Math.round(g.hours)+' /สัปดาห์ · คนบนเพย์โรลประมาณ '+(g.shifts/5).toFixed(1)+' คน';
-  } else { hoursWk=num('hoursWk'); }
-  var laborMo = hoursWk*num('wage')*(1+num('burden')/100)*4.333;
+  var g=gridHours();
+  document.getElementById('gridHrs').textContent=
+    'ชั่วโมงรวม: '+Math.round(g.hours)+' /สัปดาห์ · คนบนเพย์โรลประมาณ '+(g.shifts/5).toFixed(1)+' คน';
+  var laborMo = g.hours*num('wage')*(1+num('burden')/100)*4.333;
 
   var cogs=monthly*foodPct, card=monthly*cardPct, fixed=num('fixed');
   var opCash = monthly - cogs - card - laborMo - fixed;
@@ -290,7 +269,9 @@ function calc(){
   var partners=Math.max(1,num('partners'));
   var drawPer = dist/partners;
 
-  // outputs
+  document.getElementById('o_draw_top').textContent=f$(drawPer);
+  document.getElementById('o_sub_top').textContent='margin '+pct(margin)+' · /ปี '+f$(drawPer*12)+' · แบ่ง '+partners+' คน';
+
   var avgDay = monthly/30.4;
   document.getElementById('o_sales').textContent=f$(monthly);
   document.getElementById('o_perday').textContent='~'+f$(avgDay)+'/วัน';
@@ -303,59 +284,58 @@ function calc(){
   document.getElementById('o_margin').textContent=pct(margin);
   document.getElementById('o_tax').textContent='−'+f$(tax);
   document.getElementById('o_dist').textContent=f$(dist);
-  document.getElementById('o_draw').innerHTML=f$(drawPer)+' <small>/ ปี '+f$(drawPer*12)+'</small>';
-  document.getElementById('o_partners').textContent=partners;
 
-  // bar (share of sales)
   function w(v){return monthly>0?Math.max(0,v/monthly*100):0;}
-  var profSeg=Math.max(0,margin*100);
   document.getElementById('bar').innerHTML=
     '<span style="width:'+w(cogs)+'%;background:#c97b5a"></span>'+
     '<span style="width:'+w(laborMo)+'%;background:#8a6d1f"></span>'+
     '<span style="width:'+w(fixed)+'%;background:#4a7fa5"></span>'+
     '<span style="width:'+w(card)+'%;background:#6b6b6b"></span>'+
-    '<span style="width:'+profSeg+'%;background:#5BBF7B"></span>';
+    '<span style="width:'+Math.max(0,margin*100)+'%;background:#5BBF7B"></span>';
 
-  // covers
   var check=num('check');
   if(check>0){
     document.getElementById('o_covers').textContent=
-      'ลูกค้าโดยประมาณ: วันธรรมดา ~'+Math.round(wdSales/check)+' คน/วัน · เสาร์-อาทิตย์ ~'+Math.round(weSales/check)+' คน/วัน  (ที่นั่ง ~100 + patio)';
+      'ลูกค้าโดยประมาณ: วันธรรมดา ~'+Math.round(wdSales/check)+' คน/วัน · เสาร์-อาทิตย์ ~'+Math.round(weSales/check)+' คน/วัน';
   } else { document.getElementById('o_covers').textContent=''; }
 
-  // advice
   var adv;
   if(opCash<0){ adv='⚠️ ขาดทุน — ยอดยังไม่พอคลุมต้นทุน ลองเพิ่มยอด/ลดค่าแรงหรือค่าคงที่'; }
-  else if(drawPer<3000){ adv='ช่วงยอดน้อย: ถอนแต่พอดี เก็บ cushion จากทุนสำรอง รอยอดไต่ขึ้นก่อนถอนเต็ม'; }
-  else if(laborPctSales>0.30){ adv='ค่าแรงเกิน 30% ของยอด — สูงไป ลองจัดกะให้ตรงกับช่วงพีค (เสาร์-อาทิตย์) หรือเพิ่มยอด/หัว'; }
+  else if(drawPer<3000){ adv='ช่วงยอดน้อย: ถอนแต่พอดี เก็บ cushion รอยอดไต่ขึ้นก่อนถอนเต็ม'; }
+  else if(laborPctSales>0.30){ adv='ค่าแรงเกิน 30% ของยอด — สูงไป ลองจัดกะให้ตรงพีค หรือเพิ่มยอด/หัว'; }
   else { adv='สุขภาพดี: ค่าแรง '+pct(laborPctSales)+' · margin '+pct(margin)+' กันภาษีแล้วถอนได้ '+f$(drawPer)+'/คน/เดือน'; }
   document.getElementById('o_advice').textContent=adv;
 }
 
 function setVal(id,v){var e=document.getElementById(id); if(e) e.value=v;}
+function setGrid(amWd,amWe,pmWd,pmWe,bus,kitP){
+  setVal('g_amP_wd',amWd);setVal('g_amP_we',amWe);setVal('g_pmP_wd',pmWd);setVal('g_pmP_we',pmWe);
+  setVal('g_busP',bus);setVal('g_kitP',kitP);setVal('g_fohHrs',5);setVal('g_kitHrs',10);
+}
 function preset(name){
   document.querySelectorAll('.preset').forEach(function(b){b.classList.remove('active');});
-  if(name==='soft'){
-    setVal('wdSales',3000);setVal('weSales',3000);setVal('wdDays',4);setVal('weDays',2);
-    setLaborMode('manual'); setVal('hoursWk',120);
+  if(name==='first'){
+    setVal('wdSales',3000);setVal('weSales',3000);setVal('wdDays',4);setVal('weDays',3);
+    setGrid(2,2,2,2,0,3);
     document.querySelectorAll('.preset')[0].classList.add('active');
-  } else if(name==='thainakorn'){
-    setVal('wdSales',6000);setVal('weSales',12000);setVal('wdDays',4);setVal('weDays',3);
-    setVal('g_amP_wd',2);setVal('g_pmP_wd',3);setVal('g_amP_we',3);setVal('g_pmP_we',4);setVal('g_busP',1);setVal('g_kitP',5);
-    setVal('g_amHrs',6);setVal('g_pmHrs',7);setVal('g_busHrs',5);setVal('g_kitHrs',9);
-    setLaborMode('grid');
+  } else if(name==='p6'){
+    setVal('wdSales',6000);setVal('weSales',6000);setVal('wdDays',4);setVal('weDays',3);
+    setGrid(2,2,2,3,1,5);
     document.querySelectorAll('.preset')[1].classList.add('active');
-  } else if(name==='mid'){
-    setVal('wdSales',4000);setVal('weSales',7000);setVal('wdDays',4);setVal('weDays',3);
-    setLaborMode('manual'); setVal('hoursWk',320);
+  } else if(name==='p10'){
+    setVal('wdSales',10000);setVal('weSales',10000);setVal('wdDays',4);setVal('weDays',3);
+    setGrid(2,2,3,3,1,5);
     document.querySelectorAll('.preset')[2].classList.add('active');
+  } else if(name==='max'){
+    setVal('wdSales',15000);setVal('weSales',15000);setVal('wdDays',4);setVal('weDays',3);
+    setGrid(3,3,3,3,1,6);
+    document.querySelectorAll('.preset')[3].classList.add('active');
   }
   calc();
 }
 
-// init
-preset('soft');
+preset('first');
 </script>
 </body>
 </html>
-`;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          `;
