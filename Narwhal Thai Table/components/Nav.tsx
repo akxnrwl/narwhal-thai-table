@@ -10,23 +10,14 @@ const NAV_LINKS = [
   { href: '/menu',         label: 'Menu' },
   { href: '/#experience',  label: 'Experience' },
   { href: '/play',         label: 'Play' },
-  { href: '/#contact',     label: 'Visit' },
+  { href: '/#contact',     label: 'Contact' },
 ];
 
-/**
- * Top navigation.
- *
- * Mobile rule (≤980px): the desktop "Save a Seat" button is hidden so the
- * header isn't cluttered with two CTAs sitting next to the hamburger. The
- * drawer that opens has Save a Seat as its bottom CTA — one place, no
- * duplicates.
- */
 export default function Nav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Sticky-nav shrink on scroll
   useEffect(() => {
     let ticking = false;
     const onScroll = () => {
@@ -41,7 +32,6 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Body lock + Esc handler when drawer open
   useEffect(() => {
     document.body.dataset.navOpen = String(open);
     if (!open) return;
@@ -52,10 +42,8 @@ export default function Nav() {
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
-  // Close drawer when navigating
   useEffect(() => { setOpen(false); }, [pathname]);
 
-  // Close drawer if user resizes back to desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth > 980) setOpen(false); };
     window.addEventListener('resize', onResize);
@@ -65,6 +53,7 @@ export default function Nav() {
   const isCurrent = (href: string) => {
     if (href === '/menu') return pathname === '/menu' || pathname?.startsWith('/menu/');
     if (href === '/play') return pathname === '/play';
+    if (href === '/contact') return pathname === '/contact' || pathname?.startsWith('/contact/');
     return false;
   };
 
@@ -73,7 +62,7 @@ export default function Nav() {
       <a href="#main" className="skip-link">Skip to content</a>
 
       <nav className={`site-nav${scrolled ? ' scrolled' : ''}`} aria-label="Primary">
-        <Link href="/" className="logo" aria-label="Narwhal Thai Table — home">
+        <Link href="/" className="logo" aria-label="Narwhal Thai Table home">
           <span className="logo-mark" aria-hidden="true">N</span>
           Narwhal Thai Table
         </Link>
@@ -90,8 +79,7 @@ export default function Nav() {
           ))}
         </div>
 
-        {/* Save a Seat — desktop only; mobile uses the drawer CTA instead */}
-        <Link href="/#reserve" className="btn-reserve desktop-only">Save a Seat</Link>
+        <Link href="/contact/reservation" className="btn-reserve desktop-only">Save a Seat</Link>
 
         <button
           className="nav-toggle"
@@ -121,7 +109,7 @@ export default function Nav() {
             {l.label}
           </Link>
         ))}
-        <Link href="/#reserve" className="drawer-cta" onClick={() => setOpen(false)}>
+        <Link href="/contact/reservation" className="drawer-cta" onClick={() => setOpen(false)}>
           Save a Seat
         </Link>
       </div>

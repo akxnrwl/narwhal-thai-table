@@ -1,0 +1,24 @@
+=== CLONE FRESH FROM GITHUB === 
+Cloning into 'D:\projects\narwhal-deploy'...
+CLONE_ERR=0 
+=== COPY my 4 edited files === 
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+=== COMMIT + PUSH === 
+warning: in the working copy of 'Narwhal Thai Table/app/api/chat/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/components/ChatWidget.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/chatKnowledge.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/message.ts', LF will be replaced by CRLF the next time Git touches it
+[main 7b2c0e0] Aileen: varied greetings, narwhal icon, send-message to welcome@, persona
+ 4 files changed, 160 insertions(+), 14 deletions(-)
+ create mode 100644 Narwhal Thai Table/lib/message.ts
+To https://github.com/AKxNRWL/narwhal-thai-table.git
+   d52d303..7b2c0e0  main -> main
+PUSH_ERR=0 
+7b2c0e0 Aileen: varied greetings, narwhal icon, send-message to welcome@, persona
+d52d303 Aileen chat: add request_reservation tool + tool-use loop (in-chat booking)
+41d4faa Aileen: in-chat reservations — add lib/reservation.ts + update persona
+eb709c2 netlify.toml: rewrite /os -> /os.html (200) for clean URL
+ALL_DONE 

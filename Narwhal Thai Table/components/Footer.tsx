@@ -16,6 +16,7 @@ export default function Footer() {
           anyone who knows to look.
         */}
         <nav className="footer-social" aria-label="Social and extras">
+          <a href="mailto:welcome@narwhalthaihb.com" aria-label="Email Narwhal Thai Table">welcome@narwhalthaihb.com</a>
           <a href="#" aria-label="Narwhal Thai Table on Instagram" rel="noopener">Instagram</a>
           <a href="#" aria-label="Narwhal Thai Table on Facebook" rel="noopener">Facebook</a>
           <a href="#" aria-label="Narwhal Thai Table on Yelp" rel="noopener">Yelp</a>

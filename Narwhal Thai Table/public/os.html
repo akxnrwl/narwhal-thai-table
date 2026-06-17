@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Narwhal AI OS — Restaurant AI Command Center</title>
+<meta name="theme-color" content="#0B1F33" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Narwhal OS" />
+<link rel="apple-touch-icon" href="/os-icon.png" />
+<link rel="icon" type="image/png" href="/os-icon.png" />
+<link rel="manifest" href="/os.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0B1F33; --navy-deep:#06121F; --navy-soft:#152F4A;
+    --off-white:#F5F0E6; --brass:#C8A24E; --brass-light:#E3C581; --brass-deep:#9C7A33;
+    --live:#43E59B; --build:#F0B23C; --design:#46C8E6; --plan:#8AA0B8; --future:#5C7184;
+    --pink:#E36AB0; --blue:#4E8FF0; --purple:#9B7BE0; --teal:#3FD6C4; --orange:#F08A4E;
+    --card:rgba(21,47,74,0.55); --line:rgba(200,162,78,0.22);
+    --txt:#EAF1F8; --muted:rgba(234,241,248,0.62); --muted2:rgba(234,241,248,0.40);
+    --sans:'Space Grotesk',system-ui,sans-serif; --serif:'Fraunces',Georgia,serif;
+    --thai:'Noto Sans Thai',var(--sans);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:var(--sans); color:var(--txt); line-height:1.5;
+    background:
+      radial-gradient(1100px 700px at 78% -8%, rgba(78,143,240,0.16), transparent 60%),
+      radial-gradient(900px 620px at 8% 8%, rgba(200,162,78,0.14), transparent 58%),
+      radial-gradient(800px 800px at 50% 120%, rgba(63,214,196,0.10), transparent 60%),
+      linear-gradient(180deg, #081726 0%, var(--navy-deep) 55%, #04101b 100%);
+    min-height:100vh; padding:max(18px,env(safe-area-inset-top)) 18px 40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.5;
+    background-image:
+      linear-gradient(rgba(120,170,220,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120,170,220,0.05) 1px, transparent 1px);
+    background-size:46px 46px;
+    mask-image:linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent);
+  }
+  .wrap{position:relative; z-index:1; max-width:1280px; margin:0 auto;}
+  .thai{font-family:var(--thai);}
+
+  .topbar{
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    background:linear-gradient(180deg, rgba(21,47,74,0.78), rgba(11,31,51,0.62));
+    border:1px solid var(--line); border-radius:18px; padding:16px 18px;
+    box-shadow:0 24px 60px -34px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+    backdrop-filter:blur(6px);
+  }
+  .brandmark{
+    width:46px; height:46px; border-radius:12px; flex:none;
+    background:linear-gradient(150deg,var(--brass-light),var(--brass-deep));
+    display:grid; place-items:center; color:var(--navy-deep);
+    font-family:var(--serif); font-style:italic; font-weight:600; font-size:26px;
+    box-shadow:0 0 22px rgba(200,162,78,0.45);
+  }
+  .brand h1{font-size:20px; font-weight:600; letter-spacing:.2px; line-height:1.1;}
+  .brand p{font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .topbar .spacer{flex:1 1 40px;}
+  .chip{
+    display:flex; align-items:center; gap:8px; padding:8px 13px; border-radius:12px;
+    background:rgba(6,18,31,0.6); border:1px solid var(--line); font-size:12.5px; white-space:nowrap;
+  }
+  .chip b{font-weight:600; font-size:14px;}
+  .chip .sub{color:var(--muted); font-size:11px;}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.55;transform:scale(.8);}}
+  .coin{color:var(--brass-light);} .coin b{color:var(--brass-light);}
+
+  .grid-main{display:grid; grid-template-columns:170px 1fr; gap:18px; margin-top:18px;}
+  @media (max-width:860px){ .grid-main{grid-template-columns:1fr;} }
+  .rail{
+    background:linear-gradient(180deg, rgba(21,47,74,0.5), rgba(11,31,51,0.4));
+    border:1px solid var(--line); border-radius:16px; padding:10px; align-self:start;
+    position:sticky; top:14px;
+  }
+  @media (max-width:860px){ .rail{position:static; display:flex; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch;} }
+  .rail a{
+    display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:10px;
+    color:var(--muted); text-decoration:none; font-size:13.5px; font-weight:500; white-space:nowrap; transition:.18s;
+  }
+  .rail a:hover{background:rgba(200,162,78,0.10); color:var(--txt);}
+  .rail a.on{background:rgba(200,162,78,0.16); color:var(--brass-light); box-shadow:inset 0 0 0 1px var(--line);}
+  .rail a i{width:8px;height:8px;border-radius:2px;background:currentColor;flex:none;opacity:.85;}
+  .col{display:flex; flex-direction:column; gap:18px; min-width:0;}
+
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  @media (max-width:680px){ .kpis{grid-template-columns:repeat(2,1fr);} }
+  .kpi{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:15px 16px; position:relative; overflow:hidden;}
+  .kpi::after{content:""; position:absolute; left:0; top:0; right:0; height:2px; background:linear-gradient(90deg,var(--brass),transparent);}
+  .kpi .lbl{font-size:11px; letter-spacing:.7px; text-transform:uppercase; color:var(--muted2);}
+  .kpi .val{font-size:30px; font-weight:600; margin-top:6px; line-height:1;}
+  .kpi .meta{font-size:11.5px; color:var(--muted); margin-top:7px;}
+  .kpi.green .val{color:var(--live);} .kpi.green::after{background:linear-gradient(90deg,var(--live),transparent);}
+  .kpi.amber .val{color:var(--build);} .kpi.amber::after{background:linear-gradient(90deg,var(--build),transparent);}
+  .kpi.slate .val{color:var(--plan);} .kpi.slate::after{background:linear-gradient(90deg,var(--plan),transparent);}
+
+  .shead{display:flex; align-items:baseline; gap:12px; margin:4px 2px -2px;}
+  .shead h2{font-size:16px; font-weight:600; letter-spacing:.2px;}
+  .shead span{font-size:12px; color:var(--muted);}
+  .shead .thai{font-size:12.5px;}
+
+  .city{display:grid; grid-template-columns:repeat(3,1fr); gap:13px;}
+  @media (max-width:980px){ .city{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .city{grid-template-columns:1fr;} }
+  .bld{
+    --accent:var(--brass);
+    background:linear-gradient(180deg, rgba(21,47,74,0.62), rgba(8,20,33,0.6));
+    border:1px solid var(--line); border-radius:15px; padding:0; overflow:hidden;
+    position:relative; transition:.2s; display:flex; flex-direction:column;
+  }
+  .bld:hover{transform:translateY(-3px); border-color:color-mix(in srgb,var(--accent) 55%, transparent);
+    box-shadow:0 22px 50px -28px rgba(0,0,0,0.85), 0 0 30px -10px var(--accent);}
+  .bld .roof{height:5px; background:linear-gradient(90deg,var(--accent),transparent 85%); box-shadow:0 0 16px -2px var(--accent);}
+  .bld .body{padding:15px 16px 16px; display:flex; flex-direction:column; gap:10px; height:100%;}
+  .bld .top{display:flex; align-items:center; gap:11px;}
+  .bld .ico{
+    width:38px;height:38px;border-radius:10px;flex:none;display:grid;place-items:center;font-size:19px;
+    background:color-mix(in srgb,var(--accent) 18%, rgba(6,18,31,0.7)); border:1px solid color-mix(in srgb,var(--accent) 40%, transparent);
+    box-shadow:0 0 16px -6px var(--accent);
+  }
+  .bld .name{font-size:14.5px; font-weight:600; line-height:1.15;}
+  .bld .name small{display:block; font-weight:400; color:var(--muted); font-size:11px; margin-top:2px; letter-spacing:.3px;}
+  .bld .desc{font-size:12.5px; color:var(--muted); line-height:1.45;}
+  .bld .desc .thai{color:rgba(234,241,248,0.72);}
+  .bld .foot{margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:4px;}
+  .bld .metric{font-size:11px; color:var(--muted2);}
+  .pill{font-size:10.5px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; padding:4px 9px; border-radius:999px; white-space:nowrap;}
+  .pill.live{color:#06321f; background:var(--live);}
+  .pill.build{color:#3a2600; background:var(--build);}
+  .pill.design{color:#04303a; background:var(--design);}
+  .pill.plan{color:#0a1a28; background:var(--plan);}
+  .pill.future{color:var(--muted); background:rgba(92,113,132,0.22); border:1px solid rgba(92,113,132,0.4);}
+
+  .roadmap{display:grid; grid-template-columns:repeat(3,1fr); gap:13px;}
+  @media (max-width:780px){ .roadmap{grid-template-columns:1fr;} }
+  .phase{background:var(--card); border:1px solid var(--line); border-radius:15px; padding:16px; display:flex; flex-direction:column; gap:11px;}
+  .phase .ph-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .phase .ph-top .tag{font-size:10.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--brass-light);}
+  .phase h3{font-size:15px; font-weight:600;}
+  .phase h3 small{display:block; font-weight:400; font-size:11.5px; color:var(--muted); margin-top:3px;}
+  .bar{height:8px; border-radius:99px; background:rgba(6,18,31,0.7); overflow:hidden; border:1px solid rgba(255,255,255,0.05);}
+  .bar i{display:block; height:100%; border-radius:99px;}
+  .phase ul{list-style:none; display:flex; flex-direction:column; gap:7px; margin-top:2px;}
+  .phase li{font-size:12.5px; color:var(--muted); display:flex; gap:8px; align-items:flex-start; line-height:1.4;}
+  .phase li b{color:var(--txt); font-weight:500;}
+  .mk{flex:none; width:16px; height:16px; border-radius:5px; display:grid; place-items:center; font-size:10px; margin-top:1px;}
+  .mk.done{background:var(--live); color:#06321f;}
+  .mk.wip{background:var(--build); color:#3a2600;}
+  .mk.todo{background:rgba(92,113,132,0.25); color:var(--muted); border:1px solid rgba(92,113,132,0.4);}
+
+  .two{display:grid; grid-template-columns:1.05fr 1fr; gap:18px;}
+  @media (max-width:780px){ .two{grid-template-columns:1fr;} }
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:15px; padding:16px;}
+  .panel h2{font-size:14.5px; font-weight:600; margin-bottom:13px; display:flex; align-items:center; gap:9px;}
+  .panel h2 .tg{font-size:10.5px; color:var(--muted2); font-weight:400; margin-left:auto; letter-spacing:.5px;}
+  .feed{display:flex; flex-direction:column;}
+  .ev{display:flex; gap:11px; padding:10px 0; border-top:1px solid rgba(255,255,255,0.05);}
+  .ev:first-child{border-top:none;}
+  .ev .fdot{width:9px;height:9px;border-radius:50%;flex:none;margin-top:5px;background:var(--accent,var(--brass));box-shadow:0 0 9px var(--accent,var(--brass));}
+  .ev .et{font-size:13px; font-weight:500;}
+  .ev .es{font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .ev .ew{margin-left:auto; font-size:10.5px; color:var(--muted2); white-space:nowrap; padding-top:2px;}
+  .todo{display:flex; flex-direction:column; gap:3px;}
+  .ti{display:flex; gap:11px; padding:9px 0; border-top:1px solid rgba(255,255,255,0.05); align-items:flex-start;}
+  .ti:first-child{border-top:none;}
+  .ti .box{width:17px;height:17px;border-radius:5px;border:1.6px solid var(--brass-deep);flex:none;margin-top:1px;display:grid;place-items:center;font-size:10px;color:var(--brass-light);}
+  .ti.next .box{background:rgba(240,178,60,0.18);border-color:var(--build);color:var(--build);}
+  .ti .tt{font-size:13px; font-weight:500;}
+  .ti .td{font-size:11.5px; color:var(--muted); margin-top:1px; line-height:1.4;}
+  .ti .pr{margin-left:auto; font-size:9.5px; letter-spacing:.5px; text-transform:uppercase; padding:3px 7px; border-radius:6px; white-space:nowrap; align-self:center;}
+  .pr.now{background:rgba(240,178,60,0.18); color:var(--build); border:1px solid rgba(240,178,60,0.4);}
+  .pr.soon{background:rgba(70,200,230,0.14); color:var(--design); border:1px solid rgba(70,200,230,0.35);}
+  .pr.later{background:rgba(138,160,184,0.14); color:var(--plan); border:1px solid rgba(138,160,184,0.3);}
+
+  .foot-os{text-align:center; margin-top:26px; padding:20px; color:var(--muted2); font-size:12px;}
+  .foot-os b{color:var(--brass-light); font-weight:600; font-family:var(--serif); font-style:italic; letter-spacing:.3px;}
+  .note{margin-top:14px; font-size:11.5px; color:var(--muted2); text-align:center; line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="brandmark">N</div>
+    <div class="brand">
+      <h1>Narwhal AI OS</h1>
+      <p>The Operating System for Restaurant AI · ระบบสมองกลร้านอาหาร</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="chip"><span class="dot"></span><span><b>Phase 1</b><br><span class="sub">Pilot · Live</span></span></div>
+    <div class="chip coin">🏮 <span><b>1</b><br><span class="sub">ร้านนำร่อง · Narwhal HB</span></span></div>
+    <div class="chip"><span id="clock"><b>--:--</b></span></div>
+  </header>
+
+  <div class="grid-main">
+    <nav class="rail">
+      <a href="#overview" class="on"><i></i>Overview</a>
+      <a href="#city"><i></i>Services</a>
+      <a href="#roadmap"><i></i>Roadmap</a>
+      <a href="#feed"><i></i>Activity</a>
+      <a href="#todo"><i></i>What's next</a>
+    </nav>
+
+    <div class="col">
+
+      <section id="overview" class="kpis">
+        <div class="kpi green"><div class="lbl">Services Live</div><div class="val">3</div><div class="meta">Aileen · Analytics · Website</div></div>
+        <div class="kpi amber"><div class="lbl">In Progress</div><div class="val">1</div><div class="meta">Multi-tenant core</div></div>
+        <div class="kpi slate"><div class="lbl">Planned</div><div class="val">4</div><div class="meta">Voice · Lead · POS · Back-office</div></div>
+        <div class="kpi"><div class="lbl">Phase 1</div><div class="val">80<span style="font-size:17px">%</span></div><div class="meta">Pilot on Narwhal HB</div></div>
+      </section>
+
+      <div class="shead"><h2 id="city">The Service City</h2><span class="thai">แต่ละการ์ดคือบริการหนึ่งอย่างที่จะขายเป็น SaaS ให้ร้านอื่น</span></div>
+      <section class="city">
+
+        <article class="bld" style="--accent:var(--brass)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">💬</div><div class="name">Aileen — AI Host<small>Chatbot บนเว็บไซต์</small></div></div>
+            <div class="desc"><span class="thai">พนักงานต้อนรับ AI ตอบลูกค้าไทย+อังกฤษ อิงเมนูจริง อัปเซลแบบสุภาพ ส่งต่อการจองโต๊ะ</span></div>
+            <div class="foot"><span class="metric">Sonnet 4.6 · EN + TH ✓</span><span class="pill live">Live</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--live)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">📊</div><div class="name">Analytics Hub<small>/stats · แดชบอร์ดสถิติ</small></div></div>
+            <div class="desc"><span class="thai">เก็บบทสนทนาจริง — ลูกค้าถามอะไร เมนูไหนถูกแนะนำบ่อย ใครติชม แฟลกคำร้องเรียนอัตโนมัติ</span></div>
+            <div class="foot"><span class="metric">Netlify Blobs · ล็อกด้วยรหัส</span><span class="pill live">Live</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--blue)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">🌐</div><div class="name">Website Engine<small>Next.js stack</small></div></div>
+            <div class="desc"><span class="thai">เว็บไซต์ร้านพร้อมเมนู ระบบจอง/จัดเลี้ยง ฟอร์มแจ้งเตือนแยกอีเมล — ทำเป็นเทมเพลตขายต่อได้</span></div>
+            <div class="foot"><span class="metric">narwhalthaihb.com</span><span class="pill live">Live</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--purple)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">🏙️</div><div class="name">Multi-Tenant Core<small>หัวใจของ SaaS</small></div></div>
+            <div class="desc"><span class="thai">หนึ่งระบบ หลายร้าน — แยกข้อมูล แยกสมอง/เมนู แยกล็อกอินของแต่ละร้าน + แดชบอร์ดแม่ข่ายของเรา</span></div>
+            <div class="foot"><span class="metric">tenant IDs · onboarding</span><span class="pill build">Building</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--design)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">📞</div><div class="name">Voice Agent<small>AI รับสายโทรศัพท์</small></div></div>
+            <div class="desc"><span class="thai">AI รับสายแทนร้าน ตอบเวลาเปิด-ปิด รับจองโต๊ะ/สั่งจัดเลี้ยง บันทึกสายที่พลาด — 24 ชม.</span></div>
+            <div class="foot"><span class="metric">design · telephony TBD</span><span class="pill design">Design</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--pink)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">🎯</div><div class="name">Lead Engine<small>เก็บ &amp; ดูแลลูกค้า</small></div></div>
+            <div class="desc"><span class="thai">รวบรวมลูกค้าจัดเลี้ยง/จองโต๊ะจากทุกช่องทางเข้า CRM เดียว ติดตามอัตโนมัติ ไม่ให้หลุดมือ</span></div>
+            <div class="foot"><span class="metric">CRM · follow-up</span><span class="pill plan">Planned</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--orange)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">🧾</div><div class="name">POS / Toast Sync<small>เชื่อมระบบขายหน้าร้าน</small></div></div>
+            <div class="desc"><span class="thai">ซิงก์เมนู ราคา และออเดอร์กับ Toast ให้ทุกช่องทางใช้ข้อมูลชุดเดียว (ต้องขอสิทธิ์พาร์ตเนอร์)</span></div>
+            <div class="foot"><span class="metric">needs Toast partner</span><span class="pill future">Future</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--teal)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">🗂️</div><div class="name">Back-Office Suite<small>หลังบ้านร้าน</small></div></div>
+            <div class="desc"><span class="thai">จัดตารางพนักงาน ซัพพลายเออร์ รายงานยอด ผู้ช่วย SOP — มากกว่าที่ POS ทั่วไปทำได้</span></div>
+            <div class="foot"><span class="metric">scheduling · reporting</span><span class="pill future">Future</span></div>
+          </div>
+        </article>
+
+        <article class="bld" style="--accent:var(--brass-light)">
+          <div class="roof"></div>
+          <div class="body">
+            <div class="top"><div class="ico">🧠</div><div class="name">The Brain<small>Central Plaza</small></div></div>
+            <div class="desc"><span class="thai">สมองกลาง (Claude) ที่ทุกบริการดึงไปใช้ — ออกแบบให้ “สลับสมอง” ได้ เพื่อคุมต้นทุนระยะยาว</span></div>
+            <div class="foot"><span class="metric">Anthropic · swappable</span><span class="pill live">Live</span></div>
+          </div>
+        </article>
+
+      </section>
+
+      <div class="shead"><h2 id="roadmap">Roadmap</h2><span class="thai">เราอยู่ตรงไหน และเหลืออะไรอีก</span></div>
+      <section class="roadmap">
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">Phase 1 · ตอนนี้</span><span class="pill live">80%</span></div>
+          <h3>Pilot on Narwhal<small>พิสูจน์ผลด้วยร้านจริง</small></h3>
+          <div class="bar"><i style="width:80%;background:linear-gradient(90deg,var(--live),var(--brass-light))"></i></div>
+          <ul>
+            <li><span class="mk done">✓</span><span><b>Aileen chatbot</b> ขึ้นไลฟ์ (Sonnet 4.6)</span></li>
+            <li><span class="mk done">✓</span><span><b>Analytics /stats</b> เก็บข้อมูลจริง</span></li>
+            <li><span class="mk done">✓</span><span>อีเมลแจ้งเตือนแยกช่องทาง</span></li>
+            <li><span class="mk wip">●</span><span><b>เก็บสถิติ</b>ให้ครบเพื่อทำเคสขาย</span></li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">Phase 2 · ถัดไป</span><span class="pill build">10%</span></div>
+          <h3>Productize<small>ทำให้ขายหลายร้านได้</small></h3>
+          <div class="bar"><i style="width:10%;background:linear-gradient(90deg,var(--build),var(--orange))"></i></div>
+          <ul>
+            <li><span class="mk wip">●</span><span><b>Multi-tenant core</b> แยกข้อมูลรายร้าน</span></li>
+            <li><span class="mk todo">○</span><span>หน้า <b>onboarding</b> เปิดร้านใหม่</span></li>
+            <li><span class="mk todo">○</span><span><b>ล็อกอิน</b> + แดชบอร์ดของเจ้าของร้าน</span></li>
+            <li><span class="mk todo">○</span><span>ระบบ <b>เก็บเงิน Stripe</b></span></li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">Phase 3 · อนาคต</span><span class="pill plan">5%</span></div>
+          <h3>Expand<small>เพิ่มบริการเต็มแพลตฟอร์ม</small></h3>
+          <div class="bar"><i style="width:5%;background:linear-gradient(90deg,var(--design),var(--purple))"></i></div>
+          <ul>
+            <li><span class="mk todo">○</span><span><b>Voice agent</b> รับสายโทรศัพท์</span></li>
+            <li><span class="mk todo">○</span><span><b>Lead engine</b> + CRM</span></li>
+            <li><span class="mk todo">○</span><span><b>Toast / POS</b> integration</span></li>
+            <li><span class="mk todo">○</span><span><b>Back-office</b> หลังบ้านครบวงจร</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <section class="two">
+        <div class="panel" id="feed">
+          <h2>📡 Activity Feed <span class="tg">milestones</span></h2>
+          <div class="feed">
+            <div class="ev" style="--accent:var(--live)"><span class="fdot"></span><div><div class="et">Analytics dashboard /stats ขึ้นไลฟ์</div><div class="es thai">หน้าแดชบอร์ดล็อกด้วยรหัส ดูสถิติ Aileen ได้แล้ว</div></div><span class="ew">วันนี้</span></div>
+            <div class="ev" style="--accent:var(--brass)"><span class="fdot"></span><div><div class="et">เก็บสถิติบทสนทนา (Netlify Blobs)</div><div class="es thai">ทุกแชตถูกบันทึก + แฟลกคำติชมอัตโนมัติ</div></div><span class="ew">วันนี้</span></div>
+            <div class="ev" style="--accent:var(--design)"><span class="fdot"></span><div><div class="et">แก้บั๊กคีย์บอร์ดบังแชตบนมือถือ</div><div class="es thai">VisualViewport sizing · แชตเต็มจอ ≤480px</div></div><span class="ew">วันนี้</span></div>
+            <div class="ev" style="--accent:var(--purple)"><span class="fdot"></span><div><div class="et">เปลี่ยนชื่อบอท Nara → Aileen</div><div class="es thai">ปรับชื่อที่ลูกค้าเห็นทั้งหมด</div></div><span class="ew">วันนี้</span></div>
+            <div class="ev" style="--accent:var(--blue)"><span class="fdot"></span><div><div class="et">Aileen chatbot เปิดใช้งานจริง</div><div class="es thai">ทดสอบไทย+อังกฤษ อิงเมนูจริง อัปเซลสุภาพ</div></div><span class="ew">วันนี้</span></div>
+            <div class="ev" style="--accent:var(--brass-light)"><span class="fdot"></span><div><div class="et">วางแผนแพลตฟอร์ม SaaS</div><div class="es thai">เอกสารกลยุทธ์ + แพ็กเกจราคา 3 ระดับ</div></div><span class="ew">วันนี้</span></div>
+          </div>
+        </div>
+
+        <div class="panel" id="todo">
+          <h2>✅ What's Next <span class="tg">เหลืออะไรต้องทำ</span></h2>
+          <div class="todo">
+            <div class="ti next"><span class="box">●</span><div><div class="tt">สร้าง Multi-tenant core</div><div class="td thai">แยก tenant ต่อร้าน — log, เมนู, รหัสไม่ปนกัน</div></div><span class="pr now">Now</span></div>
+            <div class="ti"><span class="box"></span><div><div class="tt">หน้า Onboarding ร้านใหม่</div><div class="td thai">กรอกเมนู/ข้อมูล → ระบบสร้างร้านอัตโนมัติ</div></div><span class="pr now">Now</span></div>
+            <div class="ti"><span class="box"></span><div><div class="tt">ล็อกอิน + แดชบอร์ดเจ้าของร้าน</div><div class="td thai">แต่ละร้านเห็นเฉพาะข้อมูลตัวเอง</div></div><span class="pr soon">Soon</span></div>
+            <div class="ti"><span class="box"></span><div><div class="tt">ระบบเก็บเงิน (Stripe)</div><div class="td thai">แพ็กเกจ $195 / $445 / $895</div></div><span class="pr soon">Soon</span></div>
+            <div class="ti"><span class="box"></span><div><div class="tt">Voice agent prototype</div><div class="td thai">ต่อระบบโทรศัพท์ + AI รับสาย</div></div><span class="pr later">Later</span></div>
+            <div class="ti"><span class="box"></span><div><div class="tt">Lead engine + Toast / POS</div><div class="td thai">CRM และเชื่อมระบบขายหน้าร้าน</div></div><span class="pr later">Later</span></div>
+            <div class="ti next"><span class="box">!</span><div><div class="tt">หมุนเปลี่ยน API key (ความปลอดภัย)</div><div class="td thai">คีย์เคยพิมพ์ในแชต — ควรสร้างใหม่แล้วลบเก่า</div></div><span class="pr now">Now</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="foot-os">
+        <b>Narwhal AI OS</b> · The Decentralized Brain for Restaurants<br>
+        <span class="note thai">หน้านี้คือ “ศูนย์บัญชาการ” ของโปรเจกต์ — เล่าว่าเราทำอะไรไปแล้ว กำลังทำอะไร และเหลืออะไร · ข้อมูลอัปเดตตามจริงเมื่อแต่ละบริการคืบหน้า</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function tick(){
+    var d=new Date();
+    var h=String(d.getHours()).padStart(2,'0'), m=String(d.getMinutes()).padStart(2,'0');
+    var el=document.getElementById('clock'); if(el) el.innerHTML='<b>'+h+':'+m+'</b>';
+  }
+  tick(); setInterval(tick,15000);
+
+  var links=[].slice.call(document.querySelectorAll('.rail a'));
+  var ids=links.map(function(a){return a.getAttribute('href').slice(1);});
+  function onScroll(){
+    var y=window.scrollY+140, best=0;
+    ids.forEach(function(id,i){var s=document.getElementById(id); if(s&&s.offsetTop<=y)best=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===best);});
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  links.forEach(function(a){a.addEventListener('click',function(e){
+    e.preventDefault();
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    if(t)window.scrollTo({top:t.offsetTop-120,behavior:'smooth'});
+  });});
+</script>
+<div id="os-gate" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#081726,#04101b);padding:24px;">
+  <form id="os-gate-form" style="width:100%;max-width:360px;background:rgba(21,47,74,0.6);border:1px solid rgba(200,162,78,0.25);border-radius:16px;padding:22px;box-shadow:0 24px 60px -30px #000;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px;">
+      <div class="brandmark" style="width:40px;height:40px;font-size:22px;">N</div>
+      <div><div style="font-weight:600;font-size:15px;color:#EAF1F8;">Narwhal AI OS</div><div style="font-size:11.5px;color:rgba(234,241,248,0.6);">ศูนย์บัญชาการ · สำหรับเจ้าของเท่านั้น</div></div>
+    </div>
+    <input id="os-pw" type="password" placeholder="ใส่รหัส (เดียวกับ /stats)" autocomplete="current-password"
+      style="width:100%;padding:12px 14px;border-radius:10px;background:rgba(6,18,31,0.6);border:1px solid rgba(200,162,78,0.25);color:#EAF1F8;font-size:15px;outline:none;" />
+    <div id="os-err" style="color:#e0907a;font-size:12.5px;margin-top:9px;min-height:16px;"></div>
+    <button type="submit" style="width:100%;margin-top:4px;padding:12px;border-radius:10px;border:none;background:linear-gradient(150deg,#E3C581,#9C7A33);color:#06121F;font-weight:600;font-size:14px;cursor:pointer;">เข้าดูแดชบอร์ด</button>
+  </form>
+</div>
+<script>
+(function(){
+  var g=document.getElementById('os-gate'),f=document.getElementById('os-gate-form'),pw=document.getElementById('os-pw'),er=document.getElementById('os-err');
+  function unlock(){g.style.display='none';try{sessionStorage.setItem('os_ok','1');}catch(e){}}
+  try{if(sessionStorage.getItem('os_ok')==='1'){unlock();}}catch(e){}
+  f.addEventListener('submit',function(e){e.preventDefault();var v=(pw.value||'').trim();if(!v)return;er.textContent='กำลังตรวจ…';
+    fetch('/api/chat-stats?key='+encodeURIComponent(v)).then(function(r){if(r.ok){unlock();}else{er.textContent='รหัสไม่ถูกต้อง';}}).catch(function(){er.textContent='เชื่อมต่อไม่ได้ ลองใหม่';});});
+  setTimeout(function(){try{pw.focus();}catch(e){}},200);
+})();
+</script>
+</body>
+</html>

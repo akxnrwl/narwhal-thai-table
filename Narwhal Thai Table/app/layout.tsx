@@ -3,6 +3,7 @@ import './globals.css';
 import ComingSoonTicker from '@/components/ComingSoonTicker';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import ChatWidget from '@/components/ChatWidget';
 
 const SITE_URL = 'https://narwhalthaihb.com'; // update when domain is live
 
@@ -20,9 +21,15 @@ export const metadata: Metadata = {
     locale: 'en_US',
     title: 'Narwhal Thai Table · Huntington Beach',
     description: 'A Thai family table on Beach Boulevard. Every dish by Chef Rainny, of MasterChef Thailand Season 1.',
-    // images: [{ url: '/og-cover.jpg', width: 1200, height: 630, alt: 'Narwhal Thai Table' }],
+    url: SITE_URL,
+    images: [{ url: '/images/og-cover.jpg', width: 1200, height: 630, alt: 'Narwhal Thai Table — a Thai family feast in Huntington Beach' }],
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Narwhal Thai Table · Huntington Beach',
+    description: 'A Thai family table on Beach Boulevard. Every dish by Chef Rainny, of MasterChef Thailand Season 1.',
+    images: ['/images/og-cover.jpg'],
+  },
   icons: {
     icon: [
       { url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230B1F33'/%3E%3Ctext x='50%25' y='54%25' font-family='Bodoni Moda,Georgia,serif' font-style='italic' font-size='38' fill='%23B08D3C' text-anchor='middle' dominant-baseline='middle'%3EN%3C/text%3E%3C/svg%3E" },
@@ -56,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main id="main">{children}</main>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );

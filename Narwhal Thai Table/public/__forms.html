@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Netlify form detection</title>
+</head>
+<body>
+  <!-- Hidden static forms so Netlify registers each form + its fields at build
+       time. The real React forms (ReserveForm / ContactForm / CateringForm)
+       POST here with a matching form-name. Do not delete. -->
+
+  <form name="reservation" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="reservation" />
+    <input name="bot-field" />
+    <input type="text" name="first_name" />
+    <input type="text" name="last_name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="date" />
+    <input type="text" name="time" />
+    <input type="text" name="party_size" />
+    <textarea name="notes"></textarea>
+  </form>
+
+  <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="contact" />
+    <input name="bot-field" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="topic" />
+    <textarea name="message"></textarea>
+  </form>
+
+  <form name="catering" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="catering" />
+    <input name="bot-field" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="event_date" />
+    <input type="text" name="guests" />
+    <input type="text" name="budget" />
+    <input type="text" name="event_type" />
+    <input type="text" name="location" />
+    <textarea name="message"></textarea>
+  </form>
+</body>
+</html>

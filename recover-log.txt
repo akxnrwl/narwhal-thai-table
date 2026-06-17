@@ -1,0 +1,128 @@
+=== FIX .git PERMS === 
+perms_done 
+=== ADD === 
+warning: in the working copy of 'Narwhal Thai Table/.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/components/HomeSections.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/components/Nav.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/netlify.toml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/api/chat-stats/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/api/chat/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/contact/catering/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/contact/message/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/contact/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/contact/reservation/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/stats/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/components/CateringForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/components/ChatWidget.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/components/ContactForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/chatKnowledge.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/chatLog.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/message.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/netlifyForm.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/reservation.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/public/__forms.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/public/os.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/public/os.webmanifest', LF will be replaced by CRLF the next time Git touches it
+error: unable to write file .git/objects/c2/c5971d9626cdfcd5007b9fa2c74768390879ed: Permission denied
+error: recover.bat: failed to insert into database
+error: unable to index file 'recover.bat'
+fatal: adding files failed
+=== COMMIT === 
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   Narwhal Thai Table/.gitignore
+	modified:   Narwhal Thai Table/app/globals.css
+	modified:   Narwhal Thai Table/app/layout.tsx
+	modified:   Narwhal Thai Table/app/menu/[slug]/page.tsx
+	modified:   Narwhal Thai Table/app/page.tsx
+	modified:   Narwhal Thai Table/app/play/page.tsx
+	modified:   Narwhal Thai Table/components/Footer.tsx
+	modified:   Narwhal Thai Table/components/HomeSections.tsx
+	modified:   Narwhal Thai Table/components/Nav.tsx
+	modified:   Narwhal Thai Table/components/ReserveForm.tsx
+	modified:   Narwhal Thai Table/netlify.toml
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	Narwhal Thai Table/app/api/
+	Narwhal Thai Table/app/contact/
+	Narwhal Thai Table/app/stats/
+	Narwhal Thai Table/components/CateringForm.tsx
+	Narwhal Thai Table/components/ChatWidget.tsx
+	Narwhal Thai Table/components/ContactForm.tsx
+	Narwhal Thai Table/lib/chatKnowledge.ts
+	Narwhal Thai Table/lib/chatLog.ts
+	Narwhal Thai Table/lib/message.ts
+	Narwhal Thai Table/lib/netlifyForm.ts
+	Narwhal Thai Table/lib/reservation.ts
+	Narwhal Thai Table/public/__forms.html
+	Narwhal Thai Table/public/images/
+	Narwhal Thai Table/public/media/
+	Narwhal Thai Table/public/os-icon.png
+	Narwhal Thai Table/public/os.html
+	Narwhal Thai Table/public/os.webmanifest
+	Narwhal Thai Table/tsconfig.tsbuildinfo
+	recover-log.txt
+	recover.bat
+
+no changes added to commit (use "git add" and/or "git commit -a")
+=== PULL --rebase === 
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+fatal: no rebase in progress
+=== PUSH === 
+To https://github.com/AKxNRWL/narwhal-thai-table.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/AKxNRWL/narwhal-thai-table.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+=== RESULT LOG === 
+ef23f14 Update site
+548371b Update site
+3ee420f Redesign components: cards, motion, media slots
+f647800 Redesign app: dark theme, B fonts, hours
+643846e Add lib/media.ts - drop-in media detection (hero/dish/chef photos)
+=== STATUS === 
+## main...origin/main
+ M "Narwhal Thai Table/.gitignore"
+ M "Narwhal Thai Table/app/globals.css"
+ M "Narwhal Thai Table/app/layout.tsx"
+ M "Narwhal Thai Table/app/menu/[slug]/page.tsx"
+ M "Narwhal Thai Table/app/page.tsx"
+ M "Narwhal Thai Table/app/play/page.tsx"
+ M "Narwhal Thai Table/components/Footer.tsx"
+ M "Narwhal Thai Table/components/HomeSections.tsx"
+ M "Narwhal Thai Table/components/Nav.tsx"
+ M "Narwhal Thai Table/components/ReserveForm.tsx"
+ M "Narwhal Thai Table/netlify.toml"
+?? "Narwhal Thai Table/app/api/"
+?? "Narwhal Thai Table/app/contact/"
+?? "Narwhal Thai Table/app/stats/"
+?? "Narwhal Thai Table/components/CateringForm.tsx"
+?? "Narwhal Thai Table/components/ChatWidget.tsx"
+?? "Narwhal Thai Table/components/ContactForm.tsx"
+?? "Narwhal Thai Table/lib/chatKnowledge.ts"
+?? "Narwhal Thai Table/lib/chatLog.ts"
+?? "Narwhal Thai Table/lib/message.ts"
+?? "Narwhal Thai Table/lib/netlifyForm.ts"
+?? "Narwhal Thai Table/lib/reservation.ts"
+?? "Narwhal Thai Table/public/__forms.html"
+?? "Narwhal Thai Table/public/images/"
+?? "Narwhal Thai Table/public/media/"
+?? "Narwhal Thai Table/public/os-icon.png"
+?? "Narwhal Thai Table/public/os.html"
+?? "Narwhal Thai Table/public/os.webmanifest"
+?? "Narwhal Thai Table/tsconfig.tsbuildinfo"
+?? recover-log.txt
+?? recover.bat
+ALL_DONE 

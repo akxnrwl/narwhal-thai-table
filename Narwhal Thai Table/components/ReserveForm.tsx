@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { submitNetlifyForm } from '@/lib/netlifyForm';
 
 /** Reservation time slots: 11:00 AM → 10:00 PM, every 30 minutes
  *  (last seating about an hour before the 11:00 PM close). */
@@ -33,7 +34,7 @@ export default function ReserveForm() {
     const form = e.currentTarget;
 
     // Honeypot — bots fill hidden fields; real users don't
-    const hp = (form.elements.namedItem('company') as HTMLInputElement | null)?.value;
+    const hp = (form.elements.namedItem('bot-field') as HTMLInputElement | null)?.value;
     if (hp) return;
 
     if (!form.checkValidity()) {
@@ -44,11 +45,12 @@ export default function ReserveForm() {
     setSending(true);
     setError(null);
 
-    // Simulated latency until a real backend is wired up
-    setTimeout(() => {
-      setSending(false);
-      setSubmitted(true);
-    }, 400);
+    submitNetlifyForm(form)
+      .then(() => { setSending(false); setSubmitted(true); })
+      .catch(() => {
+        setSending(false);
+        setError('Something went wrong — please call us or email welcome@narwhalthaihb.com.');
+      });
   }
 
   return (
@@ -61,6 +63,7 @@ export default function ReserveForm() {
       onSubmit={handleSubmit}
       aria-describedby="reserve-form-status"
     >
+      <input type="hidden" name="form-name" value="reservation" />
       <div className="form-title">Book a <em>seat</em> at the table</div>
       <div className="form-sub">We&apos;ll text or email you to confirm — usually within a few hours.</div>
 
@@ -118,7 +121,7 @@ export default function ReserveForm() {
       {/* Honeypot for spam bots — never visible/focusable for real users */}
       <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
         <label htmlFor="rsv-hp">Leave blank</label>
-        <input id="rsv-hp" name="company" type="text" tabIndex={-1} autoComplete="off" />
+        <input id="rsv-hp" name="bot-field" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <button type="submit" className="btn-submit" disabled={sending || submitted}>

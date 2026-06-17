@@ -268,34 +268,41 @@ export function ContactSection() {
   return (
     <section className="contact" id="contact">
       <div className="container">
-        <FadeUp className="section-head" >
+        <FadeUp className="section-head">
           <span className="label" style={{ color: 'var(--brass-light)' }}>Come See Us</span>
-          <h2 style={{ color: 'var(--off-white)' }}>Right on Beach Blvd — <em style={{ color: 'var(--brass-light)' }}>stop by anytime</em>.</h2>
+          <h2 style={{ color: 'var(--off-white)' }}>How can we <em style={{ color: 'var(--brass-light)' }}>help?</em></h2>
         </FadeUp>
-        <div className="contact-grid">
-          <FadeUp className="contact-block">
-            <span className="label">Address</span>
-            <h3>Find us</h3>
-            <p>19072 Beach Boulevard<br/>Huntington Beach, CA 92648<br/>Between PCH and the 405</p>
-          </FadeUp>
-          <FadeUp className="contact-block">
-            <span className="label">Contact</span>
-            <h3>Get in touch</h3>
-            <p>
-              <a href="tel:+17140000000">(714) 000-0000</a><br/>
-              <a href="mailto:hello@narwhalthaitable.com">hello@narwhalthaitable.com</a>
-            </p>
-          </FadeUp>
-          <FadeUp className="contact-block">
-            <span className="label">Private Events</span>
-            <h3>Take the room</h3>
-            <p>
-              Buyouts, family-style tastings, private dinners — we love hosting.<br/>
-              <a href="mailto:events@narwhalthaitable.com">events@narwhalthaitable.com</a>
-            </p>
-          </FadeUp>
-        </div>
-        <FadeUp>
+
+        <FadeUp className="contact-cards">
+          <Link className="contact-card" href="/contact/reservation">
+            <span className="contact-card-num">01</span>
+            <h3>Reservations</h3>
+            <p>Request a table &mdash; we&apos;ll confirm within a few hours.</p>
+            <span className="contact-card-email">reservations@narwhalthaihb.com</span>
+            <span className="contact-card-go">Book a table <span aria-hidden="true">&rarr;</span></span>
+          </Link>
+          <Link className="contact-card" href="/contact/catering">
+            <span className="contact-card-num">02</span>
+            <h3>Catering &amp; Events</h3>
+            <p>Buyouts, family-style tastings, off-site catering.</p>
+            <span className="contact-card-email">catering@narwhalthaihb.com</span>
+            <span className="contact-card-go">Plan an event <span aria-hidden="true">&rarr;</span></span>
+          </Link>
+          <Link className="contact-card" href="/contact/message">
+            <span className="contact-card-num">03</span>
+            <h3>Say Hello</h3>
+            <p>Questions, suppliers, press &mdash; we&apos;ll get back to you.</p>
+            <span className="contact-card-email">welcome@narwhalthaihb.com</span>
+            <span className="contact-card-go">Send a message <span aria-hidden="true">&rarr;</span></span>
+          </Link>
+        </FadeUp>
+
+        <FadeUp className="contact-visit">
+          <div className="contact-visit-info">
+            <span className="label">Find us</span>
+            <h3>Visit the table</h3>
+            <p>19072 Beach Boulevard<br/>Huntington Beach, CA 92648<br/>Open daily &middot; 11:00&nbsp;AM &ndash; 11:00&nbsp;PM</p>
+          </div>
           <a
             className="map-placeholder"
             href="https://www.google.com/maps/search/?api=1&query=19072+Beach+Blvd+Huntington+Beach+CA+92648"
@@ -308,7 +315,7 @@ export function ContactSection() {
                 <circle cx="28" cy="22" r="6" />
               </svg>
               <div className="addr">19072 Beach Boulevard</div>
-              <div className="city">Huntington Beach, California · open in Google Maps</div>
+              <div className="city">Huntington Beach, California &middot; open in Google Maps</div>
             </div>
           </a>
         </FadeUp>

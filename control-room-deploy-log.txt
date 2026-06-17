@@ -1,0 +1,40 @@
+=== CLONE FRESH FROM GITHUB === 
+Cloning into 'D:\projects\narwhal-deploy'...
+CLONE_OK 
+=== COPY Control Room files === 
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+=== COMMIT + PUSH === 
+warning: in the working copy of 'Narwhal Thai Table/.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/stats/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/api/owner/data/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/api/owner/login/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/api/owner/logout/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/app/api/owner/me/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/session.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/statsAggregate.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Narwhal Thai Table/lib/tenants.ts', LF will be replaced by CRLF the next time Git touches it
+[main d05f89a] Owner Control Room: secure cookie login + reservations/messages panels, tenant-aware
+ 9 files changed, 524 insertions(+), 78 deletions(-)
+ create mode 100644 Narwhal Thai Table/app/api/owner/data/route.ts
+ create mode 100644 Narwhal Thai Table/app/api/owner/login/route.ts
+ create mode 100644 Narwhal Thai Table/app/api/owner/logout/route.ts
+ create mode 100644 Narwhal Thai Table/app/api/owner/me/route.ts
+ create mode 100644 Narwhal Thai Table/lib/session.ts
+ create mode 100644 Narwhal Thai Table/lib/statsAggregate.ts
+ create mode 100644 Narwhal Thai Table/lib/tenants.ts
+To https://github.com/AKxNRWL/narwhal-thai-table.git
+   7b2c0e0..d05f89a  main -> main
+PUSH_ERRORLEVEL=0 
+d05f89a Owner Control Room: secure cookie login + reservations/messages panels, tenant-aware
+7b2c0e0 Aileen: varied greetings, narwhal icon, send-message to welcome@, persona
+d52d303 Aileen chat: add request_reservation tool + tool-use loop (in-chat booking)
+41d4faa Aileen: in-chat reservations — add lib/reservation.ts + update persona
+ALL_DONE 

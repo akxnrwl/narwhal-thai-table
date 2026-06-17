@@ -1,0 +1,12 @@
+{
+  "name": "Narwhal AI OS",
+  "short_name": "Narwhal OS",
+  "start_url": "/os",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#06121F",
+  "theme_color": "#0B1F33",
+  "icons": [
+    { "src": "/os-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

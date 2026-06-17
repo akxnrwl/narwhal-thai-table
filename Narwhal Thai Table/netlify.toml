@@ -6,8 +6,13 @@
 
 [build]
   command = "npm run build"
-    publish = ".next"
+  publish = ".next"
 
-    [[plugins]]
-      package = "@netlify/plugin-nextjs"
-      
+  [[plugins]]
+    package = "@netlify/plugin-nextjs"
+
+# Serve the gated /os command-center (static file public/os.html) at a clean URL
+[[redirects]]
+  from = "/os"
+  to = "/os.html"
+  status = 200
