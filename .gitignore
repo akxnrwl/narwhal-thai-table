@@ -1,2 +1,18 @@
 deploy.bat
 deploy-log.txt
+
+# ── Narwhal SECRET / PRIVATE — ห้าม commit/push เด็ดขาด (สูตรลับ / SOP / ต้นทุน) ──
+# วางไฟล์ลับไว้ในโฟลเดอร์ _private/ แล้วจะถูกกันอัตโนมัติ
+_private/
+secret/
+*PRIVATE*
+*Recipe*
+*Chef-Recipe*
+*Playbook*
+*-Menu-Engineering*
+*สูตร*
+*คู่มือสูตร*
+# ชื่อไฟล์ตรงตัว (กันชนซ้ำอีกชั้น)
+Narwhal-Chef-Recipe-Manual.html
+Narwhal-Kitchen-Menu-Playbook.md
+Narwhal-Menu-Engineering.xlsx

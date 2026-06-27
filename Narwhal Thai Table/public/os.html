@@ -206,6 +206,7 @@
     <nav class="rail">
       <a href="#overview" class="on"><i></i>Overview</a>
       <a href="#city"><i></i>Services</a>
+      <a href="#reality"><i></i>Reality</a>
       <a href="#roadmap"><i></i>Roadmap</a>
       <a href="#feed"><i></i>Activity</a>
       <a href="#todo"><i></i>What's next</a>
@@ -305,6 +306,64 @@
         </article>
 
       </section>
+
+      <div class="shead"><h2 id="reality">Reality Map</h2><span class="thai">อะไรใช้ได้จริงตอนนี้ · อะไรต้องรอต่อ</span></div>
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-bottom:8px">
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">🟢 ใช้ได้จริงตอนนี้</span><span class="pill" style="color:var(--live);border-color:rgba(67,229,155,.4)">Live</span></div>
+          <h3>ไม่ต้องรออะไร<small>ทำงานแล้ววันนี้</small></h3>
+          <ul>
+            <li><span class="mk done">✓</span><span><b>Aileen</b> แชท + รับจองโต๊ะ</span></li>
+            <li><span class="mk done">✓</span><span><b>AI agents</b> (เดโม · Claude จริง)</span></li>
+            <li><span class="mk done">✓</span><span>ร่างตอบรีวิว / โพสต์โซเชียล</span></li>
+            <li><span class="mk done">✓</span><span><b>Planner</b> งานก่อนเปิดร้าน</span></li>
+            <li><span class="mk done">✓</span><span>เครื่องคิดเลขกำไร + /stats</span></li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">🔵 ต่อ Toast ปุ๊บติด</span><span class="pill" style="color:var(--design);border-color:rgba(70,200,230,.4)">Software</span></div>
+          <h3>เสียบ env แล้วใช้เลย<small>ไม่ต้องมีฮาร์ดแวร์</small></h3>
+          <ul>
+            <li><span class="mk wip" style="color:var(--design)">●</span><span>ยอด / ลูกค้า / labor จริง</span></li>
+            <li><span class="mk wip" style="color:var(--design)">●</span><span>เมนูไหนขายดี (item mix)</span></li>
+            <li><span class="mk wip" style="color:var(--design)">●</span><span>ฟีดออเดอร์เข้า</span></li>
+            <li><span class="mk wip" style="color:var(--design)">●</span><span><b>Insights</b> ใช้ตัวเลขจริง</span></li>
+            <li><span class="mk wip" style="color:var(--design)">●</span><span>ช่วงพีครายชั่วโมง</span></li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">🟡 ต้องต่อบริการอื่น</span><span class="pill build">Integrate</span></div>
+          <h3>ซอฟต์แวร์เพิ่ม<small>ต่อ API ปลายทาง</small></h3>
+          <ul>
+            <li><span class="mk todo">○</span><span>Reviewer → <b>Google / Yelp</b></span></li>
+            <li><span class="mk todo">○</span><span>Social → <b>IG / Facebook</b></span></li>
+            <li><span class="mk todo">○</span><span>หน้า "อนุมัติ" ในเว็บ</span></li>
+            <li><span class="mk todo">○</span><span>รันอัตโนมัติ (schedule)</span></li>
+            <li><span class="mk todo">○</span><span><b>Voice</b> รับสายโทรศัพท์</span></li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <div class="ph-top"><span class="tag">🟣 ต้องมี Hardware</span><span class="pill" style="color:var(--purple);border-color:rgba(155,123,224,.4)">Hardware</span></div>
+          <h3>อุปกรณ์เพิ่ม<small>นอกเหนือซอฟต์แวร์</small></h3>
+          <ul>
+            <li><span class="mk todo" style="color:var(--purple)">○</span><span><b>Toast KDS</b> (จอครัว) → รู้ "จานพร้อมเสิร์ฟ" real-time</span></li>
+            <li><span class="mk todo" style="color:var(--purple)">○</span><span><b>กล้อง</b> → วิชันนับคิว / ลูกค้า (อนาคต)</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <div class="panel" style="margin-bottom:18px">
+        <h2>📡 ฟีดในห้องตอนนี้รู้แค่ไหน <span class="tg">ข้อจำกัดที่ควรรู้</span></h2>
+        <p class="thai" style="color:var(--muted);font-size:13.5px;line-height:1.7;margin-top:4px">
+          ฟีดรู้แค่ <b style="color:var(--txt)">"ออเดอร์เข้า + เมนูอะไรในออเดอร์"</b> (ดึงทุก ~30 วิ) — <b style="color:var(--txt)">ยังไม่รู้ว่าจานไหนกำลังจะออก</b>
+          จะเห็นสถานะ <span style="color:var(--design)">SENT → READY</span> แบบ real-time ต้องมี <b style="color:var(--purple)">Toast KDS</b> (จอครัว) + เปิด fulfillment webhook
+        </p>
+      </div>
 
       <div class="shead"><h2 id="roadmap">Roadmap</h2><span class="thai">เราอยู่ตรงไหน และเหลืออะไรอีก</span></div>
       <section class="roadmap">

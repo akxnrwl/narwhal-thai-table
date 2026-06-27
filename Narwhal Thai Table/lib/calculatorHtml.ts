@@ -112,7 +112,6 @@ export const calculatorHtml = `<!DOCTYPE html>
           <div class="field"><label>วันธรรมดา/สัปดาห์</label><input type="number" id="wdDays" value="4" oninput="calc()"></div>
           <div class="field"><label>เสาร์-อาทิตย์/สัปดาห์</label><input type="number" id="weDays" value="3" oninput="calc()"></div>
         </div>
-        <div class="field"><label>ราคาเฉลี่ย/หัว $ <span class="hint">ใช้ประเมินจำนวนลูกค้า</span></label><input type="number" id="check" value="35" oninput="calc()"></div>
       </div>
 
       <div class="card">
@@ -125,13 +124,13 @@ export const calculatorHtml = `<!DOCTYPE html>
           <div class="top"><span>ค่าธรรมเนียมบัตร (% ของยอด)</span><b id="cardLab">2.2%</b></div>
           <input type="range" id="cardPct" min="0" max="4" step="0.1" value="2.2" oninput="calc()">
         </div>
-        <div class="field"><label>ค่าคงที่/เดือน (เช่า+ฯลฯ)</label><input type="number" id="fixed" value="13120" oninput="calc()"></div>
+        <div class="field"><label>ค่าคงที่/เดือน (เช่า+ฯลฯ)</label><input type="number" id="fixed" value="11220" oninput="calc()"></div>
         <details>
           <summary>รายละเอียดค่าคงที่ (ปรับแยกได้)</summary>
           <div style="margin-top:9px">
             <div class="row2">
-              <div class="field"><label>เช่า</label><input type="number" id="fx_rent" value="5600" oninput="sumFixed()"></div>
-              <div class="field"><label>CAM/NNN</label><input type="number" id="fx_cam" value="1500" oninput="sumFixed()"></div>
+              <div class="field"><label>เช่า (รวม CAM+ขยะ)</label><input type="number" id="fx_rent" value="5600" oninput="sumFixed()"></div>
+              <div class="field"><label>CAM (อยู่ในค่าเช่า)</label><input type="number" id="fx_cam" value="0" oninput="sumFixed()"></div>
             </div>
             <div class="row2">
               <div class="field"><label>ค่าน้ำไฟ</label><input type="number" id="fx_util" value="2500" oninput="sumFixed()"></div>
@@ -143,7 +142,7 @@ export const calculatorHtml = `<!DOCTYPE html>
             </div>
             <div class="row2">
               <div class="field"><label>Payroll SW</label><input type="number" id="fx_pay" value="120" oninput="sumFixed()"></div>
-              <div class="field"><label>ขยะ/ดักไขมัน</label><input type="number" id="fx_trash" value="400" oninput="sumFixed()"></div>
+              <div class="field"><label>ขยะ (อยู่ในค่าเช่า)</label><input type="number" id="fx_trash" value="0" oninput="sumFixed()"></div>
             </div>
             <div class="row2">
               <div class="field"><label>บัญชี/CPA</label><input type="number" id="fx_cpa" value="500" oninput="sumFixed()"></div>
@@ -212,7 +211,6 @@ export const calculatorHtml = `<!DOCTYPE html>
           <div class="l"><span>− กันภาษี</span><b class="neg" id="o_tax">$0</b></div>
           <div class="l tot"><span>= ถอนได้ (distributable)</span><b class="pos" id="o_dist">$0</b></div>
         </div>
-        <div class="cap" id="o_covers"></div>
       </div>
 
       <div class="card" style="border-color:rgba(176,141,60,0.4)">
@@ -293,11 +291,6 @@ function calc(){
     '<span style="width:'+w(card)+'%;background:#6b6b6b"></span>'+
     '<span style="width:'+Math.max(0,margin*100)+'%;background:#5BBF7B"></span>';
 
-  var check=num('check');
-  if(check>0){
-    document.getElementById('o_covers').textContent=
-      'ลูกค้าโดยประมาณ: วันธรรมดา ~'+Math.round(wdSales/check)+' คน/วัน · เสาร์-อาทิตย์ ~'+Math.round(weSales/check)+' คน/วัน';
-  } else { document.getElementById('o_covers').textContent=''; }
 
   var adv;
   if(opCash<0){ adv='⚠️ ขาดทุน — ยอดยังไม่พอคลุมต้นทุน ลองเพิ่มยอด/ลดค่าแรงหรือค่าคงที่'; }

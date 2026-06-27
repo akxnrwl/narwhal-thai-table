@@ -13,7 +13,7 @@ echo BUILD_OK >> "%LOG%"
 cd /d "%~dp0"
 echo === COMMIT === >> "%LOG%"
 git add -A >> "%LOG%" 2>&1
-git commit -m "Mobile: tighter ticker + content-height placeholder cards" >> "%LOG%" 2>&1
+git commit -m "AI agents (Insights/Reviewer/Social/Planner) + Toast-ready backend + /os Reality Map" >> "%LOG%" 2>&1
 echo === FETCH+PUSH (reconcile) === >> "%LOG%"
 git fetch origin >> "%LOG%" 2>&1
 git push --force-with-lease origin main >> "%LOG%" 2>&1
